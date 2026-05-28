@@ -15,6 +15,10 @@ This way, multiple tests can be done on multiple models. The embedding has to be
 ## Project structure
 
 - `explore_phantom_wiki.ipynb` — exploratory notebook for the PhantomWiki dataset (kilian-group/phantom-wiki-v1 on HuggingFace)
+- `explore_faker.ipynb` — exploratory notebook for the Faker library
+- `build_corpus_generators.py` — calls Claude Haiku per JSON in dariusk/corpora to evaluate and generate sentence-family dataclasses; writes `profile_sentences.py`
+- `corpus_evaluations/` — intermediate per-file results (resumable cache, not checked in)
+- `profile_sentences.py` — auto-generated output: one dataclass per accepted corpora category
 
 **You have to keep this relevant**. Every time you delete files or create new files that are relevant and meant to stay, update this (no throwaway or miscellanious files)
 
