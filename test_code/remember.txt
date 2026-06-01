@@ -1,0 +1,12 @@
+Split dataset creation into two functions:
+1. generate_pairs() — returns raw (doc, queries) pairs
+2. build_dataset(pairs) — splits into corpus list, queries list, qrels
+
+Reason: the test for qrels correctness needs access to the raw pairs to verify alignment.
+
+Test algorithm:
+    pairs = [generate_pairs() for _ in range(N)]
+    docs, queries, qrels = build_dataset(pairs)
+    query_source = {q: i for i, (doc, qs) in enumerate(pairs) for q in qs}
+    for j, query in enumerate(queries):
+        assert docs[qrels[j]] == pairs[query_source[query]][0]
