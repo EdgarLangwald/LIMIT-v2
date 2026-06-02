@@ -1,0 +1,120 @@
+Goal: Generate profile_sentences.py — a Python module of dataclasses, one per "people-profile attribute" category,
+each with a pool of items and sentence templates. The final API should look like:
+
+from profile_sentences import generate
+generate.cars()  # → {"sentence": "He drives a Bugatti.", "facts": {"category": "cars", "item": "Bugatti"}}
+generate.cars.pool_size       # → 47
+generate.cars.templates       # → ["He drives a {item}.", ...]
+generate.cars.pool            # → ["Ford Mustang", "Bugatti", ...]
+Data source: The dariusk/corpora GitHub repo (https://raw.githubusercontent.com/dariusk/corpora/master/ + path).
+Use the GitHub tree API to get all file paths:https://api.github.com/repos/dariusk/corpora/git/trees/master?recursive=1
+Filter to entries whose path starts with data/ and ends with .json.
+
+Strategy — parallelize with sub-agents:
+
+Fetch the full file list (one WebFetch call)
+Split all JSON paths into batches of ~15 files each
+Spawn all batches as parallel sub-agents in a single message (use the Agent tool). Each agent receives its list
+of raw GitHub URLs, fetches each one with WebFetch, evaluates it, and returns a JSON array of results.
+Collect all agent results, filter to accepted, assemble and write profile_sentences.py
+Prompt to give each batch-agent:
+'''
+We are building huge synthetic datasets to stresstest embedding models. You are deciding whether the provided
+JSON files from the dariusk/corpora collection make for an interesting yet realistic fictional US person profile.
+The sentences can use the list in a creative way, as long as: 
+- each item makes sense with the template (bad example: "He keeps a [dolphin] in his yard"
+- the items differentiate the profiles enough (bad example: "his favorite prime is [149186131]")
+
+For each URL in the list below: fetch it with WebFetch, read the content, then decide accept or reject.
+
+If accepted: generate 5–10 unique sentence templates using {item} as placeholder. Vary structure, tense,
+context (childhood memory, current habit, aspiration, etc.). Every template must work naturally with every
+item in the list
+
+Good example: "his favorite book is Harry Potter", "Harry Potter was his favorite book when he was younger",
+"Last week, he couldn't stop reading Harry Potter", "He loves Harry Potter so much, he read it four times
+already", etc...
+
+A person's profile is assembled by sampling from some but not all template families — so generate.cars()
+won't be called for every person. The frequency field tells the assembler how likely this attribute is to
+appear in any given profile (as a percentage). Base it on how common this trait realistically is among US
+adults. Examples: cars → 65 (most adults own or care about cars), instruments → 18 (relatively few people
+play one), academic_subjects → 30 (a sizable minority are curious learners), exotic_pets → 4 (rare).
+
+Return ONLY a JSON array, one object per file:
+
+
+[
+  {
+    "path": "data/music/instruments.json",
+    "accepted": true,
+    "reason": "one sentence",
+    "category_name": "instruments",
+    "description": "Musical instruments",
+    "frequency": 18,
+    "templates": ["He's been playing {item} since he was twelve.", "..."],
+    "items": ["guitar", "piano", ...]
+  },
+  { "path": "data/...", "accepted": false, "reason": "..." }
+]
+Include ALL usable items from the JSON in the items array. Strip any items that would break the templates.
+
+URLs to evaluate:
+[LIST GOES HERE]
+
+'''
+After collecting all batch results, assemble profile_sentences.py. Each accepted category becomes a
+@dataclass with ClassVar fields (pool, templates, pool_size, avg_template_length) and a __call__(self,
+seed=None) -> dict method that picks a random item + template and returns {"sentence": "...", "facts":
+{"category": "...", "item": "..."}}. Wire all of them up on a _Generate dataclass instance called generate.
+
+#########################################################################################################################
+#########################################################################################################################
+
+Problem 1
+
+If half the items are unknown or unheard of to most people, the list is way too specific.
+Depending on the cause of this problem, there's two solutions:
+
+1) remove the list
+2) filter down to <10 most common items and set frequency very low
+
+Cause 1: Category too niche to begin with -> remove:
+
+- NaturalBuildingMaterials, EnglishPlaces, LeagueOfLeagendsChampion, SculptureMaterials,
+StreetFighterCharacters, CanadaProvincesTerritories, HotPeppers, FavoriteCrayolaColor, ...
+
+Cause 2: Too many items in an otherwise good category:
+
+- Scents, Gemstones, Fabrics, CanadianCities, Fish, Moods,
+
+BE AGGRESSIVE IN YOUR DECISIONS
+
+Problem 2
+
+Items are not obviously associated with that category.
+This may result in sentences that cannot be understood because of a lack of context.
+
+Examples: 
+Jake -> Dog name
+Plastic -> Building material
+Pheonix -> US State Capital
+
+Solution: Needs individual judgement. You may need to
+1) Filter the items for the specific ones
+2) Rewrite the sentences to include context
+or both.
+
+#########################################################################################################################
+#########################################################################################################################
+
+Notizen:
+
+Family names (2000 Census surnames zip, contains app_c.csv):
+https://www2.census.gov/topics/genealogy/2000surnames/names.zip
+
+Male first names (1990 Census):
+https://www2.census.gov/topics/genealogy/1990surnames/dist.male.first
+
+Female first names (1990 Census):
+https://www2.census.gov/topics/genealogy/1990surnames/dist.female.first
