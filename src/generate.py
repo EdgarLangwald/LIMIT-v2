@@ -4,7 +4,7 @@ import os
 import random
 import numpy as np
 from faker import Faker
-from profile_sentences import generate as _gen
+from src.profile_sentences import generate as _gen
 
 # Build weighted sampling table once at import time.
 # Excludes categories with frequency=0 (male_name, female_name, family_name, occupations).
@@ -83,7 +83,8 @@ if __name__ == "__main__":
     N=100
     M=4
 
-    out_dir = os.path.join(os.path.dirname(__file__), "dataset")
+    from src.paths import DATASET_DIR
+    out_dir = str(DATASET_DIR)
     os.makedirs(out_dir, exist_ok=True)
 
     filename = f"dataset_n{N}_m{M}.json"

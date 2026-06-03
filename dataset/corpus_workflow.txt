@@ -1,0 +1,78 @@
+You are evaluating a JSON dataset from dariusk/corpora to decide if it can serve as a
+sentence category for a synthetic US-person profile generator.
+
+Step 1 — Fetch the file:
+  Use WebFetch to fetch: <URL>
+
+Step 2 — Evaluate. BE AGGRESSIVE — when in doubt, reject.
+
+  ACCEPT only if ALL of these are true:
+  - The dataset contains a list of concrete items a fictional US person might individually
+    have as a preference, hobby, trait or distinct characteristic (cars, instruments, foods, sports, dog breeds, etc.)
+  - Items naturally complete sentences like "He likes/drives/plays/collects/reads {item}."
+  - A typical US adult would recognise most items without needing specialist knowledge.
+
+  REJECT outright if any of these apply:
+  - Abstract, or numerical content (primes, math constants, Zip-Codes)
+  - Technical/specialist knowledge most US adults lack (chemical compounds, niche video game character list)
+
+  PROBLEM 1 — Too many obscure items: if the list has some known items, but most items are
+  unknown to a typical US adult, choose one of:
+    a) Reject entirely if the category itself is too niche (e.g. StreetFighterCharacters,
+       LeagueOfLegendsChampions, EnglishPlaces, HotPeppers, SculptureMaterials)
+    b) Filter down to the most well-known items and assign a weight of 5 (or 10 if the filtered list is still long)
+       (e.g. Scents → keep rose/vanilla/lavender/...; Gemstones → keep diamond/ruby/emerald/...)
+
+  PROBLEM 2 — Items not obviously associated with the category: if reading an item in a
+  sentence would confuse a reader (e.g. "Jake" as a dog name, "Plastic" as a building material,
+  "Phoenix" as a US state capital), you must either:
+    b) Rewrite the templates to include enough context that the sentence is self-explanatory
+       (e.g. "His favourite US state capital to visit is {item}." instead of "He lives in {item}.")
+
+Step 3 — If ACCEPTED, produce:
+  - category_name: short snake_case name (e.g. "music_genres", "favorite_vegetables")
+  - description: one sentence describing the category
+  - frequency: a sampling weight (integer, not a percentage — categories are normalised at
+      sampling time, so only the relative values matter). Use these tiers as a guide:
+        60 → nearly universal trait, almost every adult has a clear answer (music_genres, car_brand, favorite_books, religions, work_industry)
+        40 → very common, most people engage with it (tv_shows, movie_genres, us_cities, board_games)
+        20 → fairly common, a solid minority of people (sports, fruits, moods, favorite_color, nfl_teams)
+        10 → uncommon but mainstream (cat_breeds, famous_duos, wine_tasting_descriptors, scents)
+         5 → niche or specialist interest (programming_languages, scotch_whisky, shakespeare_plays, norse_gods, cannabis_strains)
+         0 → keep in file but never sample (internal use only)
+  - items: the final filtered list of usable items only.
+  - templates: 5–10 varied sentence templates. Rules:
+      * Use these placeholders: {He} {he} {His} {his} {Him} {him} {Himself} {himself} {item}
+        ({He}/{he} = He/She, {His}/{his} = His/Her, {Him}/{him} = Him/Her, {Himself}/{himself} = Himself/Herself)
+      * EVERY template must work grammatically and naturally with EVERY item in the final list.
+        Bad: favorite_animal: "He keeps a {item} in his yard." — works for "dog" but not "dophin".
+      * Vary structure, tense, and context: current habit, childhood memory, aspiration, quirk, etc.
+      * Good variety example for books: "The book he can't stop thinking about is {item}.", "{item} was {his} favourite
+        book growing up.", "He has read {item} four times already.", "He always recommends {item}
+        to anyone who asks.", "Last week he couldn't put {item} down."
+  - python_class: the full Python dataclass code block for this category, using this exact format:
+
+@dataclass
+class _Cat_<PascalCaseName>:
+    pool: ClassVar[list] = [<items as a JSON-style Python list, one item per line, each quoted>]
+    templates: ClassVar[list] = [<templates list>]
+    pool_size: ClassVar[int] = <len(items)>
+    avg_template_length: ClassVar[float] = <mean char length of templates, 1 decimal>
+    frequency: ClassVar[int] = <frequency>
+    description: ClassVar[str] = '<description>'
+    category_name: ClassVar[str] = '<category_name>'
+
+    def __call__(self, seed=None, gender='male'):
+        rng = random.Random(seed)
+        pronouns = _PRONOUNS[gender]
+        item = rng.choice(self.pool)
+        template = rng.choice(self.templates)
+        return {"sentence": template.format(item=item, **pronouns),
+                "facts": {"category": self.category_name, "item": item}}
+
+Step 4 — Write result to file:
+  Use the Write tool to write the evaluation result as JSON to: <cache_file>
+  The JSON should include all fields above (accepted, reason, category_name, description,
+  frequency, items, templates, python_class, and add "_path": "<path>").
+
+Return the evaluation result as structured output.

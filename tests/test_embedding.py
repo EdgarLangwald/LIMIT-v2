@@ -1,6 +1,6 @@
 import numpy as np
-from dataset_creation import build_dataset
-from embed import embed_dataset
+from dataset_creation import build_dataset  # TODO: build_dataset not yet implemented in limit.dataset
+from src.embed import embed_dataset
 
 
 test_embedding_metadata()
@@ -9,7 +9,7 @@ test_embedding_metadata()
 
 
 def test_embedding_statistics():
-    dataset, _ = build_loi_dataset(n=20, m=1, seed=42)
+    dataset, _ = build_dataset(n=20, m=1, seed=42)
     result = embed_dataset(dataset, model_name="default")
     embs = np.concatenate([result["doc_embs"], result["qry_embs"]], axis=0)
 

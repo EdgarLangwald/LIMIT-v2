@@ -1,5 +1,5 @@
 import numpy as np
-from evaluate import compute_score_matrix, recall_at_k
+from src.evaluate import compute_score_matrix, recall_at_k  # TODO: metrics not yet implemented
 
 
 def test_score_matrix():

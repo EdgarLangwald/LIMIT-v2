@@ -1,0 +1,31 @@
+Notizen:
+
+Family names (2000 Census surnames zip, contains app_c.csv):
+https://www2.census.gov/topics/genealogy/2000surnames/names.zip
+
+Male first names (1990 Census):
+https://www2.census.gov/topics/genealogy/1990surnames/dist.male.first
+
+Female first names (1990 Census):
+https://www2.census.gov/topics/genealogy/1990surnames/dist.female.first
+
+## Can we retrieve the person from asking about the person?
+
+What is the birth date of {person}?
+Where does {person} live?
+What is the occupation of {person}?
+What do we know about {person}?
+Does {person} like to go hiking in the summer?
+
+## Can we filter people by commonalities?
+
+Who lives in {state}?
+Who works as {occupation}?
+Who was born after {2000}?
+
+## Can we retrieve the person from his profile?
+
+Who {verb} {item} and {verb} item?
+
+#########################################################################################################################
+#########################################################################################################################
