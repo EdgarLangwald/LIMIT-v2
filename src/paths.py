@@ -13,4 +13,5 @@ EMBEDDINGS_DIR = PROJECT_ROOT / "embeddings"
 MODELS_DIR     = PROJECT_ROOT / "models"
 ENV_PATH       = PROJECT_ROOT / ".env"
 
-POOLS_DIR = Path(__file__).resolve().parent / "pools"
+POOLS_DIR       = Path(__file__).resolve().parent / "pools"
+EVAL_TARGETS    = POOLS_DIR / "eval_targets.json"

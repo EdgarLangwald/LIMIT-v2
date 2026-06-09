@@ -1,10 +1,12 @@
-"""Embedding for LIMIT-v2 documents with per-model caching."""
+"""Embedding for LIMIT-v2 with per-dataset disk cache and batch-level resume."""
 import gc
+import json
 import os
 
 import numpy as np
-import torch
+from numpy.lib.format import open_memmap
 from tqdm import tqdm
+import torch
 
 from src.paths import EMBEDDINGS_DIR, MODELS_DIR
 
@@ -86,7 +88,7 @@ MODELS: dict[str, dict] = {
 
 
 def load_model(model_name: str, device: str | None = None):
-    """Download (if needed) and load the embedding model. Returns the model object."""
+    """Download (if needed) and load the embedding model."""
     model_id         = MODELS[model_name]["hf_id"]
     model_local_path = os.path.join(_DEFAULT_MODELS_DIR, model_name)
     use_device       = device or _device
@@ -117,20 +119,14 @@ def load_model(model_name: str, device: str | None = None):
         return SentenceTransformer(model_local_path, device=use_device)
 
 
-def _raw_embed(
-    texts: list[str],
-    model,
-    model_name: str,
-    is_query: bool,
-    batch_size: int = 64,
-) -> np.ndarray:
+def _raw_embed(texts: list[str], model, model_name: str, is_query: bool, batch_size: int = 64) -> np.ndarray:
     """Return (len(texts), dim) float32 L2-normalized embeddings."""
     is_gritlm = MODELS[model_name].get("gritlm_api", False)
-    prefix = MODELS[model_name].get("query_prefix" if is_query else "doc_prefix", "")
-    suffix = MODELS[model_name].get("query_suffix", "") if is_query else ""
+    prefix    = MODELS[model_name].get("query_prefix" if is_query else "doc_prefix", "")
+    suffix    = MODELS[model_name].get("query_suffix", "") if is_query else ""
 
     if is_gritlm:
-        embs = np.array(model.encode(texts, instruction=prefix, batch_size=batch_size), dtype=np.float32)
+        embs  = np.array(model.encode(texts, instruction=prefix, batch_size=batch_size), dtype=np.float32)
         norms = np.linalg.norm(embs, axis=1, keepdims=True)
         return embs / np.maximum(norms, 1e-8)
     else:
@@ -146,45 +142,106 @@ def embed_query(query: str, model_name: str, model) -> np.ndarray:
     return _raw_embed([query], model, model_name, is_query=True, batch_size=1)[0]
 
 
+def _progress_path(base: str) -> str:
+    return base + "_progress.json"
+
+def _load_progress(base: str) -> dict | None:
+    p = _progress_path(base)
+    return json.load(open(p)) if os.path.isfile(p) else None
+
+def _save_progress(base: str, data: dict) -> None:
+    with open(_progress_path(base), "w") as f:
+        json.dump(data, f)
+
+def _clear_progress(base: str) -> None:
+    p = _progress_path(base)
+    if os.path.isfile(p):
+        os.remove(p)
+
+def _cache_valid(base: str, n_doc: int, n_qry: int) -> bool:
+    if os.path.isfile(_progress_path(base)):
+        return False
+    d_ok = (n_doc == 0) or (os.path.isfile(base + "_d.npy") and np.load(base + "_d.npy", mmap_mode="r").shape[0] == n_doc)
+    q_ok = (n_qry == 0) or (os.path.isfile(base + "_q.npy") and np.load(base + "_q.npy", mmap_mode="r").shape[0] == n_qry)
+    return d_ok and q_ok
+
+
 def embed_dataset(
-    docs: list[dict],
+    dataset: dict,
     model_name: str,
     dataset_name: str,
     force: bool = False,
     batch_size: int = 64,
     device: str | None = None,
-) -> np.ndarray:
-    """Embed documents, cache to disk, and return (n, dim) float32 array.
+) -> dict:
+    """Embed corpus and queries, cache to disk, return {"doc_embs": ndarray, "qry_embs": ndarray}.
 
-    Each document is all of its sentences joined with a space.
-    Cache layout: embeddings/{dataset_name}/{model_name}_d.npy
+    Skips embedding if corpus or queries dict is empty.
+    Resumes interrupted runs batch-by-batch via progress files.
+    Cache layout: embeddings/{dataset_name}/{model_name}_d.npy  /  _q.npy
     """
-    cache_path = os.path.join(_DEFAULT_CACHE_DIR, dataset_name, model_name + "_d.npy")
-    doc_texts  = [" ".join(doc["sentences"]) for doc in docs]
+    doc_texts = list(dataset["corpus"].values())
+    qry_texts = list(dataset["queries"].values())
 
-    if not force and os.path.isfile(cache_path):
-        cached = np.load(cache_path, mmap_mode="r")
-        if cached.shape[0] == len(doc_texts):
-            print(f"Loading {len(doc_texts)} cached embeddings ({dataset_name}/{model_name})")
-            return np.array(cached)  # copy out of mmap for safety
+    folder = os.path.join(_DEFAULT_CACHE_DIR, dataset_name)
+    base   = os.path.join(folder, model_name)
 
-    print(f"Embedding {len(doc_texts)} documents with {model_name} ...")
-    model     = load_model(model_name, device)
+    if not force and _cache_valid(base, len(doc_texts), len(qry_texts)):
+        print(f"Loading cached embeddings ({dataset_name}/{model_name})")
+        return _load_cached(base)
+
+    os.makedirs(folder, exist_ok=True)
+    model      = load_model(model_name, device)
+    is_gritlm  = MODELS[model_name].get("gritlm_api", False)
     doc_prefix = MODELS[model_name].get("doc_prefix", "")
 
-    os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+    if is_gritlm:
+        dim = np.array(model.encode(["test"], instruction=doc_prefix, batch_size=1), dtype=np.float32).shape[-1]
+    else:
+        dim = model.get_embedding_dimension()
 
-    batches = []
-    for start in tqdm(range(0, len(doc_texts), batch_size), desc="docs"):
-        batch  = doc_texts[start : start + batch_size]
-        batches.append(_raw_embed(batch, model, model_name, is_query=False, batch_size=batch_size))
+    progress   = None if force else _load_progress(base)
+    docs_done  = (not force) and (progress is None or progress.get("docs_done", False)) and os.path.isfile(base + "_d.npy")
+    if docs_done and doc_texts and np.load(base + "_d.npy", mmap_mode="r").shape[0] != len(doc_texts):
+        docs_done = False
+    doc_start  = progress.get("doc_start", 0) if (progress and not docs_done) else 0
+    qry_start  = progress.get("qry_start", 0) if (progress and docs_done) else 0
 
-    doc_embs = np.concatenate(batches, axis=0)
-    np.save(cache_path, doc_embs)
+    if doc_texts:
+        doc_mm = open_memmap(base + "_d.npy", dtype="float32", mode="r+" if docs_done else "w+", shape=(len(doc_texts), dim))
+        if not docs_done:
+            n_batches = (len(doc_texts) + batch_size - 1) // batch_size
+            for start in tqdm(range(doc_start, len(doc_texts), batch_size), desc="docs", initial=doc_start // batch_size, total=n_batches, mininterval=30):
+                batch = doc_texts[start : start + batch_size]
+                doc_mm[start : start + len(batch)] = _raw_embed(batch, model, model_name, is_query=False, batch_size=batch_size)
+                _save_progress(base, {"docs_done": False, "doc_start": start + len(batch)})
+            doc_mm.flush()
+            _clear_progress(base)
+        del doc_mm
+
+    if qry_texts:
+        qry_exists = os.path.isfile(base + "_q.npy")
+        if qry_exists and np.load(base + "_q.npy", mmap_mode="r").shape[0] != len(qry_texts):
+            qry_exists, qry_start = False, 0
+        qry_mm = open_memmap(base + "_q.npy", dtype="float32", mode="r+" if qry_exists else "w+", shape=(len(qry_texts), dim))
+        n_batches = (len(qry_texts) + batch_size - 1) // batch_size
+        for start in tqdm(range(qry_start, len(qry_texts), batch_size), desc="queries", initial=qry_start // batch_size, total=n_batches, mininterval=30):
+            batch = qry_texts[start : start + batch_size]
+            qry_mm[start : start + len(batch)] = _raw_embed(batch, model, model_name, is_query=True, batch_size=batch_size)
+            _save_progress(base, {"docs_done": True, "qry_start": start + len(batch)})
+        qry_mm.flush()
+        del qry_mm
+        _clear_progress(base)
 
     del model
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
-    return doc_embs
+    return _load_cached(base)
+
+
+def _load_cached(base: str) -> dict:
+    def _load(path):
+        return np.load(path, mmap_mode="r") if os.path.isfile(path) else np.empty((0,), dtype=np.float32)
+    return {"doc_embs": _load(base + "_d.npy"), "qry_embs": _load(base + "_q.npy")}

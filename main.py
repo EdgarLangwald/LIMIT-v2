@@ -1,4 +1,4 @@
-"""LIMIT-v2 full pipeline: generate dataset → embed → interactive evaluation."""
+"""LIMIT-v2 pipeline: generate dataset → embed → evaluate at increasing distractor counts."""
 import os
 
 def _load_env():
@@ -15,63 +15,42 @@ def _load_env():
 _load_env()
 
 from src.generate import generate_dataset
-from src.embed import embed_dataset, load_model
-from src.evaluate import evaluate_manually
+from src.embed import embed_dataset
+from src.evaluate import evaluate, plot_results
 
-# --- configure here before running ---
-MODEL  = "Snowflake_v2"
-N      = 10000
-M      = 4
-SEED   = 42
-K      = 10
-FORCE  = False
-# -------------------------------------
+# --- dataset ---
+
+N        = 1000000        # total distractor documents
+M        = 4              # sentences per distractor doc
+SEED     = 42
+
+# --- embedding ---
+
+MODELS = [
+    "Snowflake_v2",
+    ]
+
+# --- evaluation ---
+
+N_VALUES = [0, 500, 1000, 2000, 5000, 10000] # distractor document count <= N
+KS       = [1, 5, 10]
+FORCE    = False
+
+# -----------------
 
 dataset_name = f"n{N}_m{M}_s{SEED}"
 
-# 1. Generate
-print(f"\n=== Generate ===")
-docs = generate_dataset(N, M, seed=SEED)
-print(f"{len(docs)} documents ready.")
+dataset, qrels, n_targets = generate_dataset(N, M, seed=SEED)
+print(f"{n_targets} targets + {N} distractors = {len(dataset['corpus'])} docs, {len(dataset['queries'])} queries")
 
-out_dir = os.path.join(os.path.dirname(__file__), "dataset")
-os.makedirs(out_dir, exist_ok=True)
-txt_path = os.path.join(out_dir, f"{dataset_name}.txt")
-with open(txt_path, "w", encoding="utf-8") as f:
-    f.write("\n\n".join("\n".join(doc["sentences"]) for doc in docs))
-print(f"Saved to {txt_path}\n")
+embs     = embed_dataset(dataset, MODEL, dataset_name, force=FORCE)
+doc_embs = embs["doc_embs"]
+qry_embs = embs["qry_embs"]
 
-# 2. Embed
-print(f"=== Embed ===")
-doc_embs = embed_dataset(docs, MODEL, dataset_name, force=FORCE)
-print(f"Embeddings: {doc_embs.shape}\n")
+results = evaluate(doc_embs, qry_embs, qrels, n_targets, N_VALUES, ks=KS)
 
-# 3. Load model for query embedding
-print(f"=== Load model for queries ===")
-model = load_model(MODEL)
-print()
+for n, metrics in sorted(results.items()):
+    recalls = "  ".join(f"R@{k}={metrics[f'recall@{k}']:.3f}" for k in KS)
+    print(f"  n={n:>6}  MRR={metrics['mrr']:.3f}  {recalls}")
 
-# 4. Interactive eval loop
-print(f"=== Evaluate ===")
-print(f"Top-{K} results, {len(docs)} docs total. Type 'quit' to exit.\n")
-
-while True:
-    sentence = input("Sentence : ").strip()
-    if sentence.lower() in ("quit", "q", "exit", ""):
-        break
-    target = input("Target   : ").strip()
-    if not target:
-        continue
-
-    result = evaluate_manually(sentence, target, doc_embs, docs, MODEL, k=K, model=model)
-
-    print(f"\nTop {K}:")
-    for rank, name in result["top_k"]:
-        marker = "  <-- target" if name.lower() == target.lower() else ""
-        print(f"  {rank:>3}. {name}{marker}")
-
-    if result["target_rank"] is not None:
-        print(f"\n  Target rank: {result['target_rank']} / {len(docs)}")
-    else:
-        print(f"\n  '{target}' not found in dataset (check spelling)")
-    print()
+plot_results(results, title=f"{MODEL} — {dataset_name}", show=True)

@@ -24,7 +24,7 @@ Structure (the "2 x 2" design):
 
 Usage:
     python dataset/build_query_workflow_input.py --dump-specs --seed 42 --n 100
-    python dataset/build_query_workflow_input.py --render --seed 42 --out dataset/query_final.json
+    python dataset/build_query_workflow_input.py --render --seed 42 --out src/pools/eval_targets.json
 """
 import argparse
 import glob
@@ -38,7 +38,7 @@ from faker import Faker
 
 from src.profile_sentences import generate as _gen, _PRONOUNS
 from src.generate import _SAMPLING_CATS, _SAMPLING_WEIGHTS
-from src.paths import DATASET_DIR
+from src.paths import DATASET_DIR, EVAL_TARGETS
 
 K_CATS = 3              # categories per draw
 TPL_PER_CAT = 2        # template indices the agent picks per category
@@ -60,11 +60,11 @@ def _eligible_categories():
 
 
 def _specs_dir(seed: int) -> str:
-    return str(DATASET_DIR / "qry_specs")
+    return str(DATASET_DIR / "query_workflow_input")
 
 
 def _results_dir(seed: int) -> str:
-    return str(DATASET_DIR / "qry_raw")
+    return str(DATASET_DIR / "query_workflow_output")
 
 
 # --------------------------------------------------------------------------- #
@@ -322,7 +322,7 @@ def main():
         dump_specs(args.n, args.seed, args.out or _specs_dir(args.seed))
         return
     if args.render:
-        out_path = args.out or str(DATASET_DIR / "qry_final.json")
+        out_path = args.out or str(EVAL_TARGETS)
         render_from_specs(args.seed, out_path)
         return
     parser.error("choose one of --dump-specs or --render")
