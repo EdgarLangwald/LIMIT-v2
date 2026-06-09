@@ -16,7 +16,7 @@ _load_env()
 
 from src.generate import generate_dataset
 from src.embed import embed_dataset
-from src.evaluate import evaluate, plot_results
+from src.evaluate import evaluate, plot_results, plot_mrr_comparison
 
 # --- dataset ---
 
@@ -43,14 +43,20 @@ dataset_name = f"n{N}_m{M}_s{SEED}"
 dataset, qrels, n_targets = generate_dataset(N, M, seed=SEED)
 print(f"{n_targets} targets + {N} distractors = {len(dataset['corpus'])} docs, {len(dataset['queries'])} queries")
 
-embs     = embed_dataset(dataset, MODEL, dataset_name, force=FORCE)
-doc_embs = embs["doc_embs"]
-qry_embs = embs["qry_embs"]
+all_results = {}
+for model in MODELS:
+    print(f"\n=== {model} ===")
+    embs     = embed_dataset(dataset, model, dataset_name, force=FORCE)
+    doc_embs = embs["doc_embs"]
+    qry_embs = embs["qry_embs"]
 
-results = evaluate(doc_embs, qry_embs, qrels, n_targets, N_VALUES, ks=KS)
+    results = evaluate(doc_embs, qry_embs, qrels, n_targets, N_VALUES, ks=KS)
+    all_results[model] = results
 
-for n, metrics in sorted(results.items()):
-    recalls = "  ".join(f"R@{k}={metrics[f'recall@{k}']:.3f}" for k in KS)
-    print(f"  n={n:>6}  MRR={metrics['mrr']:.3f}  {recalls}")
+    for n, metrics in sorted(results.items()):
+        recalls = "  ".join(f"R@{k}={metrics[f'recall@{k}']:.3f}" for k in KS)
+        print(f"  n={n:>6}  MRR={metrics['mrr']:.3f}  {recalls}")
 
-plot_results(results, title=f"{MODEL} — {dataset_name}", show=True)
+    plot_results(results, title=f"{model} — {dataset_name}", show=False)
+
+plot_mrr_comparison(all_results, title=f"MRR — {dataset_name}", show=True)
