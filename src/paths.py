@@ -8,7 +8,8 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
-DATASET_DIR    = PROJECT_ROOT / "dataset"
+DATASET_DIR           = PROJECT_ROOT / "dataset"
+GENERATED_DATASETS_DIR = DATASET_DIR / "generated_datasets"
 EMBEDDINGS_DIR = PROJECT_ROOT / "embeddings"
 MODELS_DIR     = PROJECT_ROOT / "models"
 ENV_PATH       = PROJECT_ROOT / ".env"

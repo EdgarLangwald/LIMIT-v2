@@ -36,7 +36,8 @@ LIMIT-v2/
 │   ├── query_workflow.js         — Workflow script: LLM step for query generation
 │   ├── query_workflow.txt        — subagent prompt for query_workflow.js
 │   ├── corpus_evaluations/       — per-file Haiku eval cache for corpus_workflow.js
-│   └── query_workflow_input/  query_workflow_output/ — intermediate query-build cache
+│   ├── query_workflow_input/  query_workflow_output/ — intermediate query-build cache
+│   └── generated_datasets/       — cached generate_dataset() outputs (n{n}_m{m}_s{seed}.json)
 ├── embeddings/ models/           — cached embeddings and model weights
 └── explore_faker.ipynb
 ```

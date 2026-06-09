@@ -116,7 +116,9 @@ def load_model(model_name: str, device: str | None = None):
         import logging
         logging.getLogger("sentence_transformers").setLevel(logging.WARNING)
         from sentence_transformers import SentenceTransformer
-        return SentenceTransformer(model_local_path, device=use_device)
+        st = SentenceTransformer(model_local_path, device=use_device)
+        print(f"  device: {next(st.parameters()).device}")
+        return st
 
 
 def _raw_embed(texts: list[str], model, model_name: str, is_query: bool, batch_size: int = 64) -> np.ndarray:
@@ -158,11 +160,21 @@ def _clear_progress(base: str) -> None:
     if os.path.isfile(p):
         os.remove(p)
 
+def _array_ok(path: str, n: int) -> bool:
+    """File exists, has n rows, and its boundary rows are non-zero (cheap corruption check:
+    catches the zero-prefix/suffix left by a botched resume without scanning the whole file)."""
+    if not os.path.isfile(path):
+        return False
+    arr = np.load(path, mmap_mode="r")
+    if arr.shape[0] != n:
+        return False
+    return bool(np.linalg.norm(arr[0]) > 1e-6 and np.linalg.norm(arr[-1]) > 1e-6)
+
 def _cache_valid(base: str, n_doc: int, n_qry: int) -> bool:
     if os.path.isfile(_progress_path(base)):
         return False
-    d_ok = (n_doc == 0) or (os.path.isfile(base + "_d.npy") and np.load(base + "_d.npy", mmap_mode="r").shape[0] == n_doc)
-    q_ok = (n_qry == 0) or (os.path.isfile(base + "_q.npy") and np.load(base + "_q.npy", mmap_mode="r").shape[0] == n_qry)
+    d_ok = (n_doc == 0) or _array_ok(base + "_d.npy", n_doc)
+    q_ok = (n_qry == 0) or _array_ok(base + "_q.npy", n_qry)
     return d_ok and q_ok
 
 
@@ -208,16 +220,27 @@ def embed_dataset(
     qry_start  = progress.get("qry_start", 0) if (progress and docs_done) else 0
 
     if doc_texts:
-        doc_mm = open_memmap(base + "_d.npy", dtype="float32", mode="r+" if docs_done else "w+", shape=(len(doc_texts), dim))
+        # Resume in-place ('r+') only if a correctly-shaped file already exists; opening 'w+'
+        # would zero-fill a fresh file and silently discard batches written before an interrupt.
+        d_path     = base + "_d.npy"
+        can_resume = os.path.isfile(d_path) and tuple(np.load(d_path, mmap_mode="r").shape) == (len(doc_texts), dim)
+        if not can_resume:
+            doc_start = 0
+        doc_mm = open_memmap(d_path, dtype="float32", mode="r+" if can_resume else "w+", shape=(len(doc_texts), dim))
         if not docs_done:
             n_batches = (len(doc_texts) + batch_size - 1) // batch_size
             for start in tqdm(range(doc_start, len(doc_texts), batch_size), desc="docs", initial=doc_start // batch_size, total=n_batches, mininterval=30):
                 batch = doc_texts[start : start + batch_size]
                 doc_mm[start : start + len(batch)] = _raw_embed(batch, model, model_name, is_query=False, batch_size=batch_size)
                 _save_progress(base, {"docs_done": False, "doc_start": start + len(batch)})
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
             doc_mm.flush()
             _clear_progress(base)
         del doc_mm
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
     if qry_texts:
         qry_exists = os.path.isfile(base + "_q.npy")
@@ -229,6 +252,8 @@ def embed_dataset(
             batch = qry_texts[start : start + batch_size]
             qry_mm[start : start + len(batch)] = _raw_embed(batch, model, model_name, is_query=True, batch_size=batch_size)
             _save_progress(base, {"docs_done": True, "qry_start": start + len(batch)})
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
         qry_mm.flush()
         del qry_mm
         _clear_progress(base)

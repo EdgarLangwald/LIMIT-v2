@@ -14,13 +14,14 @@ def _load_env():
 
 _load_env()
 
+import gc
 from src.generate import generate_dataset
 from src.embed import embed_dataset
 from src.evaluate import evaluate, plot_results, plot_mrr_comparison
 
 # --- dataset ---
 
-N        = 1000000        # total distractor documents
+N        = 100000        # total distractor documents
 M        = 4              # sentences per distractor doc
 SEED     = 42
 
@@ -28,12 +29,15 @@ SEED     = 42
 
 MODELS = [
     "Snowflake_v2",
+    "Qwen0.6b",
     ]
+BS     = 512
+DEVICE = "cuda"
 
 # --- evaluation ---
 
-N_VALUES = [0, 500, 1000, 2000, 5000, 10000] # distractor document count <= N
-KS       = [1, 5, 10]
+N_VALUES = [0, 500, 1000, 2000, 5000] + [10000*i for i in range(1, 11)]# distractor document count <= N
+KS       = [1, 5, 10, 50, 200]
 FORCE    = False
 
 # -----------------
@@ -46,7 +50,7 @@ print(f"{n_targets} targets + {N} distractors = {len(dataset['corpus'])} docs, {
 all_results = {}
 for model in MODELS:
     print(f"\n=== {model} ===")
-    embs     = embed_dataset(dataset, model, dataset_name, force=FORCE)
+    embs     = embed_dataset(dataset, model, dataset_name, force=FORCE, batch_size=BS, device=DEVICE)
     doc_embs = embs["doc_embs"]
     qry_embs = embs["qry_embs"]
 
@@ -58,5 +62,7 @@ for model in MODELS:
         print(f"  n={n:>6}  MRR={metrics['mrr']:.3f}  {recalls}")
 
     plot_results(results, title=f"{model} — {dataset_name}", show=False)
+    del doc_embs, qry_embs, embs
+    gc.collect()
 
 plot_mrr_comparison(all_results, title=f"MRR — {dataset_name}", show=True)

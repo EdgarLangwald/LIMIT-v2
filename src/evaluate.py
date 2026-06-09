@@ -23,6 +23,16 @@ def evaluate(
     target_embs     = doc_embs[:n_targets]
     distractor_embs = doc_embs[n_targets:]
 
+    # Zero-norm rows score 0 against every query; with strict-'>' ranking they all tie at
+    # rank 1 and fake a perfect score. This is the signature of a corrupt/incomplete embedding
+    # cache (e.g. an interrupted run), so fail loudly rather than report bogus metrics.
+    n_zero_docs = int((np.linalg.norm(doc_embs, axis=1) < 1e-6).sum())
+    if n_zero_docs:
+        raise ValueError(
+            f"{n_zero_docs}/{len(doc_embs)} doc embeddings are zero vectors — corpus embeddings "
+            f"are corrupt or incomplete. Re-embed (delete the cached *_d.npy) before evaluating."
+        )
+
     results = {}
     for n in n_values:
         corpus = np.concatenate([target_embs, distractor_embs[:n]], axis=0)

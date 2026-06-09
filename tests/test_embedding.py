@@ -1,30 +1,89 @@
+import math
+import shutil
+import pytest
 import numpy as np
-from dataset_creation import build_dataset  # TODO: build_dataset not yet implemented in limit.dataset
+from unittest.mock import patch
+
+import src.embed as _embed_module
+from src.generate import generate_dataset
 from src.embed import embed_dataset
+from src.paths import EMBEDDINGS_DIR
+
+_TEST_MODEL = "BGE_S"
 
 
-test_embedding_metadata()
-# Does the number of embeddings equal number docs + number queries?
-# Embedding dimension same as reported by model?
+def test_embedding_metadata():
+    dataset, _, _ = generate_dataset(n=5, m=1, seed=42)
+    result   = embed_dataset(dataset, model_name=_TEST_MODEL, dataset_name="test_metadata")
+    doc_embs = result["doc_embs"]
+    qry_embs = result["qry_embs"]
+
+    assert doc_embs.shape[0] == len(dataset["corpus"])
+    assert qry_embs.shape[0] == len(dataset["queries"])
+    assert doc_embs.shape[1] == qry_embs.shape[1], "doc and query embedding dims must match"
 
 
 def test_embedding_statistics():
-    dataset, _ = build_dataset(n=20, m=1, seed=42)
-    result = embed_dataset(dataset, model_name="default")
-    embs = np.concatenate([result["doc_embs"], result["qry_embs"]], axis=0)
+    dataset, _, _ = generate_dataset(n=2000, m=1, seed=42)
 
-    assert not np.isnan(embs).any()
-    assert not np.isinf(embs).any()
+    # Start both caches fresh so we actually exercise the resume path
+    for name in ("test_statistics_interrupted", "test_statistics_clean"):
+        folder = EMBEDDINGS_DIR / name
+        if folder.exists():
+            shutil.rmtree(str(folder))
+
+    n_doc_batches  = math.ceil(len(dataset["corpus"]) / 64)
+    interrupt_every = n_doc_batches // 3
+    original        = _embed_module._raw_embed
+
+    # Two interrupted runs — each stops after interrupt_every new doc batches
+    for _ in range(2):
+        counter = [0]
+
+        def patched(texts, model, model_name, is_query, batch_size=64,
+                    _c=counter, _stop=interrupt_every, _orig=original):
+            if not is_query:
+                _c[0] += 1
+                if _c[0] >= _stop:
+                    raise RuntimeError("Simulated interrupt")
+            return _orig(texts, model, model_name, is_query, batch_size)
+
+        with patch.object(_embed_module, "_raw_embed", patched):
+            with pytest.raises(RuntimeError, match="Simulated interrupt"):
+                embed_dataset(dataset, model_name=_TEST_MODEL, dataset_name="test_statistics_interrupted")
+
+    # Third call: no patch → runs to completion
+    result_interrupted = embed_dataset(dataset, model_name=_TEST_MODEL, dataset_name="test_statistics_interrupted")
+
+    # Reference: independent uninterrupted run on a fresh cache
+    result_clean = embed_dataset(dataset, model_name=_TEST_MODEL, dataset_name="test_statistics_clean")
+
+    embs = np.concatenate([result_interrupted["doc_embs"], result_interrupted["qry_embs"]], axis=0)
+
+    assert not np.isnan(embs).any(), f"nan in embedding"
+    assert not np.isinf(embs).any(), f"inf in embedding"
 
     norms = np.linalg.norm(embs, axis=1)
     assert np.allclose(norms, 1.0, atol=1e-3), f"Norms not unit: min={norms.min():.4f} max={norms.max():.4f}"
 
-    mean_cos_sim = (embs @ embs.T).mean()  # diagonal included but won't affect much for large n
+    mean_cos_sim = (embs @ embs.T).mean()
     assert mean_cos_sim < 0.95, f"Embeddings may be collapsed: mean cosine sim={mean_cos_sim:.4f}"
 
     sv = np.linalg.svd(embs, compute_uv=False)
     participation_ratio = sv.sum() ** 2 / (sv ** 2).sum()
     assert participation_ratio > 2.0, f"Embeddings may be dimension-collapsed: PR={participation_ratio:.2f}"
+
+    # Interrupted-then-resumed must produce bitwise-identical output to a clean run
+    np.testing.assert_array_equal(
+        result_interrupted["doc_embs"],
+        result_clean["doc_embs"],
+        err_msg="Interrupted doc embeddings differ from a clean run",
+    )
+    np.testing.assert_array_equal(
+        result_interrupted["qry_embs"],
+        result_clean["qry_embs"],
+        err_msg="Interrupted query embeddings differ from a clean run",
+    )
 
 
 def test_embedding_STS():
@@ -273,31 +332,34 @@ def test_embedding_STS():
 
     all_sentences = [s for g in GROUPS for s in g["similar"] + g["unrelated"]]
     corpus = {str(i): s for i, s in enumerate(all_sentences)}
-    result = embed_dataset({"corpus": corpus, "queries": {}}, model_name="default")
+    result = embed_dataset(
+        {"corpus": corpus, "queries": {}},
+        model_name=_TEST_MODEL,
+        dataset_name="test_sts",
+    )
     embs = result["doc_embs"]  # (120, dim), L2-normalized
 
     for group_idx, _ in enumerate(GROUPS):
         base = group_idx * 6
-        sim_embs = embs[base : base + 3]
+        sim_embs   = embs[base : base + 3]
         unrel_embs = embs[base + 3 : base + 6]
 
-        sim_sim = sim_embs @ sim_embs.T      # [i,j] = cos(similar[i], similar[j])
-        sim_unrel = sim_embs @ unrel_embs.T  # [i,j] = cos(similar[i], unrelated[j])
+        sim_sim   = sim_embs @ sim_embs.T
+        sim_unrel = sim_embs @ unrel_embs.T
         unrel_unrel = unrel_embs @ unrel_embs.T
 
         for i in range(3):
             min_within = min(sim_sim[i, j] for j in range(3) if j != i)
-            max_cross = sim_unrel[i].max()
+            max_cross  = sim_unrel[i].max()
             assert min_within > max_cross, (
                 f"Group {group_idx}: similar[{i}] not closer to similar sentences than to unrelated "
                 f"(min_within={min_within:.3f}, max_cross={max_cross:.3f})"
             )
 
         for i in range(3):
-            mean_to_sim = sim_unrel[:, i].mean()
+            mean_to_sim        = sim_unrel[:, i].mean()
             mean_to_other_unrel = np.array([unrel_unrel[i, j] for j in range(3) if j != i]).mean()
             assert abs(mean_to_sim - mean_to_other_unrel) < 0.2, (
                 f"Group {group_idx}: unrelated[{i}] has unusual affinity to similar cluster "
                 f"(mean_to_sim={mean_to_sim:.3f}, mean_to_other_unrel={mean_to_other_unrel:.3f})"
             )
-
