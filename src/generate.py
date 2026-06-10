@@ -85,7 +85,7 @@ def generate_dataset(
     m: int,
     seed: int | None = None,
     cache_dir: str | None = None,
-) -> tuple[dict, list[list[int]], int]:
+) -> tuple[dict, list[list[int]], int, "Path"]:
     """Build the full evaluation dataset: benchmark targets + n filler documents.
 
     Loads eval_targets.json, prepends unique target docs to an n-doc filler corpus,
@@ -96,12 +96,13 @@ def generate_dataset(
         n:         Number of filler (distractor) documents.
         m:         Category sentences per filler document.
         seed:      RNG seed for filler generation.
-        cache_dir: Directory for the cached JSON. Defaults to DATASET_DIR.
+        cache_dir: Directory for the cached JSON. Defaults to GENERATED_DATASETS_DIR.
 
     Returns:
-        dataset:   {"corpus": {"doc_0": text, ...}, "queries": {"query_0": text, ...}}
-        qrels:     list[list[int]] — relevant doc indices per query (always in 0..n_targets-1)
-        n_targets: number of target documents (always at the front of corpus)
+        dataset:      {"corpus": {"doc_0": text, ...}, "queries": {"query_0": text, ...}}
+        qrels:        list[list[int]] — relevant doc indices per query (always in 0..n_targets-1)
+        n_targets:    number of target documents (always at the front of corpus)
+        dataset_path: Path to the cached JSON file (written or loaded)
     """
     from pathlib import Path
     default_dir = GENERATED_DATASETS_DIR
@@ -111,7 +112,7 @@ def generate_dataset(
     if cache_path.exists():
         print(f"Loading cached dataset ({cache_path.name})")
         d = json.loads(cache_path.read_text(encoding="utf-8"))
-        return {"corpus": d["corpus"], "queries": d["queries"]}, d["qrels"], d["n_targets"]
+        return {"corpus": d["corpus"], "queries": d["queries"]}, d["qrels"], d["n_targets"], cache_path
 
     with open(EVAL_TARGETS, encoding="utf-8") as f:
         draws = json.load(f)
@@ -158,7 +159,7 @@ def generate_dataset(
         encoding="utf-8",
     )
 
-    return {"corpus": corpus, "queries": queries}, qrels, n_targets
+    return {"corpus": corpus, "queries": queries}, qrels, n_targets, cache_path
 
 
 if __name__ == "__main__":

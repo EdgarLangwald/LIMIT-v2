@@ -2,6 +2,7 @@
 import gc
 import json
 import os
+from pathlib import Path
 
 import numpy as np
 from numpy.lib.format import open_memmap
@@ -181,21 +182,21 @@ def _cache_valid(base: str, n_doc: int, n_qry: int) -> bool:
 def embed_dataset(
     dataset: dict,
     model_name: str,
-    dataset_name: str,
+    dataset_path: Path,
     force: bool = False,
     batch_size: int = 64,
     device: str | None = None,
-) -> dict:
-    """Embed corpus and queries, cache to disk, return {"doc_embs": ndarray, "qry_embs": ndarray}.
+) -> tuple[dict, Path]:
+    """Embed corpus and queries, cache to disk, return ({"doc_embs": ndarray, "qry_embs": ndarray}, embs_path).
 
+    embs_path is EMBEDDINGS_DIR/<dataset_stem>/<model_name> — pass it to evaluate().
     Skips embedding if corpus or queries dict is empty.
     Resumes interrupted runs batch-by-batch via progress files.
-    Cache layout: embeddings/{dataset_name}/{model_name}_d.npy  /  _q.npy
     """
     doc_texts = list(dataset["corpus"].values())
     qry_texts = list(dataset["queries"].values())
 
-    folder = os.path.join(_DEFAULT_CACHE_DIR, dataset_name)
+    folder = os.path.join(_DEFAULT_CACHE_DIR, Path(dataset_path).stem)
     base   = os.path.join(folder, model_name)
 
     if not force and _cache_valid(base, len(doc_texts), len(qry_texts)):
@@ -263,7 +264,7 @@ def embed_dataset(
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
-    return _load_cached(base)
+    return _load_cached(base), Path(base)
 
 
 def _load_cached(base: str) -> dict:

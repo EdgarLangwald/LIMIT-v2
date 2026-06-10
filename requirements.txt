@@ -1,2 +1,6 @@
-datasets
-phantom-wiki
+torch
+transformers
+sentence-transformers
+faker
+matplotlib
+gritlm

@@ -1,6 +1,8 @@
-"""LIMIT-v2 pipeline: generate dataset → embed → evaluate at increasing distractor counts."""
+"""LIMIT-v2 pipeline: generate dataset → embed with different models
+   → evaluate at increasing distractor counts → visualize"""
 import os
 
+# load huggingface token to download models from hf with authentification
 def _load_env():
     env_path = os.path.join(os.path.dirname(__file__), ".env")
     if not os.path.exists(env_path):
@@ -17,11 +19,12 @@ _load_env()
 import gc
 from src.generate import generate_dataset
 from src.embed import embed_dataset
-from src.evaluate import evaluate, plot_results, plot_mrr_comparison
+from src.evaluate import evaluate
+from src.plot import visualize_results
 
 # --- dataset ---
 
-N        = 100000        # total distractor documents
+N        = 50000        # total distractor documents
 M        = 4              # sentences per distractor doc
 SEED     = 42
 
@@ -31,38 +34,35 @@ MODELS = [
     "Snowflake_v2",
     "Qwen0.6b",
     ]
-BS     = 512
-DEVICE = "cuda"
+BS     = 1000
 
 # --- evaluation ---
 
-N_VALUES = [0, 500, 1000, 2000, 5000] + [10000*i for i in range(1, 11)]# distractor document count <= N
+N_VALUES = [0, 500, 1000, 2000, 5000] + [10000*i for i in range(1, 6)]# distractor document count <= N
 KS       = [1, 5, 10, 50, 200]
-FORCE    = False
 
 # -----------------
 
-dataset_name = f"n{N}_m{M}_s{SEED}"
-
-dataset, qrels, n_targets = generate_dataset(N, M, seed=SEED)
+dataset, qrels, n_targets, dataset_path = generate_dataset(N, M, seed=SEED)
 print(f"{n_targets} targets + {N} distractors = {len(dataset['corpus'])} docs, {len(dataset['queries'])} queries")
 
-all_results = {}
 for model in MODELS:
     print(f"\n=== {model} ===")
-    embs     = embed_dataset(dataset, model, dataset_name, force=FORCE, batch_size=BS, device=DEVICE)
-    doc_embs = embs["doc_embs"]
-    qry_embs = embs["qry_embs"]
 
-    results = evaluate(doc_embs, qry_embs, qrels, n_targets, N_VALUES, ks=KS)
-    all_results[model] = results
+    embs, embs_path = embed_dataset(
+        dataset, model, dataset_path,
+        batch_size=BS,
+        force=False,
+    )
 
-    for n, metrics in sorted(results.items()):
-        recalls = "  ".join(f"R@{k}={metrics[f'recall@{k}']:.3f}" for k in KS)
-        print(f"  n={n:>6}  MRR={metrics['mrr']:.3f}  {recalls}")
+    results = evaluate(
+        embs, qrels, n_targets, embs_path,
+        n_values=N_VALUES,
+        ks=KS,
+        force=True,
+    )
 
-    plot_results(results, title=f"{model} — {dataset_name}", show=False)
-    del doc_embs, qry_embs, embs
+    del embs
     gc.collect()
 
-plot_mrr_comparison(all_results, title=f"MRR — {dataset_name}", show=True)
+visualize_results()

@@ -1,37 +1,65 @@
-"""Evaluation for LIMIT-v2: metrics, plotting, and interactive manual eval."""
+"""Evaluation for LIMIT-v2: metrics and JSON persistence."""
+import json
+from pathlib import Path
+
 import numpy as np
-import matplotlib.pyplot as plt
 
 from src.embed import embed_query
+from src.paths import RESULTS_DIR
 
 
 def evaluate(
-    doc_embs:   np.ndarray,
-    qry_embs:   np.ndarray,
-    qrels:      list[list[int]],
-    n_targets:  int,
-    n_values:   list[int],
-    ks:         list[int] = [1, 5, 10],
+    embs:        dict,
+    qrels:       list[list[int]],
+    n_targets:   int,
+    embs_path:   Path,
+    n_values:    list[int] | None = None,
+    ks:          list[int] = [1, 5, 10],
+    results_dir: Path | None = None,
+    force:       bool = True,
 ) -> dict[int, dict]:
     """Evaluate retrieval at increasing distractor pool sizes.
 
-    For each n in n_values, the corpus is: all target docs (fixed) + first n distractor docs.
-    Targets occupy indices 0..n_targets-1; qrels must only reference those indices.
+    For each n in n_values, the corpus is: all target docs (fixed) + first n
+    distractor docs.  Targets occupy indices 0..n_targets-1; qrels must only
+    reference those indices.
+
+    If *embs_path* is given (as returned by embed_dataset), results are saved to
+    <results_dir>/<model>_<dataset>.json.  With force=False an existing file is
+    loaded and returned immediately.
 
     Returns dict mapping n -> {"recall@k": float, ..., "mrr": float}.
     """
-    target_embs     = doc_embs[:n_targets]
-    distractor_embs = doc_embs[n_targets:]
+    n_values = [n_targets] if n_values is None else n_values
+    results_dir = results_dir or RESULTS_DIR
 
-    # Zero-norm rows score 0 against every query; with strict-'>' ranking they all tie at
-    # rank 1 and fake a perfect score. This is the signature of a corrupt/incomplete embedding
-    # cache (e.g. an interrupted run), so fail loudly rather than report bogus metrics.
+    name = None
+    if embs_path is not None:
+        embs_path = Path(embs_path)
+        name = f"{embs_path.name}_{embs_path.parent.name}"
+
+    if name is not None:
+        json_path = results_dir / f"{name}.json"
+        if not force and json_path.exists():
+            with open(json_path) as f:
+                data = json.load(f)
+            return {int(k): v for k, v in data["results"].items()}
+
+    doc_embs = embs["doc_embs"]
+    qry_embs = embs["qry_embs"]
+
+    # Zero-norm rows score 0 against every query; with strict-'>' ranking they
+    # all tie at rank 1 and fake a perfect score — fail loudly instead.
     n_zero_docs = int((np.linalg.norm(doc_embs, axis=1) < 1e-6).sum())
     if n_zero_docs:
         raise ValueError(
-            f"{n_zero_docs}/{len(doc_embs)} doc embeddings are zero vectors — corpus embeddings "
-            f"are corrupt or incomplete. Re-embed (delete the cached *_d.npy) before evaluating."
+            f"{n_zero_docs}/{len(doc_embs)} doc embeddings are zero vectors — "
+            f"corpus embeddings are corrupt or incomplete. Re-embed (delete the "
+            f"cached *_d.npy) before evaluating."
         )
+
+    target_embs     = doc_embs[:n_targets]
+    distractor_embs = doc_embs[n_targets:]
 
     results = {}
     for n in n_values:
@@ -45,7 +73,6 @@ def evaluate(
             q_scores   = scores[qi]
             rel_arr    = np.array(rel)
             rel_scores = q_scores[rel_arr]
-            # rank of each relevant doc: 1 + number of corpus docs scoring strictly higher
             ranks = (q_scores[None, :] > rel_scores[:, None]).sum(axis=1) + 1
 
             mrr_vals.append(1.0 / float(ranks.min()))
@@ -56,71 +83,17 @@ def evaluate(
         out["mrr"] = float(np.mean(mrr_vals))
         results[n] = out
 
+    if name is not None:
+        results_dir.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "name": name,
+            "ks": ks,
+            "results": {str(n): v for n, v in results.items()},
+        }
+        with open(results_dir / f"{name}.json", "w") as f:
+            json.dump(payload, f, indent=2)
+
     return results
-
-
-def plot_results(
-    results: dict[int, dict],
-    title:   str = "",
-    show:    bool = True,
-    show_mrr: bool = True,
-) -> None:
-    ns  = sorted(results)
-    ks  = sorted(int(k.split("@")[1]) for k in results[ns[0]] if k.startswith("recall@"))
-
-    fig, ax = plt.subplots(figsize=(8, 5))
-    for i, k in enumerate(ks):
-        ax.plot(ns, [results[n][f"recall@{k}"] for n in ns], marker="os^Dv"[i % 5], label=f"Recall@{k}")
-    if show_mrr:
-        ax.plot(ns, [results[n]["mrr"] for n in ns], marker="x", linestyle="--", label="MRR")
-
-    ax.set_xlabel("n distractors")
-    ax.set_ylabel("Score")
-    ax.set_xticks(ns)
-    ax.set_xticklabels([f"{n/1000:.0f}k" if n >= 1000 else str(n) for n in ns])
-    ax.set_ylim(0, 1.05)
-    if title:
-        ax.set_title(title)
-    ax.legend()
-    ax.grid(True, alpha=0.3)
-    plt.tight_layout()
-
-    if show:
-        plt.show()
-    else:
-        fname = f"{title}.png" if title else "results.png"
-        plt.savefig(fname, dpi=150)
-        plt.close(fig)
-
-
-def plot_mrr_comparison(all_results: dict[str, dict[int, dict]], title: str = "", show: bool = True) -> None:
-    """Compare MRR curves across models. all_results: {model_name: {n: metrics}}."""
-    markers = "os^DvP*X"
-    fig, ax = plt.subplots(figsize=(10, 6))
-
-    for i, (model_name, results) in enumerate(all_results.items()):
-        ns  = sorted(results)
-        mrr = [results[n]["mrr"] for n in ns]
-        ax.plot(ns, mrr, marker=markers[i % len(markers)], label=model_name)
-
-    ns = sorted(next(iter(all_results.values())))
-    ax.set_xlabel("n distractors")
-    ax.set_ylabel("MRR")
-    ax.set_xticks(ns)
-    ax.set_xticklabels([f"{n/1000:.0f}k" if n >= 1000 else str(n) for n in ns])
-    ax.set_ylim(0, 1.05)
-    if title:
-        ax.set_title(title)
-    ax.legend()
-    ax.grid(True, alpha=0.3)
-    plt.tight_layout()
-
-    if show:
-        plt.show()
-    else:
-        fname = f"{title}.png" if title else "mrr_comparison.png"
-        plt.savefig(fname, dpi=150)
-        plt.close(fig)
 
 
 def evaluate_manually(
@@ -159,6 +132,7 @@ if __name__ == "__main__":
 
     from src.generate import generate_corpus
     from src.embed import embed_dataset, load_model
+    from src.paths import GENERATED_DATASETS_DIR
 
     MODEL = "Snowflake_v2"
     N     = 1000
@@ -166,14 +140,14 @@ if __name__ == "__main__":
     SEED  = 42
     K     = 10
 
-    dataset_name = f"manual_n{N}_m{M}_s{SEED}"
     corpus_docs  = generate_corpus(N, M, seed=SEED)
     corpus       = {doc["name"]: " ".join(doc["sentences"]) for doc in corpus_docs}
     dataset      = {"corpus": corpus, "queries": {}}
+    dataset_path = GENERATED_DATASETS_DIR / f"manual_n{N}_m{M}_s{SEED}.json"
 
-    embs  = embed_dataset(dataset, MODEL, dataset_name)
+    embs, _  = embed_dataset(dataset, MODEL, dataset_path)
     doc_embs = embs["doc_embs"]
-    model = load_model(MODEL)
+    model    = load_model(MODEL)
 
     print(f"Corpus: {len(corpus)} docs. Top-{K} results. Type 'quit' to exit.\n")
     while True:

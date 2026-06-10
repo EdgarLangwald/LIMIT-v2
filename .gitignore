@@ -1,0 +1,7 @@
+*.sh
+*.png
+*.err
+*.out
+/embeddings
+/models
+src/__pycache__

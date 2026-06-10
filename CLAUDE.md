@@ -25,7 +25,8 @@ LIMIT-v2/
 │   ├── profile_sentences.py      — STAGE 1: sentence category dataclasses (auto-generated)
 │   ├── generate.py               — STAGE 1: generate_dataset(n, m, seed)
 │   ├── embed.py                  — STAGE 2: embed_dataset, load_model, embed_query
-│   ├── evaluate.py               — STAGE 3: evaluate_manually (metrics.py, plotting.py land here next)
+│   ├── evaluate.py               — STAGE 3: evaluate() saves results/{name}.json; evaluate_manually()
+│   ├── plot.py                   — STAGE 3: visualize_results() builds PDF from results/*.json
 │   └── pools/                    — male_names.csv, female_names.csv, family_names.csv, eval_targets.json
 ├── tests/                        — test scaffolds (some reference not-yet-built metrics)
 ├── dataset/
@@ -39,6 +40,7 @@ LIMIT-v2/
 │   ├── query_workflow_input/  query_workflow_output/ — intermediate query-build cache
 │   └── generated_datasets/       — cached generate_dataset() outputs (n{n}_m{m}_s{seed}.json)
 ├── embeddings/ models/           — cached embeddings and model weights
+├── results/                      — evaluate() JSON outputs + report.pdf from visualize_results()
 └── explore_faker.ipynb
 ```
 

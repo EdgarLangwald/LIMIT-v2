@@ -16,3 +16,4 @@ ENV_PATH       = PROJECT_ROOT / ".env"
 
 POOLS_DIR       = Path(__file__).resolve().parent / "pools"
 EVAL_TARGETS    = POOLS_DIR / "eval_targets.json"
+RESULTS_DIR     = PROJECT_ROOT / "results"

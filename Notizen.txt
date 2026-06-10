@@ -29,3 +29,12 @@ Who {verb} {item} and {verb} item?
 
 #########################################################################################################################
 #########################################################################################################################
+
+output.err reads faker didn't load. But pip show faker shows correct in terminal. Take over the terminal. Set a goal: run current (testrun) main.py on gpu of cluster. The goal is completed if I get the pdf from visualize_results(), and it looks good and well formated. At each step of the code (i.e. generate dataset → embed with different models
+   → evaluate at increasing distractor counts → visualize).
+
+ judge whether the last step ran successfully, then don't repeat it by setting force=False in main.py. If you do so, I expect the code to skip the step if files are already present. As you go, summarize in a SHORT way (1 - 2 sentences max) each bugfix you did inside a bugfix_report.txt file inside root.
+
+remember that you're on SLURM cluster, and jobs take a while to submit. check with exp. decay whether the job is being done, but check no less then every 5min.
+
+You're free to create temporary test files to debug as you go. You're free to add logs into the code, as long as you delete them all after the fix.
