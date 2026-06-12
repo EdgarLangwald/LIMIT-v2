@@ -26,6 +26,12 @@ MODELS: dict[str, dict] = {
         "hf_id": "BAAI/bge-large-en-v1.5",
         "query_prefix": "Represent this sentence for searching relevant passages: ",
     },
+    # ~2.3 GB; multilingual XLM-RoBERTa-large; dense+sparse+ColBERT (SentenceTransformer gives dense).
+    # Unlike bge-*-en-v1.5, M3 needs NO query instruction; 1024-dim, 8192 ctx (2024)
+    "BGE_M3": {
+        "hf_id": "BAAI/bge-m3",
+        "query_prefix": "",
+    },
     # ~0.5 GB; ModernBERT backbone, strong MTEB for its size (2024)
     "ModernBERT": {
         "hf_id": "Alibaba-NLP/gte-modernbert-base",
@@ -75,10 +81,24 @@ MODELS: dict[str, dict] = {
         "hf_id": "Alibaba-NLP/gte-Qwen2-7B-instruct",
         "query_prefix": "Instruct: Retrieve the person whose profile best answers the query.\nQuery: ",
     },
-    # ~1 GB; MoE architecture, 475M params (305M active), strong for size (2024)
-    "Nomic_MoE": {
+    # ~1 GB; MoE, 475M params (305M active), strong for size; 768-dim Matryoshka.
+    # Asymmetric: documents MUST use the search_document prefix. Needs trust_remote_code (2024)
+    "Nomic_Embed_v2": {
         "hf_id": "nomic-ai/nomic-embed-text-v2-moe",
         "query_prefix": "search_query: ",
+        "doc_prefix":   "search_document: ",
+        "trust_remote_code": True,
+    },
+    # ~2.3 GB; multilingual XLM-RoBERTa w/ task-specific LoRA adapters, 1024-dim Matryoshka, 8192 ctx.
+    # Selects adapter + instruction via task/prompt_name encode args (NOT text prefixes); needs
+    # trust_remote_code + `pip install einops`. License: CC-BY-NC-4.0 (non-commercial) (2024)
+    "Jina_v3": {
+        "hf_id": "jinaai/jina-embeddings-v3",
+        "query_prefix": "",
+        "doc_prefix":   "",
+        "trust_remote_code": True,
+        "query_encode_kwargs": {"task": "retrieval.query",   "prompt_name": "retrieval.query"},
+        "doc_encode_kwargs":   {"task": "retrieval.passage", "prompt_name": "retrieval.passage"},
     },
     # ~2 GB; updated Arctic-L, stronger MTEB than v1 (2024)
     "Snowflake_v2": {
@@ -86,6 +106,45 @@ MODELS: dict[str, dict] = {
         "query_prefix": "query: ",
     },
 }
+
+
+class _GritLMEmbedder:
+    """Embedding-only replacement for the `gritlm` package.
+
+    GritLM-7B ships custom remote modeling code written for transformers 4.37 that
+    crashes on transformers 5.x, and the `gritlm` pip package depends on it. The
+    weights are plain Mistral-7B though, so we load them into the stock
+    `MistralModel` and use the transformers>=5 `config.is_causal = False` switch
+    to get the bidirectional attention GritLM's embedding mode was trained with.
+    Pooling replicates gritlm.GritLM.encode: mean over non-instruction tokens,
+    right padding, max_length 512, L2 normalize.
+    """
+
+    def __init__(self, model_path: str, device: str):
+        from transformers import AutoTokenizer, MistralModel
+        self.tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="right")
+        self.model = MistralModel.from_pretrained(model_path, dtype=torch.bfloat16, attn_implementation="sdpa")
+        self.model.config.is_causal = False      # bidirectional attention (the 'bb' in GritLM's bbcc)
+        self.model.config.sliding_window = None  # full attention, as in the original embedding path
+        self.model.eval().to(device)
+        self.device = device
+        print(f"  device: {next(self.model.parameters()).device}, dtype: {self.model.dtype}")
+
+    @torch.no_grad()
+    def encode(self, texts: list[str], instruction: str = "", batch_size: int = 64, max_length: int = 512) -> np.ndarray:
+        # Instruction token count includes BOS, exactly like gritlm's masking
+        n_inst = len(self.tokenizer(instruction)["input_ids"]) if instruction else 0
+        out = []
+        for i in range(0, len(texts), batch_size):
+            batch  = [instruction + t for t in texts[i : i + batch_size]]
+            inputs = self.tokenizer(batch, padding=True, truncation=True, max_length=max_length,
+                                    return_tensors="pt").to(self.device)
+            hidden = self.model(**inputs, use_cache=False).last_hidden_state
+            mask   = inputs["attention_mask"].clone()
+            mask[:, :n_inst] = 0  # mean-pool only over the text, not the instruction
+            pooled = (hidden * mask.unsqueeze(-1).float()).sum(dim=1) / mask.sum(dim=1, keepdim=True).float()
+            out.append(torch.nn.functional.normalize(pooled, dim=-1).float().cpu().numpy())
+        return np.concatenate(out, axis=0)
 
 
 def load_model(model_name: str, device: str | None = None):
@@ -103,30 +162,23 @@ def load_model(model_name: str, device: str | None = None):
         print(f"  {model_name} (local)")
 
     if is_gritlm:
-        from transformers import MistralConfig
-        from transformers.cache_utils import DynamicCache
-        if not hasattr(MistralConfig, "rope_theta"):
-            MistralConfig.rope_theta = 10000.0
-        if not hasattr(DynamicCache, "from_legacy_cache"):
-            DynamicCache.from_legacy_cache = classmethod(lambda cls, legacy=None: cls())
-        if not hasattr(DynamicCache, "get_usable_length"):
-            DynamicCache.get_usable_length = lambda self, _, layer_idx=0: self.get_seq_length(layer_idx)
-        from gritlm import GritLM as _GritLM
-        return _GritLM(model_local_path, torch_dtype="auto", mode="embedding")
+        return _GritLMEmbedder(model_local_path, device=use_device)
     else:
         import logging
         logging.getLogger("sentence_transformers").setLevel(logging.WARNING)
         from sentence_transformers import SentenceTransformer
-        st = SentenceTransformer(model_local_path, device=use_device)
+        st_kwargs = {"trust_remote_code": True} if MODELS[model_name].get("trust_remote_code") else {}
+        st = SentenceTransformer(model_local_path, device=use_device, **st_kwargs)
         print(f"  device: {next(st.parameters()).device}")
         return st
 
 
 def _raw_embed(texts: list[str], model, model_name: str, is_query: bool, batch_size: int = 64) -> np.ndarray:
     """Return (len(texts), dim) float32 L2-normalized embeddings."""
-    is_gritlm = MODELS[model_name].get("gritlm_api", False)
-    prefix    = MODELS[model_name].get("query_prefix" if is_query else "doc_prefix", "")
-    suffix    = MODELS[model_name].get("query_suffix", "") if is_query else ""
+    is_gritlm  = MODELS[model_name].get("gritlm_api", False)
+    prefix     = MODELS[model_name].get("query_prefix" if is_query else "doc_prefix", "")
+    suffix     = MODELS[model_name].get("query_suffix", "") if is_query else ""
+    enc_kwargs = MODELS[model_name].get("query_encode_kwargs" if is_query else "doc_encode_kwargs", {})
 
     if is_gritlm:
         embs  = np.array(model.encode(texts, instruction=prefix, batch_size=batch_size), dtype=np.float32)
@@ -135,7 +187,7 @@ def _raw_embed(texts: list[str], model, model_name: str, is_query: bool, batch_s
     else:
         processed = [prefix + t + suffix for t in texts] if (prefix or suffix) else texts
         return np.array(
-            model.encode(processed, batch_size=batch_size, normalize_embeddings=True, show_progress_bar=False),
+            model.encode(processed, batch_size=batch_size, normalize_embeddings=True, show_progress_bar=False, **enc_kwargs),
             dtype=np.float32,
         )
 
@@ -186,12 +238,14 @@ def embed_dataset(
     force: bool = False,
     batch_size: int = 64,
     device: str | None = None,
+    model=None,
 ) -> tuple[dict, Path]:
     """Embed corpus and queries, cache to disk, return ({"doc_embs": ndarray, "qry_embs": ndarray}, embs_path).
 
     embs_path is EMBEDDINGS_DIR/<dataset_stem>/<model_name> — pass it to evaluate().
     Skips embedding if corpus or queries dict is empty.
     Resumes interrupted runs batch-by-batch via progress files.
+    Pass an already-loaded *model* to skip the load_model() call.
     """
     doc_texts = list(dataset["corpus"].values())
     qry_texts = list(dataset["queries"].values())
@@ -200,11 +254,11 @@ def embed_dataset(
     base   = os.path.join(folder, model_name)
 
     if not force and _cache_valid(base, len(doc_texts), len(qry_texts)):
-        print(f"Loading cached embeddings ({dataset_name}/{model_name})")
-        return _load_cached(base)
+        print(f"Loading cached embeddings ({Path(dataset_path).stem}/{model_name})")
+        return _load_cached(base), Path(base)
 
     os.makedirs(folder, exist_ok=True)
-    model      = load_model(model_name, device)
+    model      = model if model is not None else load_model(model_name, device)
     is_gritlm  = MODELS[model_name].get("gritlm_api", False)
     doc_prefix = MODELS[model_name].get("doc_prefix", "")
 

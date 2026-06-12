@@ -43,35 +43,25 @@ def _load_results(results_dir: Path) -> dict[str, dict]:
 
 
 def _page_per_model(pdf: PdfPages, name: str, results: dict[int, dict], simplify: bool) -> None:
-    """One PDF page: all recall@k subplots for a single model, plus MRR inset."""
+    """One PDF page: all Recall@k curves overlaid on a single graph for one model."""
     ns = sorted(results)
     ks = sorted(int(k.split("@")[1]) for k in results[ns[0]] if k.startswith("recall@"))
 
-    ncols = min(3, len(ks))
-    nrows = (len(ks) + ncols - 1) // ncols
-
-    fig, axes = plt.subplots(nrows, ncols, figsize=(5 * ncols, 4 * nrows), squeeze=False)
+    fig, ax = plt.subplots(figsize=(10, 6))
     fig.suptitle(name, fontsize=14, fontweight="bold")
 
-    xticks = list(range(len(ns)))
-    xlabels = [_fmt_x(n, simplify) for n in ns]
-
     for idx, k in enumerate(ks):
-        ax = axes[idx // ncols][idx % ncols]
         vals = [results[n][f"recall@{k}"] for n in ns]
-        ax.plot(xticks, vals, marker=MARKERS[idx % len(MARKERS)], color=COLORS[idx % len(COLORS)])
-        ax.set_title(f"Recall@{k}", fontsize=11)
-        ax.set_xlabel(_x_label(simplify), fontsize=9)
-        ax.set_ylabel("Recall", fontsize=9)
-        ax.set_xticks(xticks)
-        ax.set_xticklabels(xlabels, rotation=45, ha="right", fontsize=8)
-        ax.set_ylim(0, 1.05)
-        ax.grid(True, alpha=0.3)
+        ax.plot(ns, vals, marker=MARKERS[idx % len(MARKERS)],
+                color=COLORS[idx % len(COLORS)], label=f"Recall@{k}")
 
-    # hide unused subplots
-    for idx in range(len(ks), nrows * ncols):
-        axes[idx // ncols][idx % ncols].set_visible(False)
-
+    ax.set_xticks(ns)
+    ax.set_xticklabels([_fmt_x(n, simplify) for n in ns], rotation=45, ha="right", fontsize=9)
+    ax.set_xlabel(_x_label(simplify), fontsize=10)
+    ax.set_ylabel("Recall", fontsize=10)
+    ax.set_ylim(0, 1.05)
+    ax.legend()
+    ax.grid(True, alpha=0.3)
     fig.tight_layout(rect=[0, 0, 1, 0.95])
     pdf.savefig(fig, dpi=150)
     plt.close(fig)
@@ -84,17 +74,13 @@ def _page_mrr_comparison(pdf: PdfPages, all_results: dict[str, dict[int, dict]],
 
     for i, (name, results) in enumerate(all_results.items()):
         ns = sorted(results)
-        xticks = list(range(len(ns)))
-        xlabels = [_fmt_x(n, simplify) for n in ns]
         mrr = [results[n]["mrr"] for n in ns]
-        ax.plot(xticks, mrr, marker=MARKERS[i % len(MARKERS)],
+        ax.plot(ns, mrr, marker=MARKERS[i % len(MARKERS)],
                 color=COLORS[i % len(COLORS)], label=name)
 
     ns = sorted(next(iter(all_results.values())))
-    xticks  = list(range(len(ns)))
-    xlabels = [_fmt_x(n, simplify) for n in ns]
-    ax.set_xticks(xticks)
-    ax.set_xticklabels(xlabels, rotation=45, ha="right", fontsize=9)
+    ax.set_xticks(ns)
+    ax.set_xticklabels([_fmt_x(n, simplify) for n in ns], rotation=45, ha="right", fontsize=9)
     ax.set_xlabel(_x_label(simplify), fontsize=10)
     ax.set_ylabel("MRR", fontsize=10)
     ax.set_ylim(0, 1.05)
@@ -113,7 +99,7 @@ def visualize_results(
     """Build a PDF report from all result JSONs in *results_dir*.
 
     Layout:
-      - One page per model: separate subplot per Recall@k.
+      - One page per model: all Recall@k curves overlaid on a single graph.
       - Final page: combined MRR comparison across all models.
 
     Args:

@@ -3,4 +3,3 @@ transformers
 sentence-transformers
 faker
 matplotlib
-gritlm
