@@ -1,3 +1,4 @@
+.env
 *.sh
 *.png
 *.err
@@ -5,3 +6,4 @@
 /embeddings
 /models
 src/__pycache__
+/home_cache

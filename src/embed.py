@@ -2,14 +2,14 @@
 import gc
 import json
 import os
+import time
 from pathlib import Path
 
 import numpy as np
 from numpy.lib.format import open_memmap
-from tqdm import tqdm
 import torch
 
-from src.paths import EMBEDDINGS_DIR, MODELS_DIR
+from src.paths import EMBEDDINGS_DIR, MODELS_DIR, RESULTS_DIR
 
 _DEFAULT_CACHE_DIR  = str(EMBEDDINGS_DIR)
 _DEFAULT_MODELS_DIR = str(MODELS_DIR)
@@ -158,6 +158,7 @@ def load_model(model_name: str, device: str | None = None):
         print(f"  Downloading {model_name} ({model_id}) ...")
         from huggingface_hub import snapshot_download
         snapshot_download(repo_id=model_id, local_dir=model_local_path)
+        print(f"  {model_name} download complete.")
     else:
         print(f"  {model_name} (local)")
 
@@ -168,9 +169,62 @@ def load_model(model_name: str, device: str | None = None):
         logging.getLogger("sentence_transformers").setLevel(logging.WARNING)
         from sentence_transformers import SentenceTransformer
         st_kwargs = {"trust_remote_code": True} if MODELS[model_name].get("trust_remote_code") else {}
+        if st_kwargs:
+            _patch_remote_code_tied_weights()
+        # Force fp32 on CPU: models with a bf16/fp16 config (e.g. Jina v3) produce
+        # NaN embeddings under CPU attention without flash_attn. bf16 stays on GPU.
+        if use_device == "cpu":
+            st_kwargs["model_kwargs"] = {"dtype": torch.float32}
         st = SentenceTransformer(model_local_path, device=use_device, **st_kwargs)
+        if st_kwargs.get("trust_remote_code"):
+            _reinit_remote_code_buffers(st)
         print(f"  device: {next(st.parameters()).device}")
         return st
+
+
+def _patch_remote_code_tied_weights() -> None:
+    """Make pre-5.x trust_remote_code wrappers loadable under transformers 5.x.
+
+    transformers 5.x reads `self.all_tied_weights_keys` directly in
+    `_finalize_model_loading` (modeling_utils.py), an attribute that only the
+    modern `post_init()` creates. Old custom wrappers (e.g. Jina v3's
+    `XLMRobertaLoRA`) call `super().__init__(config)` without `post_init()`, so
+    the top-level model never gets it and loading crashes with
+    `AttributeError: ... has no attribute 'all_tied_weights_keys'`.
+
+    These wrappers have no tied weights, and transformers itself treats the
+    absent value as `{}` elsewhere, so we install `{}` as a class-level fallback.
+    Properly initialized models override it per-instance in post_init(), so this
+    is a no-op for them. Idempotent."""
+    from transformers import PreTrainedModel
+    if "all_tied_weights_keys" not in PreTrainedModel.__dict__:
+        PreTrainedModel.all_tied_weights_keys = {}
+
+
+def _reinit_remote_code_buffers(st) -> None:
+    """Re-initialize non-persistent buffers that transformers 5.x leaves uninitialized.
+
+    transformers 5.x instantiates models on the meta device, then materializes every
+    non-persistent buffer with `torch.empty_like` (uninitialized memory) and relies on
+    `_init_weights()` to fix them up. Old remote-code models (e.g. Jina v3) don't
+    re-init their custom buffers there, so they keep garbage — which produces NaN /
+    non-deterministic embeddings. Two buffers matter for Jina v3:
+
+      * rotary `inv_freq` — used every forward. Its lazy-recompute only triggers when
+        dtype != fp32 (rotary.py), so the fp32 load path reads the garbage buffer.
+      * LoRA `lora_dropout_mask` — should be all ones (only read when dropout_p > 0).
+
+    We recompute them from the modules' own init logic. No-op for models without them."""
+    for module in st.modules():
+        if hasattr(module, "_compute_inv_freq") and getattr(module, "inv_freq", None) is not None:
+            module.inv_freq = module._compute_inv_freq(device=module.inv_freq.device)
+            if hasattr(module, "_seq_len_cached"):
+                module._seq_len_cached = 0
+            for c in ("_cos_cached", "_sin_cached", "_cos_k_cached", "_sin_k_cached"):
+                if hasattr(module, c):
+                    setattr(module, c, None)
+        if getattr(module, "lora_dropout_mask", None) is not None:
+            module.lora_dropout_mask = torch.ones_like(module.lora_dropout_mask)
 
 
 def _raw_embed(texts: list[str], model, model_name: str, is_query: bool, batch_size: int = 64) -> np.ndarray:
@@ -231,6 +285,12 @@ def _cache_valid(base: str, n_doc: int, n_qry: int) -> bool:
     return d_ok and q_ok
 
 
+def _write_duration(model_name: str, dataset_stem: str, phase: str, avg_s: float, n_batches: int) -> None:
+    RESULTS_DIR.mkdir(exist_ok=True)
+    with open(RESULTS_DIR / "durations.txt", "a") as f:
+        f.write(f"{model_name}\t{dataset_stem}\t{phase}\t{avg_s:.4f}s/batch\t({n_batches} batches)\n")
+
+
 def embed_dataset(
     dataset: dict,
     model_name: str,
@@ -239,6 +299,7 @@ def embed_dataset(
     batch_size: int = 64,
     device: str | None = None,
     model=None,
+    only_embed: str | None = None,
 ) -> tuple[dict, Path]:
     """Embed corpus and queries, cache to disk, return ({"doc_embs": ndarray, "qry_embs": ndarray}, embs_path).
 
@@ -246,14 +307,30 @@ def embed_dataset(
     Skips embedding if corpus or queries dict is empty.
     Resumes interrupted runs batch-by-batch via progress files.
     Pass an already-loaded *model* to skip the load_model() call.
+
+    only_embed restricts which side is touched, independently of *force*:
+      - None        : embed/refresh both docs and queries (default).
+      - "docs"      : only the doc-embedding path runs; queries are left untouched.
+      - "queries"   : only the query-embedding path runs; docs are left untouched.
+    The skipped side's existing cache file (if any) is still returned via _load_cached.
+    Use "queries" to re-embed queries after changing the query set without re-touching the
+    (identical) corpus.
     """
+    if only_embed not in (None, "docs", "queries"):
+        raise ValueError(f"only_embed must be None, 'docs', or 'queries' — got {only_embed!r}")
+    do_docs = only_embed != "queries"
+    do_qry  = only_embed != "docs"
+
     doc_texts = list(dataset["corpus"].values())
     qry_texts = list(dataset["queries"].values())
 
     folder = os.path.join(_DEFAULT_CACHE_DIR, Path(dataset_path).stem)
     base   = os.path.join(folder, model_name)
 
-    if not force and _cache_valid(base, len(doc_texts), len(qry_texts)):
+    # Only require the side(s) we're being asked to embed to be cache-valid (passing 0 makes
+    # _cache_valid treat the skipped side as already satisfied).
+    if not force and _cache_valid(base, len(doc_texts) if do_docs else 0,
+                                  len(qry_texts) if do_qry else 0):
         print(f"Loading cached embeddings ({Path(dataset_path).stem}/{model_name})")
         return _load_cached(base), Path(base)
 
@@ -274,7 +351,7 @@ def embed_dataset(
     doc_start  = progress.get("doc_start", 0) if (progress and not docs_done) else 0
     qry_start  = progress.get("qry_start", 0) if (progress and docs_done) else 0
 
-    if doc_texts:
+    if doc_texts and do_docs:
         # Resume in-place ('r+') only if a correctly-shaped file already exists; opening 'w+'
         # would zero-fill a fresh file and silently discard batches written before an interrupt.
         d_path     = base + "_d.npy"
@@ -283,40 +360,63 @@ def embed_dataset(
             doc_start = 0
         doc_mm = open_memmap(d_path, dtype="float32", mode="r+" if can_resume else "w+", shape=(len(doc_texts), dim))
         if not docs_done:
-            n_batches = (len(doc_texts) + batch_size - 1) // batch_size
-            for start in tqdm(range(doc_start, len(doc_texts), batch_size), desc="docs", initial=doc_start // batch_size, total=n_batches, mininterval=30):
+            _dur_total, _dur_count = 0.0, 0
+            _last_print, _print_interval = time.monotonic(), 0.0
+            for start in range(doc_start, len(doc_texts), batch_size):
                 batch = doc_texts[start : start + batch_size]
+                _t0 = time.monotonic()
                 doc_mm[start : start + len(batch)] = _raw_embed(batch, model, model_name, is_query=False, batch_size=batch_size)
+                _dur_total += time.monotonic() - _t0
+                _dur_count += 1
                 _save_progress(base, {"docs_done": False, "doc_start": start + len(batch)})
                 if torch.cuda.is_available():
                     torch.cuda.empty_cache()
+                now = time.monotonic()
+                if now - _last_print >= _print_interval:
+                    done = min(start + batch_size, len(doc_texts))
+                    print(f"  docs {done:,}/{len(doc_texts):,} ({100*done/len(doc_texts):.1f}%)", flush=True)
+                    _last_print = now
+                    _print_interval = min(300.0, max(1.0, _print_interval * 2.0))
             doc_mm.flush()
             _clear_progress(base)
+            _write_duration(model_name, Path(dataset_path).stem, "docs", _dur_total / _dur_count, _dur_count)
         del doc_mm
         gc.collect()
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
 
-    if qry_texts:
+    if qry_texts and do_qry:
         qry_exists = os.path.isfile(base + "_q.npy")
         if qry_exists and np.load(base + "_q.npy", mmap_mode="r").shape[0] != len(qry_texts):
             qry_exists, qry_start = False, 0
         qry_mm = open_memmap(base + "_q.npy", dtype="float32", mode="r+" if qry_exists else "w+", shape=(len(qry_texts), dim))
-        n_batches = (len(qry_texts) + batch_size - 1) // batch_size
-        for start in tqdm(range(qry_start, len(qry_texts), batch_size), desc="queries", initial=qry_start // batch_size, total=n_batches, mininterval=30):
+        _dur_total, _dur_count = 0.0, 0
+        _last_print, _print_interval = time.monotonic(), 0.0
+        for start in range(qry_start, len(qry_texts), batch_size):
             batch = qry_texts[start : start + batch_size]
+            _t0 = time.monotonic()
             qry_mm[start : start + len(batch)] = _raw_embed(batch, model, model_name, is_query=True, batch_size=batch_size)
+            _dur_total += time.monotonic() - _t0
+            _dur_count += 1
             _save_progress(base, {"docs_done": True, "qry_start": start + len(batch)})
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
+            now = time.monotonic()
+            if now - _last_print >= _print_interval:
+                done = min(start + batch_size, len(qry_texts))
+                print(f"  queries {done:,}/{len(qry_texts):,} ({100*done/len(qry_texts):.1f}%)", flush=True)
+                _last_print = now
+                _print_interval = min(300.0, max(1.0, _print_interval * 2.0))
         qry_mm.flush()
         del qry_mm
         _clear_progress(base)
+        _write_duration(model_name, Path(dataset_path).stem, "queries", _dur_total / _dur_count, _dur_count)
 
     del model
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
+    print(f"  Embedding complete.")
 
     return _load_cached(base), Path(base)
 
