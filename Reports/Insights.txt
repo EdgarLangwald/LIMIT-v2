@@ -1,0 +1,23 @@
+EXPLANATION:
+
+query types:
+broad, specific: Describes profile with more or less accuracy. Doesn't include keyword
+exact: Describes profile specifically. Includes keyword
+auto_sentence, auto_raw: Auto-generated query from keywords with or without prepending a default sentence.
+
+table structure:
+
+NOTICEABLE:
+- query type makes a huge difference: broad query noticeably worse than specific query. Huge jump to exact query (which is when the keyword is introduced)
+- The jump from specific to exact varies wildly from model to model, and it changes performance ranking changes most
+- GritLM wins as best model, Qwen-8b, Promptriever and BGE_M3 are outperformed by better models (in every measure I looked at)
+- Pareto plot produces tradeoff line. (Not scaling laws though, as they have logarithmic axes, whereas here they're linear.)
+- It looks like all curves belong to a 1-parametric family of functions that logarithmically decay form one to zero, with only a decay steepness parameter. -> Performance order barely changes over distractor pool size.
+
+OPEN QUESTIONS (Hypothesis):
+- Can we fit curves to a function on small dataset to predict its performance on large dataset? (yes)
+- Does GritLM also outperform Promptriever on Steiner dataset? (yes)
+- Do decay curve shapes stay the same if we vary other params (output dim, output type)? (yes)
+- Are the results consistent with steiner experiments, i.e. does model performance behave nicely over all different params? (yes)
+
+

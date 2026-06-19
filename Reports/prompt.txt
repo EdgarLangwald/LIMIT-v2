@@ -1,0 +1,160 @@
+Das geht mir gerade auf den Sack! Ich mache jetzt eine Liste an Dingen, die das Limit Paper schlecht macht.
+
+  Thm 1 ist komplett abhängig von gamma und kein bisschen von Geometrie. gamma = 0 gibt eine Dimension als lower bound. Dabei ist
+  intuitiv klar, dass mehr Vektoren im selben Raum kleinere Margins benötigen, um  k-subsets to retrieven.
+
+  Their free embedding experiment is interesting. But extrapolation beyond n=1000 uncertain. Why fit a 3rd degree polynomial and not
+  exponential, or anything else?
+
+  MAIN CRITIQUE: Figure 4: Models don’t perform well, not because embedding dimension is too small, but because the document is too
+  long.
+  → Proof: their free embedding experiment (Figure 2) shows: d ~~=~~ 15 is enough to theoretically retrieve every 2-subset of n = 46
+  documents.
+  BUT: Figure 4 shows that even at d = 4096, retrieval is at 0.2 - 0.5.
+
+  The experiments I did
+
+  LIMIT v1:
+
+  Terminology:
+
+  - document: The thing that makes one embedding vector. “John Smith likes apples, olive oil, horses, …”
+  - m: number of items per document
+  - n: number of documents
+
+  Experiments:
+
+  - Increase-m: Fix some n (e.g. 40). Then, repeatedly attribute m = 1, …, 46 many items to every document. Each item appears only
+  once throughout the ENTIRE dataset - no combinatorial augmentation.
+  - Steiner: Fix m = 3. Create as many documents as possible whilst satisfying the condition, that every pair of items appears in
+  exactly one document.
+  - Preference: Some experimentation with disliking items as well
+
+  Results and takeaways:
+
+  - promptriever drastically outperforms all models, and Snowflake outperforms other small models like Qwen0.6b
+  - Increase_m shows that models are incapable of embedding 50 items to begin with -> The original experiment of the LIMIT paper
+  doesn't recognize this flaw and calls it a geometric problem.
+  - promptriever demonstrates that even with 570k very similarly structured docs, it's possible to have racall@5 at over 99%
+
+  New question:
+
+  - How much does dataset variability affect relative model performance? I.e. can we use the simple synthetic cases to estimate
+  performance on more realistic settings?
+
+  LIMIT v2:
+
+  - Documents are now entire profiles with realistic sentences. “John Smith was born on … As a child, he refused…. bla bla”
+  - m now refers to number of sentences per doc. n is still number of docs.
+  - Dataset is now split into n distractor documents and custom query targets.
+  - Distractor docs are created as follows:
+      - Sample a name, date of birth and job to create a standard introduction
+      - Sample 4 categories (with weighting by frequency value)
+      - Sample 1 template sentence and one item per category, and fill in the template (name, nouns, item)
+  - Target docs and queries are created as follows:
+      - step 1 from above
+      - Sample 3 categories instead of 4
+      - Sample one item per category
+      - Call a Haiku agent to do the following:
+          - write a broad and a specific query, asking about the person in relation to the item and
+          - pick two templates per category that match as answer to that query
+          - (review its answer)
+          - return the query and the two template sentence numbers
+      - Create 8 profiles - one for each combination of the two provided templates
+      - Pad each profile with another sentence, each sampled at random from any other category
+
+  Experiments:
+
+  - By hand: embed the distractor set and probe retrieval manually by embedding the raw query and returning the top 10 set, as well
+  of the rank of any specified doc
+  note: I did the probing BEFORE deciding on parameters for main experiment and target creation
+  - MAIN: Testing the recall of the target profiles with increasing numbers of distractor pool size.
+
+  ---
+
+  Okay, wir (ich und ich) machen es jetzt so: Ich gebe mir noch zwei Stunden Mühe, das Experiment auf den Cluster zu bringen. Dann
+  habe ich Feierabend. Es ist nicht mein Tag, und nicht meine Priorität, dieses Wochenende mit Arbeit zu verbringen. Wie Sofian sagt,
+  brauche ich wohl mehr “nein”
+
+  ---
+
+  Harshal will die Anzahl der Personen erhöhen. Ich sage, wofür? Die Person ist nur ein weiteres Item, welches eine höhere Gewichtung
+  kriegt. Wenn zwei Leute etwas mögen, dann hat das Modell einfach nur weniger Platz, die Items zu embedden.
+
+  --------------------------
+
+  Clarification: Third experiment is bad with regards to the conclusion they want to make. Not bad per se.
+
+  The paper can be split into three main sections.
+
+  - In order to return all k-subsets for n docs, we need at least d = lower_bound(k, n) many dimensions.
+  → the lower bound is entirely dependent on the margin of choice, and gamma 0.1 seems somewhat arbitrary
+  - Directly optimizing embeddings and queries against loss that scores retrieval of all 2-subsets gives a minimum dimension needed
+  for n docs to get loss to 0. Genuinly interesting result!
+  → the experiment only goes till n =~ 620, requiring < 50 dims. Extrapolation is done with a cubic polynomial, but with no
+  explanation of why. Why not fit higher or lower degree polynomials, or other functions entirely? The results don’t automatically
+  translate to higher n.
+  → If we believe their lower bound, d=4096 still gets us 250 million embedding vectors, for whom we can retrieve ALL 2 choose 250
+  million possible 2-subsets perfectly. My opinion: enough in practice
+  - Third experiment tests model capacity to return all possible pairs of document for n=46 docs, with and without distractor pool
+  respectively. Indeed, embedding models have trouble retrieving the two relevant docs.
+  → My experiment shows that with just k=1 and without distractors, models struggle to return the relevant doc. We therefore have no
+  good baseline to compare the difficulty of retrieving 2-subsets against.
+  → They truncated the embeddings to reduce dimension below what models really output. There’s no way to tell how much retrieval
+  quality suffers from truncation vs. lower dimensionality.
+  → They acknowledge themselves that promptriever wins "perhaps because their training allows them to use more of their embedding
+  space.”, implying they themselves think that models underutilize the embedding space they have instead of dimension being a
+  “fundamental limit”
+  → from 1024 onward, more dimensions don’t really help the models in the experiment with distractors.
+
+  Yet they confidently claim to have shown:
+
+  → from 1024 onward, more dimensions don’t really help the models in the experiment with distractors.
+
+  Yet they confidently claim to have shown:
+
+  → My experiment shows that with just k=1 and without distractors, models struggle to return the relevant doc. We therefore have no
+  good baseline to compare the difficulty of retrieving 2-subsets against.
+  → They truncated the embeddings to reduce dimension below what models really output. There’s no way to tell how much retrieval
+  quality suffers from truncation vs. lower dimensionality.
+  → They acknowledge themselves that promptriever wins "perhaps because their training allows them to use more of their embedding
+  space.”, implying they themselves think that models underutilize the embedding space they have instead of dimension being a
+  “fundamental limit”
+  → from 1024 onward, more dimensions don’t really help the models in the experiment with distractors.
+
+  Yet they confidently claim to have shown:
+
+  > We see that model performance depends crucially on the
+  embedding dimensionality (better performance with big-
+  ger dimensions)
+  >
+
+  My conclusion: Embedding dimensionality isn’t the bottleneck for retrieval. The better performance with increased dimension is more
+  likely due to not truncating output and models with high embedding dimension likely being bigger and better models in general.
+
+  -------------------------
+
+  I had a bit of a discussion with my team and I didn't do a good job at explaining why I worked on what I worked on for the last
+  weeks. I gave you my reflections after the meeting. The first one is general, the second is specifically my refined, pointed
+  critique about the LIMIT paper I was investigating. you'll find the paper here "C:\Users\EdgarLangwald\OneDrive - neuland AI
+  AG\Papers\LIMIT DeepMind.pdf". Relevant pdf's I did are here (folder):C:\Users\EdgarLangwald\OneDrive - neuland AI
+  AG\Coding\LIMIT\results and here (second round results): "C:\Users\EdgarLangwald\OneDrive - neuland AI
+  AG\Coding\LIMIT-v2\report.pdf"
+
+  The goal here is to generate a report that explains everything. Starting with a SHORT explanation of the three experiments I'm
+  critiqueing along with the claims in abstract or text I'm dismantling. Then SHORTLY explain my steiner setup
+  "C:\Users\EdgarLangwald\OneDrive - neuland AI AG\Coding\LIMIT\create_datasets.py" and my takeaways from the experiments: Three
+  things to take away:
+  promptriever drastically outperforms all models, and Snowflake outperforms other small models like Qwen0.6b
+  (id: "samaya-ai/promptriever-llama3.1-8b-instruct-v1"
+  id: "Snowflake/snowflake-arctic-embed-l-v2.0")
+  Increase_m shows that models are incapable of embedding 50 items to begin with -> The original experiment of the LIMIT paper
+  doesn't recognize this flaw and calls it a geometric problem.
+  promptriever demonstrates that even with 570k very similarly structured docs, it's possible to have racall@5 at over 99%
+
+  don't talk about the preference thing, that doesn't matter.
+
+  From there, raise the question of whether this simple synthetic dataset setup actually predicts real world performance. Take my
+  explanation of my next experiment I pasted here to argue that this new round of experiments tests exactly that. (sentences are
+  realistic and diverse, yet we still have a focus on a single word that we can query for, and we can even control query by
+  specificity (same word, specific description, broad description)

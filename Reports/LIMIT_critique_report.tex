@@ -1,0 +1,131 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{titlesec}
+
+\titlespacing*{\section}{0pt}{1.5em}{0.5em}
+\titlespacing*{\subsection}{0pt}{1.0em}{0.3em}
+\setlist{leftmargin=1.4em,itemsep=3pt,topsep=3pt}
+
+\title{\vspace{-1.5em}Report on what I've been working on}
+\author{Edgar Langwald}
+\date{2026-06-16}
+
+\begin{document}
+\maketitle
+\vspace{-1em}
+
+The LIMIT paper argues that single-vector based retrieval has a fundamental limitation: for a fixed embedding dimension, there are subsets of documents that no query can ever retrieve as its top results. This report examines that claim across the paper's three experiments, adds two experiments that isolate specific factors, and outlines where the question leads next.
+In the following, "Document" refers to a chunk of text that gets embedded into a single vector.
+
+\section{The paper in brief}
+
+The paper makes its case in three steps:
+
+\begin{enumerate}
+  \item A proof that retrieving every possible top-$k$ set of documents requires a minimum embedding dimension.
+  \item An experiment that optimizes vectors directly (no language) to find, empirically, the smallest dimension that works for a given number of documents.
+  \item A realistic but simple dataset (LIMIT) on which state-of-the-art models are shown to struggle.
+\end{enumerate}
+
+The overall conclusion the paper draws is that embedding dimension is a fundamental limit, and that ``model performance depends crucially on the embedding dimensionality.''
+
+\section{The three steps}
+
+\subsection{The lower bound}
+
+The paper shows that to guarantee every top-$k$ set of $n$ documents can be returned by some query, the embedding dimension $d$ must satisfy
+\[
+d \;\ge\; \frac{\log\binom{n}{k}}{\log(1+1/\gamma)},
+\]
+where $\gamma$ is a required score margin (how clearly the relevant documents must beat the rest). The proof is sound.
+
+The bound, however, depends heavily on $\gamma$, the margin one chooses to require. The paper evaluates everything at $\gamma = 0.1$, described as roughly standard, but this choice seems arbitrary, and the resulting dimension numbers shift considerably with it.
+
+\subsection{The free-embedding experiment}
+
+The second experiment removes natural language entirely and optimizes the document and query vectors directly, so that all 2-subsets are retrievable, increasing the number of documents until the optimization can no longer reach a perfect solution. It is the most direct empirical test in the paper.
+
+However, the measured data only reaches about $n = 620$ documents, which needs fewer than 50 dimensions. The extrapolation out to web scale is then done with a cubic polynomial, with no justification for that particular form; a higher- or lower-degree polynomial, or a different function altogether, would give different answers, so the result does not extend reliably to much larger $n$. Taken at face value, the extrapolation implies that $d = 4096$ covers roughly 250 million documents for which every single 2-subset is perfectly retrievable --- which is, in my view, more than enough in practice.
+
+\subsection{The LIMIT dataset}
+
+The third experiment uses a simple natural-language dataset. Each document states the items a person likes (``\textit{Jon likes apples, sports cars, \dots}''), and each query asks ``who likes X?''. The main test uses 46 documents with two relevant documents per query ($k=2$), and measures whether models can retrieve all such pairs, both within those 46 documents and against a larger pool of distractors. Models struggle: recall stays well below 0.5 even at the largest embedding dimensions.
+
+That result is hard to interpret without a baseline for the basic difficulty of the task. I ran my own, simpler variant of this experiment in order to isolate one factor: using the same document format, but with a single relevant document per query ($k=1$) and no distractor pool, varying only the number of items each document lists. Even here, models fail to return the one correct document once documents list many items (Table~\ref{tab:items}). At 46 items per document --- the size used in the paper --- recall at rank 1 falls to between 0.05 and 0.32. The simplest version of the task is therefore already hard before any $k=2$ combinatorics are involved, so the difficulty in the main experiment cannot be attributed to the combinatorics alone.
+
+Two further points affect how the main result reads:
+
+\begin{itemize}
+  \item The embeddings were truncated below the dimension the models natively produce. That makes it impossible to separate how much retrieval quality is lost to truncation from how much is lost to having fewer dimensions.
+  \item The authors observe that Promptriever does better ``perhaps because their training allows them to use more of their embedding space.'' That points to models underusing the dimensions they already have, rather than dimension being a fundamental wall. Consistent with this, from about 1024 dimensions onward more dimensions do not noticeably help in the setting with distractors.
+\end{itemize}
+
+The paper concludes that performance depends crucially on embedding dimensionality. The evidence does not support this strongly. The improvement with larger dimension is equally consistent with two mundane causes: not truncating the output, and higher-dimensional models tending to be larger, better models overall.
+
+\begin{table}[h]
+\centering
+\caption{Single-item queries ($k=1$, no distractors), as the number of items per document grows from 1 to 46. Recall at rank 1 and 5.}
+\label{tab:items}
+\begin{tabular}{lcccc}
+\toprule
+model & 1 item (r@1) & 10 items (r@1) & 46 items (r@1) & 46 items (r@5) \\
+\midrule
+Promptriever & 0.98 & 0.87 & 0.32 & 0.75 \\
+Qwen3-4B     & 0.98 & 0.54 & 0.20 & 0.47 \\
+Snowflake    & 1.00 & 0.48 & 0.13 & 0.37 \\
+Qwen3-0.6B   & 1.00 & 0.40 & 0.10 & 0.29 \\
+ModernBERT   & 1.00 & 0.36 & 0.10 & 0.32 \\
+E5-Mistral   & 0.88 & 0.22 & 0.05 & 0.20 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Crowding of the embedding space}
+
+Whether embedding dimension is the bottleneck in real retrieval pipelines is not established. But with a large number of documents, retrieval scores still diminish. To examine the relation between this crowding and recall, a second dataset uses the same basic setup as the LIMIT paper, but keeping each document to three items, which all models were able to retrieve in isolation (see Table 1). In this version, every pair of items appears in exactly one short document, so ``who likes X and Y?'' has exactly one correct answer. The corpus grows to 569,500 documents while every query stays unambiguous.
+
+Two results follow. Models differ substantially, and not in proportion to size or dimension (Table~\ref{tab:scale}): Promptriever stays near-perfect, while the much smaller Snowflake model outperforms the larger Qwen models, indicating training rather than dimension as the deciding factor. And Promptriever holds recall@5 above 99\% across all 569,500 near-identically-structured documents. This suggests that a) there's not enough documents to crowd the embedding space meaningfully, and/or b) the synthetic task is too simplistic, as near-perfect retrieval with 570k documents seems too good to be true.
+
+\begin{table}[h]
+\centering
+\caption{Retrieval over 569,500 documents (one correct document per query).}
+\label{tab:scale}
+\begin{tabular}{lccc}
+\toprule
+model & recall@2 & recall@5 & MRR \\
+\midrule
+Promptriever-8B    & 0.963 & 0.998 & 0.931 \\
+Snowflake-Arctic-L & 0.748 & 0.903 & 0.731 \\
+Qwen3-8B           & 0.602 & 0.793 & 0.586 \\
+Qwen3-4B           & 0.595 & 0.795 & 0.585 \\
+Qwen3-0.6B         & 0.494 & 0.723 & 0.497 \\
+ModernBERT         & 0.360 & 0.583 & 0.371 \\
+E5-Mistral-7B      & 0.214 & 0.392 & 0.228 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Does this simple setting predict the real world?}
+
+All of the above uses very simple documents of the form ``\textit{this person likes A, B and C}.'' Whether any of it transfers to realistic retrieval is an open question: the model ordering and the item-density effect could be artifacts of degenerate synthetic text.
+
+The next round of experiments is built to answer this. It keeps the one feature that makes the simple setting controllable --- a single, known fact per target that can be queried for --- while making the text realistic:
+
+\begin{itemize}
+  \item Documents become full profiles written in natural prose, rather than a list of liked items. Document length is now measured in sentences.
+  \item The corpus is split into a large pool of distractor profiles plus a smaller set of carefully constructed query targets, each built around one known fact.
+  \item Query specificity becomes a controlled variable: for the same underlying fact, the query can be broad or specific. This separates the case where a model cannot find the fact (embedding space gets crowded) from the case where it cannot handle a vague phrasing (task is too difficult).
+\end{itemize}
+
+The main experiment measures how well the target profiles are retrieved as the distractor pool grows into the millions, across a range of models.
+
+This connects the simple results to a realistic setting. The results will show whether these synthetic tasks are a usable proxy for realistic retrieval --- something crucial to know before running more simple experiments that isolate specific failure modes.
+
+\end{document}
