@@ -320,7 +320,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was born and raised in Orlando, has been playing the bagpipe since childhood, and counts cinnamon as their favorite scent?",
+    "auto_raw": "scents: cinnamon, instruments: bagpipe, us_cities: Orlando",
+    "auto_sentence": "Which person has the following three attributes: scents: cinnamon, instruments: bagpipe, us_cities: Orlando?"
   },
   {
     "draw_id": "0-1",
@@ -643,7 +646,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has spent most of their career in Real Estate, drove a Honda as their first car, and keeps a Netherland Dwarf rabbit as a pet?",
+    "auto_raw": "rabbit_breeds: Netherland Dwarf, car_brand: Honda, work_industry: Real Estate",
+    "auto_sentence": "Which person has the following three attributes: rabbit_breeds: Netherland Dwarf, car_brand: Honda, work_industry: Real Estate?"
   },
   {
     "draw_id": "1-0",
@@ -966,7 +972,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has a Savannah cat, counts peanut butter and jelly as their all-time favorite sandwich, and has performed in Much Ado About Nothing?",
+    "auto_raw": "sandwiches: peanut butter and jelly, shakespeare_plays: Much Ado About Nothing, cat_breeds: Savannah",
+    "auto_sentence": "Which person has the following three attributes: sandwiches: peanut butter and jelly, shakespeare_plays: Much Ado About Nothing, cat_breeds: Savannah?"
   },
   {
     "draw_id": "1-1",
@@ -1289,7 +1298,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been playing the guitar since childhood, counts catfish as their favorite seafood, and frequents the concert hall?",
+    "auto_raw": "instruments: guitar, fish: catfish, venues: concert hall",
+    "auto_sentence": "Which person has the following three attributes: instruments: guitar, fish: catfish, venues: concert hall?"
   },
   {
     "draw_id": "2-0",
@@ -1612,7 +1624,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who is described as caring, has been rewatching Buffy the Vampire Slayer for the third time, and has played the fiddle since childhood?",
+    "auto_raw": "personality_traits: caring, tv_shows: Buffy the Vampire Slayer, instruments: fiddle",
+    "auto_sentence": "Which person has the following three attributes: personality_traits: caring, tv_shows: Buffy the Vampire Slayer, instruments: fiddle?"
   },
   {
     "draw_id": "2-1",
@@ -1935,7 +1950,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who is a die-hard Manchester United fan, listens to swing as their go-to genre when driving, and has Pictionary as their favorite board game?",
+    "auto_raw": "epl_teams: Manchester United, music_genres: swing, board_games: Pictionary",
+    "auto_sentence": "Which person has the following three attributes: epl_teams: Manchester United, music_genres: swing, board_games: Pictionary?"
   },
   {
     "draw_id": "3-0",
@@ -2258,7 +2276,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts Gravity Falls as their favorite TV show from growing up, is fascinated by the historical occupation of elevator operator, and can explain the mythology of Minerva in surprising detail?",
+    "auto_raw": "tv_shows: Gravity Falls, obsolete_occupations: elevator operator, roman_deities: Minerva",
+    "auto_sentence": "Which person has the following three attributes: tv_shows: Gravity Falls, obsolete_occupations: elevator operator, roman_deities: Minerva?"
   },
   {
     "draw_id": "3-1",
@@ -2581,7 +2602,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts Batista as their favorite wrestler from childhood, has spent over a decade working in Computer Hardware, and visited Providence as their favorite state capital?",
+    "auto_raw": "favorite_wrestler: Batista, work_industry: Computer Hardware, us_state_capitals: Providence",
+    "auto_sentence": "Which person has the following three attributes: favorite_wrestler: Batista, work_industry: Computer Hardware, us_state_capitals: Providence?"
   },
   {
     "draw_id": "4-0",
@@ -2904,7 +2928,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who favors Talisker as his go-to Scotch whisky, has family roots in Malaysia, and has been a devoted Sevilla fan in La Liga since childhood?",
+    "auto_raw": "scotch_whisky: Talisker, countries: Malaysia, laliga_teams: Sevilla",
+    "auto_sentence": "Which person has the following three attributes: scotch_whisky: Talisker, countries: Malaysia, laliga_teams: Sevilla?"
   },
   {
     "draw_id": "4-1",
@@ -3227,7 +3254,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts the California Condor as his favorite bird, orders an Espresso Martini as his drink of choice, and believes houses built with clay have more character?",
+    "auto_raw": "birds_north_america: California Condor, cocktails: Espresso Martini, preferred_building_material: clay",
+    "auto_sentence": "Which person has the following three attributes: birds_north_america: California Condor, cocktails: Espresso Martini, preferred_building_material: clay?"
   },
   {
     "draw_id": "5-0",
@@ -3550,7 +3580,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who admires billionaire Ralph Lauren as his financial idol, has spent over a decade working in Financial Services, and chose white as his favorite paint color?",
+    "auto_raw": "rich_people: Ralph Lauren, work_industry: Financial Services, favorite_paint_color: white",
+    "auto_sentence": "Which person has the following three attributes: rich_people: Ralph Lauren, work_industry: Financial Services, favorite_paint_color: white?"
   },
   {
     "draw_id": "5-1",
@@ -3873,7 +3906,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who always orders flounder whenever he goes to a restaurant, prefers nickel for his jewelry, and has family roots in Pakistan?",
+    "auto_raw": "fish: flounder, layperson_metals: nickel, countries: Pakistan",
+    "auto_sentence": "Which person has the following three attributes: fish: flounder, layperson_metals: nickel, countries: Pakistan?"
   },
   {
     "draw_id": "6-0",
@@ -4196,7 +4232,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who keeps Heineken in the garage fridge, grew up treating the St. Louis Cardinals like a religion, and has a figurine of the Egyptian god Ra on his desk?",
+    "auto_raw": "cheap_beers: Heineken, mlb_teams: St. Louis Cardinals, egyptian_gods: Ra",
+    "auto_sentence": "Which person has the following three attributes: cheap_beers: Heineken, mlb_teams: St. Louis Cardinals, egyptian_gods: Ra?"
   },
   {
     "draw_id": "6-1",
@@ -4519,7 +4558,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts Schindler's List (1993) as their all-time favorite movie, nearly died from hepatitis as a child, and is currently rewatching Scandal for the third time?",
+    "auto_raw": "popular_movies: Schindler's List (1993), infectious_diseases: hepatitis, tv_shows: Scandal",
+    "auto_sentence": "Which person has the following three attributes: popular_movies: Schindler's List (1993), infectious_diseases: hepatitis, tv_shows: Scandal?"
   },
   {
     "draw_id": "7-0",
@@ -4842,7 +4884,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was raised Jehovah's Witness and still attends services, decorated their bedroom and home in turquoise, and can recite dialogue from Columbo from memory?",
+    "auto_raw": "religions: Jehovah's Witness, favorite_color: turquoise, tv_shows: Columbo",
+    "auto_sentence": "Which person has the following three attributes: religions: Jehovah's Witness, favorite_color: turquoise, tv_shows: Columbo?"
   },
   {
     "draw_id": "7-1",
@@ -5165,7 +5210,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who donates to World Vision every year without fail, puts lychee in their smoothie every morning, and considers The Lovely Bones their favorite book?",
+    "auto_raw": "supported_charity: World Vision, fruits: lychee, favorite_books: The Lovely Bones",
+    "auto_sentence": "Which person has the following three attributes: supported_charity: World Vision, fruits: lychee, favorite_books: The Lovely Bones?"
   },
   {
     "draw_id": "8-0",
@@ -5488,7 +5536,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who uses clay as their preferred building material for home projects, counts Oxygen as their favorite element on the periodic table, and has been fascinated by Peru's culture?",
+    "auto_raw": "preferred_building_material: clay, chemical_elements: Oxygen, countries: Peru",
+    "auto_sentence": "Which person has the following three attributes: preferred_building_material: clay, chemical_elements: Oxygen, countries: Peru?"
   },
   {
     "draw_id": "8-1",
@@ -5811,7 +5862,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who studied Industrial Engineering in college, considers Julius Caesar their favorite Shakespeare play, and has watched Braveheart (1995) more times than they can count?",
+    "auto_raw": "academic_subjects: Industrial Engineering, shakespeare_plays: Julius Caesar, popular_movies: Braveheart (1995)",
+    "auto_sentence": "Which person has the following three attributes: academic_subjects: Industrial Engineering, shakespeare_plays: Julius Caesar, popular_movies: Braveheart (1995)?"
   },
   {
     "draw_id": "9-0",
@@ -6134,7 +6188,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was raised Unitarian and follows Atalanta closely every Serie A season, and has been playing the kazoo since childhood?",
+    "auto_raw": "religions: Unitarian, serie_a_teams: Atalanta, instruments: kazoo",
+    "auto_sentence": "Which person has the following three attributes: religions: Unitarian, serie_a_teams: Atalanta, instruments: kazoo?"
   },
   {
     "draw_id": "9-1",
@@ -6457,7 +6514,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been obsessed with gargoyles as a mythical creature, considers Mercury their favorite element on the periodic table, and has been a Ford person their whole life?",
+    "auto_raw": "mythic_creatures: gargoyle, chemical_elements: Mercury, car_brand: Ford",
+    "auto_sentence": "Which person has the following three attributes: mythic_creatures: gargoyle, chemical_elements: Mercury, car_brand: Ford?"
   },
   {
     "draw_id": "10-0",
@@ -6780,7 +6840,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts Pretty Woman (1990) as their all-time favorite movie, prefers platinum when it comes to jewelry, and still maintains a collection of DVDs in their living room?",
+    "auto_raw": "popular_movies: Pretty Woman (1990), layperson_metals: platinum, music_media_formats: DVD",
+    "auto_sentence": "Which person has the following three attributes: popular_movies: Pretty Woman (1990), layperson_metals: platinum, music_media_formats: DVD?"
   },
   {
     "draw_id": "10-1",
@@ -7103,7 +7166,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has a profound love for blues music, finds the historical occupation of pinsetter fascinating, and considers the Monte Cristo their all-time favorite sandwich?",
+    "auto_raw": "sandwiches: Monte Cristo, obsolete_occupations: pinsetter, music_genres: blues",
+    "auto_sentence": "Which person has the following three attributes: sandwiches: Monte Cristo, obsolete_occupations: pinsetter, music_genres: blues?"
   },
   {
     "draw_id": "11-0",
@@ -7426,7 +7492,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who considers Jim Carrey their favorite celebrity, is a serious fan of disco, and donates regularly to the animal welfare organization North Shore Animal League America?",
+    "auto_raw": "music_genres: disco, favorite_celebrities: Jim Carrey, animal_welfare_orgs: North Shore Animal League America",
+    "auto_sentence": "Which person has the following three attributes: music_genres: disco, favorite_celebrities: Jim Carrey, animal_welfare_orgs: North Shore Animal League America?"
   },
   {
     "draw_id": "11-1",
@@ -7749,7 +7818,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who named their dog Scout, has been fascinated by the Greek Titan Rhea since reading about mythology, and contracted dengue fever during a trip abroad?",
+    "auto_raw": "infectious_diseases: dengue fever, dog_name: Scout, greek_titans: Rhea",
+    "auto_sentence": "Which person has the following three attributes: infectious_diseases: dengue fever, dog_name: Scout, greek_titans: Rhea?"
   },
   {
     "draw_id": "12-0",
@@ -8072,7 +8144,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was born and raised in Raleigh, owns multiple editions of the board game Sequence, and has a go-to jacket made of satin?",
+    "auto_raw": "us_cities: Raleigh, fabrics: satin, board_games: Sequence",
+    "auto_sentence": "Which person has the following three attributes: us_cities: Raleigh, fabrics: satin, board_games: Sequence?"
   },
   {
     "draw_id": "12-1",
@@ -8395,7 +8470,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who first saw Star Wars: Episode IV - A New Hope (1977) as a kid, got into psychedelic rock in college and created a two-hundred-song playlist, and recommends All Quiet on the Western Front to everyone he meets?",
+    "auto_raw": "favorite_books: All Quiet on the Western Front, popular_movies: Star Wars: Episode IV - A New Hope (1977), music_genres: psychedelic rock",
+    "auto_sentence": "Which person has the following three attributes: favorite_books: All Quiet on the Western Front, popular_movies: Star Wars: Episode IV - A New Hope (1977), music_genres: psychedelic rock?"
   },
   {
     "draw_id": "13-0",
@@ -8718,7 +8796,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who had an apartment in the Tenderloin neighborhood of San Francisco, has Rocky (1976) as his all-time favorite movie, and was inspired by the Greek monster Typhon for his Halloween costume?",
+    "auto_raw": "sf_neighborhoods: the Tenderloin, popular_movies: Rocky (1976), greek_monsters: Typhon",
+    "auto_sentence": "Which person has the following three attributes: sf_neighborhoods: the Tenderloin, popular_movies: Rocky (1976), greek_monsters: Typhon?"
   },
   {
     "draw_id": "13-1",
@@ -9041,7 +9122,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who starts every morning with a cup of Irish Breakfast tea, collects vintage vases and displays them on the windowsill, and counts Benjamin Franklin as his all-time favorite scientist?",
+    "auto_raw": "tea: Irish Breakfast, containers: vase, admired_scientists: Benjamin Franklin",
+    "auto_sentence": "Which person has the following three attributes: tea: Irish Breakfast, containers: vase, admired_scientists: Benjamin Franklin?"
   },
   {
     "draw_id": "14-0",
@@ -9364,7 +9448,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been a Volvo person their whole life and wouldn't drive anything else, was raised Zoroastrian and still attends services, and has been playing the pipe organ since childhood?",
+    "auto_raw": "car_brand: Volvo, religions: Zoroastrian, instruments: pipe organ",
+    "auto_sentence": "Which person has the following three attributes: car_brand: Volvo, religions: Zoroastrian, instruments: pipe organ?"
   },
   {
     "draw_id": "14-1",
@@ -9687,7 +9774,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who writes code in MySQL and swears by it, has a soft spot for dramas, and counts a Dark 'N' Stormy as their drink of choice at any bar?",
+    "auto_raw": "computer_sciences: MySQL, movie_genres: dramas, cocktails: Dark 'N' Stormy",
+    "auto_sentence": "Which person has the following three attributes: computer_sciences: MySQL, movie_genres: dramas, cocktails: Dark 'N' Stormy?"
   },
   {
     "draw_id": "15-0",
@@ -10010,7 +10100,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who keeps an English Angora rabbit as a pet, has been playing the piccolo since childhood, and counts coconut as their favorite fruit?",
+    "auto_raw": "rabbit_breeds: English Angora, instruments: piccolo, fruits: coconut",
+    "auto_sentence": "Which person has the following three attributes: rabbit_breeds: English Angora, instruments: piccolo, fruits: coconut?"
   },
   {
     "draw_id": "15-1",
@@ -10333,7 +10426,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has watched every movie British actor Idris Elba has ever been in, finds the old trade of iceman fascinating and has read several books about it, and considers swordfish to be their favorite seafood?",
+    "auto_raw": "favorite_british_actors: Idris Elba, obsolete_occupations: iceman, fish: swordfish",
+    "auto_sentence": "Which person has the following three attributes: favorite_british_actors: Idris Elba, obsolete_occupations: iceman, fish: swordfish?"
   },
   {
     "draw_id": "16-0",
@@ -10656,7 +10752,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who drove a beat-up old Jaguar as his first car, has spent most of his career in Health, Wellness & Fitness, and grew up in the Sacramento-Roseville-Arden-Arcade, CA area?",
+    "auto_raw": "car_brand: Jaguar, work_industry: Health, Wellness & Fitness, us_metropolitan_areas: Sacramento-Roseville-Arden-Arcade, CA",
+    "auto_sentence": "Which person has the following three attributes: car_brand: Jaguar, work_industry: Health, Wellness & Fitness, us_metropolitan_areas: Sacramento-Roseville-Arden-Arcade, CA?"
   },
   {
     "draw_id": "16-1",
@@ -10979,7 +11078,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was raised Quaker, counts The Old Man and the Sea as his favorite book, and has spent most of his career in Telecommunications?",
+    "auto_raw": "religions: Quaker, favorite_books: The Old Man and the Sea, work_industry: Telecommunications",
+    "auto_sentence": "Which person has the following three attributes: religions: Quaker, favorite_books: The Old Man and the Sea, work_industry: Telecommunications?"
   },
   {
     "draw_id": "17-0",
@@ -11302,7 +11404,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who keeps a bottle of Macallan Scotch on the shelf, was raised Jain, and has been playing the ukulele since childhood?",
+    "auto_raw": "scotch_whisky: Macallan, religions: Jain, instruments: ukulele",
+    "auto_sentence": "Which person has the following three attributes: scotch_whisky: Macallan, religions: Jain, instruments: ukulele?"
   },
   {
     "draw_id": "17-1",
@@ -11625,7 +11730,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has The Kite Runner as his favorite book, has been an Audi person his whole life, and moved to Concord for a government job at the state capital?",
+    "auto_raw": "favorite_books: The Kite Runner, car_brand: Audi, us_state_capitals: Concord",
+    "auto_sentence": "Which person has the following three attributes: favorite_books: The Kite Runner, car_brand: Audi, us_state_capitals: Concord?"
   },
   {
     "draw_id": "18-0",
@@ -11948,7 +12056,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has played the ukulele since childhood, spent time backpacking through Israel after college, and counts Channing Tatum as their favorite celebrity?",
+    "auto_raw": "instruments: ukulele, countries: Israel, favorite_celebrities: Channing Tatum",
+    "auto_sentence": "Which person has the following three attributes: instruments: ukulele, countries: Israel, favorite_celebrities: Channing Tatum?"
   },
   {
     "draw_id": "18-1",
@@ -12271,7 +12382,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who is proud of their Greek heritage, has family roots in Guatemala, and was born and raised in Birmingham?",
+    "auto_raw": "nationalities: Greek, countries: Guatemala, us_cities: Birmingham",
+    "auto_sentence": "Which person has the following three attributes: nationalities: Greek, countries: Guatemala, us_cities: Birmingham?"
   },
   {
     "draw_id": "19-0",
@@ -12594,7 +12708,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was raised Zoroastrian, has a small replica of a Vulcan statue in their apartment, and wrote a college paper on the history of yellow fever?",
+    "auto_raw": "roman_deities: Vulcan, religions: Zoroastrian, infectious_diseases: yellow fever",
+    "auto_sentence": "Which person has the following three attributes: roman_deities: Vulcan, religions: Zoroastrian, infectious_diseases: yellow fever?"
   },
   {
     "draw_id": "19-1",
@@ -12917,7 +13034,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who lived in the Financial District neighborhood in New York City after college, has the Washington Wizards as their favorite NBA team, and insists that olives is the best pizza topping?",
+    "auto_raw": "nyc_neighborhoods: the Financial District, nba_teams: Washington Wizards, pizza_toppings: olives",
+    "auto_sentence": "Which person has the following three attributes: nyc_neighborhoods: the Financial District, nba_teams: Washington Wizards, pizza_toppings: olives?"
   },
   {
     "draw_id": "20-0",
@@ -13240,7 +13360,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was introduced to Green Crack at a party, saved up for a Rickenbacker guitar, and has been exploring session ales?",
+    "auto_raw": "cannabis_strains: Green Crack, guitar_brands: Rickenbacker, beer_categories: session ale",
+    "auto_sentence": "Which person has the following three attributes: cannabis_strains: Green Crack, guitar_brands: Rickenbacker, beer_categories: session ale?"
   },
   {
     "draw_id": "20-1",
@@ -13563,7 +13686,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who often comes across as confused, thinks Barack Obama was underrated, and owns multiple scarfs?",
+    "auto_raw": "moods: confused, favorite_president: Barack Obama, clothing: scarf",
+    "auto_sentence": "Which person has the following three attributes: moods: confused, favorite_president: Barack Obama, clothing: scarf?"
   },
   {
     "draw_id": "21-0",
@@ -13886,7 +14012,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been a Land Rover person their whole life, is devoted to the Chicago Bulls, and became fascinated with North Korea after watching a documentary?",
+    "auto_raw": "car_brand: Land Rover, nba_teams: Chicago Bulls, countries: North Korea",
+    "auto_sentence": "Which person has the following three attributes: car_brand: Land Rover, nba_teams: Chicago Bulls, countries: North Korea?"
   },
   {
     "draw_id": "21-1",
@@ -14209,7 +14338,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who volunteers at a park, never misses Milwaukee Bucks playoff games, and specifically requested marble for their home flooring?",
+    "auto_raw": "venues: park, nba_teams: Milwaukee Bucks, favorite_stone: marble",
+    "auto_sentence": "Which person has the following three attributes: venues: park, nba_teams: Milwaukee Bucks, favorite_stone: marble?"
   },
   {
     "draw_id": "22-0",
@@ -14532,7 +14664,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts the Detroit Pistons as his favorite NBA basketball team, admires Michio Kaku as an all-time favorite scientist, and has spent most of his career in Broadcast Media?",
+    "auto_raw": "nba_teams: Detroit Pistons, admired_scientists: Michio Kaku, work_industry: Broadcast Media",
+    "auto_sentence": "Which person has the following three attributes: nba_teams: Detroit Pistons, admired_scientists: Michio Kaku, work_industry: Broadcast Media?"
   },
   {
     "draw_id": "22-1",
@@ -14855,7 +14990,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has always favored the New York Yankees as his baseball team, lived in the Russian Hill neighborhood of San Francisco, and spent time in Montreal, Canada on a company project?",
+    "auto_raw": "mlb_teams: New York Yankees, sf_neighborhoods: Russian Hill, canadian_cities: Montreal",
+    "auto_sentence": "Which person has the following three attributes: mlb_teams: New York Yankees, sf_neighborhoods: Russian Hill, canadian_cities: Montreal?"
   },
   {
     "draw_id": "23-0",
@@ -15178,7 +15316,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who grew up in a household where the San Francisco Giants were central, tends to feel lonely after long workdays, and counts the Mandarin duck as his favorite waterfowl?",
+    "auto_raw": "mlb_teams: San Francisco Giants, moods: lonely, waterfowl: Mandarin duck",
+    "auto_sentence": "Which person has the following three attributes: mlb_teams: San Francisco Giants, moods: lonely, waterfowl: Mandarin duck?"
   },
   {
     "draw_id": "23-1",
@@ -15501,7 +15642,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been obsessed with the djinn since childhood, grew up attending Toledo Mud Hens Minor League Baseball games, and frequently recommends Charlotte's Web to others?",
+    "auto_raw": "mythic_creatures: djinn, milb_teams: Toledo Mud Hens, favorite_books: Charlotte's Web",
+    "auto_sentence": "Which person has the following three attributes: mythic_creatures: djinn, milb_teams: Toledo Mud Hens, favorite_books: Charlotte's Web?"
   },
   {
     "draw_id": "24-0",
@@ -15824,7 +15968,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts Abraham Lincoln as their favorite president, enjoys animated movies on weekends, and has been playing the tambourine since childhood?",
+    "auto_raw": "favorite_president: Abraham Lincoln, movie_genres: animated movies, instruments: tambourine",
+    "auto_sentence": "Which person has the following three attributes: favorite_president: Abraham Lincoln, movie_genres: animated movies, instruments: tambourine?"
   },
   {
     "draw_id": "24-1",
@@ -16147,7 +16294,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has Stephen Hawking as their all-time favorite scientist, grew up watching South Park, and lived in Salem?",
+    "auto_raw": "admired_scientists: Stephen Hawking, tv_shows: South Park, us_state_capitals: Salem",
+    "auto_sentence": "Which person has the following three attributes: admired_scientists: Stephen Hawking, tv_shows: South Park, us_state_capitals: Salem?"
   },
   {
     "draw_id": "25-0",
@@ -16470,7 +16620,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has Silicon as their favorite chemical element, listens to electro music, and has been a Tesla person their whole life?",
+    "auto_raw": "chemical_elements: Silicon, music_genres: electro, car_brand: Tesla",
+    "auto_sentence": "Which person has the following three attributes: chemical_elements: Silicon, music_genres: electro, car_brand: Tesla?"
   },
   {
     "draw_id": "25-1",
@@ -16793,7 +16946,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts The Godfather (1972) as their all-time favorite movie, has Life of Pi as their favorite book, and admires billionaire Larry Page?",
+    "auto_raw": "popular_movies: The Godfather (1972), favorite_books: Life of Pi, rich_people: Larry Page",
+    "auto_sentence": "Which person has the following three attributes: popular_movies: The Godfather (1972), favorite_books: Life of Pi, rich_people: Larry Page?"
   },
   {
     "draw_id": "26-0",
@@ -17116,7 +17272,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who grew up eating salami at family cookouts, has been a Porsche person their whole life, and lists yam as their favorite vegetable?",
+    "auto_raw": "sausages: salami, car_brand: Porsche, vegetables: yam",
+    "auto_sentence": "Which person has the following three attributes: sausages: salami, car_brand: Porsche, vegetables: yam?"
   },
   {
     "draw_id": "26-1",
@@ -17439,7 +17598,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been a die-hard Arsenal fan since college, loves expressionism and has prints covering their apartment walls, and has been attending rock and roll shows since their teenage years?",
+    "auto_raw": "epl_teams: Arsenal, art_movements: expressionism, music_genres: rock and roll",
+    "auto_sentence": "Which person has the following three attributes: epl_teams: Arsenal, art_movements: expressionism, music_genres: rock and roll?"
   },
   {
     "draw_id": "27-0",
@@ -17762,7 +17924,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who always orders snapper whenever they see it on a restaurant menu, lists Mad Men as their favorite TV show, and identifies with the tarot card The Devil?",
+    "auto_raw": "fish: snapper, tv_shows: Mad Men, tarot_card: The Devil",
+    "auto_sentence": "Which person has the following three attributes: fish: snapper, tv_shows: Mad Men, tarot_card: The Devil?"
   },
   {
     "draw_id": "27-1",
@@ -18085,7 +18250,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who painted their bedroom walls black as a child, has spent most of their career working in Military, and considers Gone with the Wind the book they recommend to everyone?",
+    "auto_raw": "favorite_color: black, work_industry: Military, favorite_books: Gone with the Wind",
+    "auto_sentence": "Which person has the following three attributes: favorite_color: black, work_industry: Military, favorite_books: Gone with the Wind?"
   },
   {
     "draw_id": "28-0",
@@ -18408,7 +18576,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has a soft spot for sports movies, was obsessed with gorillas as a kid, and can identify a Black swan from fifty feet away?",
+    "auto_raw": "movie_genres: sports movies, favorite_animal: gorilla, waterfowl: Black swan",
+    "auto_sentence": "Which person has the following three attributes: movie_genres: sports movies, favorite_animal: gorilla, waterfowl: Black swan?"
   },
   {
     "draw_id": "28-1",
@@ -18731,7 +18902,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who puts teriyaki sauce on pretty much everything, has been trying to photograph an American Kestrel for years, and wrote a college paper on the history of typhoid fever?",
+    "auto_raw": "condiments: teriyaki sauce, birds_north_america: American Kestrel, infectious_diseases: typhoid fever",
+    "auto_sentence": "Which person has the following three attributes: condiments: teriyaki sauce, birds_north_america: American Kestrel, infectious_diseases: typhoid fever?"
   },
   {
     "draw_id": "29-0",
@@ -19054,7 +19228,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who considers Kendrick Lamar their favorite rapper, grew up in the Pittsburgh, PA area and still calls it home, and has a travel goal to take a boat trip down the Volga River?",
+    "auto_raw": "xxl_freshmen: Kendrick Lamar, us_metropolitan_areas: Pittsburgh, PA, rivers: Volga",
+    "auto_sentence": "Which person has the following three attributes: xxl_freshmen: Kendrick Lamar, us_metropolitan_areas: Pittsburgh, PA, rivers: Volga?"
   },
   {
     "draw_id": "29-1",
@@ -19377,7 +19554,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who relocated to the Houston-The Woodlands-Sugar Land, TX metro for a job and considers it the best place to raise a family, has visited Jackson as their favorite state capital so far, and frequently watches martial arts movies on Friday nights?",
+    "auto_raw": "us_metropolitan_areas: Houston-The Woodlands-Sugar Land, TX, us_state_capitals: Jackson, movie_genres: martial arts movies",
+    "auto_sentence": "Which person has the following three attributes: us_metropolitan_areas: Houston-The Woodlands-Sugar Land, TX, us_state_capitals: Jackson, movie_genres: martial arts movies?"
   },
   {
     "draw_id": "30-0",
@@ -19700,7 +19880,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has beige as their favorite color, rose as their favorite candle scent, and has watched The Sixth Sense (1999) more times than they can count?",
+    "auto_raw": "favorite_color: beige, scents: rose, popular_movies: The Sixth Sense (1999)",
+    "auto_sentence": "Which person has the following three attributes: favorite_color: beige, scents: rose, popular_movies: The Sixth Sense (1999)?"
   },
   {
     "draw_id": "30-1",
@@ -20023,7 +20206,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has the anemone as their favorite flower, is a Lamborghini person who wouldn't drive anything else, and counts the billionaire Larry Ellison as their financial idol?",
+    "auto_raw": "flowers: anemone, car_brand: Lamborghini, rich_people: Larry Ellison",
+    "auto_sentence": "Which person has the following three attributes: flowers: anemone, car_brand: Lamborghini, rich_people: Larry Ellison?"
   },
   {
     "draw_id": "31-0",
@@ -20346,7 +20532,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has Steinbeck as their favorite author, can identify a Harlequin duck from fifty feet away, and owns memorabilia from Dr. Jekyll and Mr. Hyde?",
+    "auto_raw": "favorite_authors: Steinbeck, waterfowl: Harlequin duck, famous_duos: Dr. Jekyll and Mr. Hyde",
+    "auto_sentence": "Which person has the following three attributes: favorite_authors: Steinbeck, waterfowl: Harlequin duck, famous_duos: Dr. Jekyll and Mr. Hyde?"
   },
   {
     "draw_id": "31-1",
@@ -20669,7 +20858,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has always wanted a Norwegian Forest cat, grew up with The Simpsons as their favorite TV show, and considers a properly made Bloody Mary one of life's great pleasures?",
+    "auto_raw": "cat_breeds: Norwegian Forest cat, tv_shows: The Simpsons, cocktails: Bloody Mary",
+    "auto_sentence": "Which person has the following three attributes: cat_breeds: Norwegian Forest cat, tv_shows: The Simpsons, cocktails: Bloody Mary?"
   },
   {
     "draw_id": "32-0",
@@ -20992,7 +21184,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has family roots in Taiwan, reads Detroit Free Press daily, and grew up in the Salt Lake City, UT area?",
+    "auto_raw": "countries: Taiwan, newspaper: Detroit Free Press, us_metropolitan_areas: Salt Lake City, UT",
+    "auto_sentence": "Which person has the following three attributes: countries: Taiwan, newspaper: Detroit Free Press, us_metropolitan_areas: Salt Lake City, UT?"
   },
   {
     "draw_id": "32-1",
@@ -21315,7 +21510,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who backpacked through Morocco after college, has coral as their favorite color, and regularly drinks Glenlivet as their go-to Scotch whisky?",
+    "auto_raw": "countries: Morocco, favorite_color: coral, scotch_whisky: Glenlivet",
+    "auto_sentence": "Which person has the following three attributes: countries: Morocco, favorite_color: coral, scotch_whisky: Glenlivet?"
   },
   {
     "draw_id": "33-0",
@@ -21638,7 +21836,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has spent most of their career in Renewables & Environment, regularly watches sci-fi movies on Friday nights, and almost never leaves the house without their hat?",
+    "auto_raw": "work_industry: Renewables & Environment, movie_genres: sci-fi movies, clothing: hat",
+    "auto_sentence": "Which person has the following three attributes: work_industry: Renewables & Environment, movie_genres: sci-fi movies, clothing: hat?"
   },
   {
     "draw_id": "33-1",
@@ -21961,7 +22162,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who studied Civil Engineering in college, has been a die-hard Chelsea fan since college, and has been drinking Corona Extra since those days?",
+    "auto_raw": "academic_subjects: Civil Engineering, epl_teams: Chelsea, cheap_beers: Corona Extra",
+    "auto_sentence": "Which person has the following three attributes: academic_subjects: Civil Engineering, epl_teams: Chelsea, cheap_beers: Corona Extra?"
   },
   {
     "draw_id": "34-0",
@@ -22284,7 +22488,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has watched La La Land (2016) more times than they can count, brings it up when recommending movies, has been a loyal Honda person their whole life, and has a deep appreciation for indie films?",
+    "auto_raw": "popular_movies: La La Land (2016), car_brand: Honda, movie_genres: indie films",
+    "auto_sentence": "Which person has the following three attributes: popular_movies: La La Land (2016), car_brand: Honda, movie_genres: indie films?"
   },
   {
     "draw_id": "34-1",
@@ -22607,7 +22814,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Whose personal motto is 'Do unto others as you would have them do to you,' whose favorite NBA team is the Los Angeles Clippers, and whose family has roots in France?",
+    "auto_raw": "proverbs: Do unto others as you would have them do to you., nba_teams: Los Angeles Clippers, countries: France",
+    "auto_sentence": "Which person has the following three attributes: proverbs: Do unto others as you would have them do to you., nba_teams: Los Angeles Clippers, countries: France?"
   },
   {
     "draw_id": "35-0",
@@ -22930,7 +23140,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was raised Anabaptist and attends services regularly, volunteers at St. Jude Children's Research Hospital, and considers Sergey Brin their financial idol?",
+    "auto_raw": "supported_charity: St. Jude Children's Research Hospital, religions: Anabaptist, rich_people: Sergey Brin",
+    "auto_sentence": "Which person has the following three attributes: supported_charity: St. Jude Children's Research Hospital, religions: Anabaptist, rich_people: Sergey Brin?"
   },
   {
     "draw_id": "35-1",
@@ -23253,7 +23466,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been drinking Colt 45 since college, has always wanted an Abyssinian cat, and loves finding the best antique shops in every city?",
+    "auto_raw": "cheap_beers: Colt 45, cat_breeds: Abyssinian, venues: antique shop",
+    "auto_sentence": "Which person has the following three attributes: cheap_beers: Colt 45, cat_breeds: Abyssinian, venues: antique shop?"
   },
   {
     "draw_id": "36-0",
@@ -23576,7 +23792,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who loves topaz jewelry, counts Idris Elba as their favorite British actor, and describes their default mood as exhausted?",
+    "auto_raw": "gemstones: topaz, favorite_british_actors: Idris Elba, moods: exhausted",
+    "auto_sentence": "Which person has the following three attributes: gemstones: topaz, favorite_british_actors: Idris Elba, moods: exhausted?"
   },
   {
     "draw_id": "36-1",
@@ -23899,7 +24118,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has watched Scarface (1983) countless times, works in Food & Beverages, and passionately recommends Percy Jackson and the Olympians to everyone?",
+    "auto_raw": "popular_movies: Scarface (1983), work_industry: Food & Beverages, favorite_books: Percy Jackson and the Olympians",
+    "auto_sentence": "Which person has the following three attributes: popular_movies: Scarface (1983), work_industry: Food & Beverages, favorite_books: Percy Jackson and the Olympians?"
   },
   {
     "draw_id": "37-0",
@@ -24222,7 +24444,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who considers a hiking trail their perfect weekend destination, counts J. Robert Oppenheimer as their all-time favorite scientist, and is a serious fan of techno music?",
+    "auto_raw": "venues: hiking trail, admired_scientists: J. Robert Oppenheimer, music_genres: techno",
+    "auto_sentence": "Which person has the following three attributes: venues: hiking trail, admired_scientists: J. Robert Oppenheimer, music_genres: techno?"
   },
   {
     "draw_id": "37-1",
@@ -24545,7 +24770,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who finds the plague doctor a fascinating historical occupation, has dreamed of owning a Lamborghini their whole life, and counts Potassium as their favorite element?",
+    "auto_raw": "obsolete_occupations: plague doctor, car_brand: Lamborghini, chemical_elements: Potassium",
+    "auto_sentence": "Which person has the following three attributes: obsolete_occupations: plague doctor, car_brand: Lamborghini, chemical_elements: Potassium?"
   },
   {
     "draw_id": "38-0",
@@ -24868,7 +25096,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who puts cardamom on almost everything they cook, has spent most of their career working in Fine Art, and gets the Los Angeles Times delivered to their door every morning?",
+    "auto_raw": "herbs_and_spices: cardamom, work_industry: Fine Art, newspaper: Los Angeles Times",
+    "auto_sentence": "Which person has the following three attributes: herbs_and_spices: cardamom, work_industry: Fine Art, newspaper: Los Angeles Times?"
   },
   {
     "draw_id": "38-1",
@@ -25191,7 +25422,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who thinks a perfect weekend is spending time at a drive-in theater, donates to Habitat for Humanity International every year, and has been a devoted Valencia fan in La Liga since they started following soccer?",
+    "auto_raw": "venues: drive-in theater, supported_charity: Habitat for Humanity International, laliga_teams: Valencia",
+    "auto_sentence": "Which person has the following three attributes: venues: drive-in theater, supported_charity: Habitat for Humanity International, laliga_teams: Valencia?"
   },
   {
     "draw_id": "39-0",
@@ -25514,7 +25748,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who lived in the Mission neighborhood in San Francisco for two years and still misses it, has been curious about Anthropology since high school, and has been a Rolls-Royce person their whole life?",
+    "auto_raw": "sf_neighborhoods: the Mission, academic_subjects: Anthropology, car_brand: Rolls-Royce",
+    "auto_sentence": "Which person has the following three attributes: sf_neighborhoods: the Mission, academic_subjects: Anthropology, car_brand: Rolls-Royce?"
   },
   {
     "draw_id": "39-1",
@@ -25837,7 +26074,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Whose favorite TV show growing up was Lost, has been playing darts since they were a teenager and still plays on weekends, and has been a die-hard Manchester United fan in the Premier League since college?",
+    "auto_raw": "tv_shows: Lost, sports: darts, epl_teams: Manchester United",
+    "auto_sentence": "Which person has the following three attributes: tv_shows: Lost, sports: darts, epl_teams: Manchester United?"
   },
   {
     "draw_id": "40-0",
@@ -26160,7 +26400,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who got into progressive rock in college, has loved the Philadelphia Eagles as their favorite NFL team since childhood, and was born and raised in Birmingham?",
+    "auto_raw": "music_genres: progressive rock, nfl_teams: Philadelphia Eagles, us_cities: Birmingham",
+    "auto_sentence": "Which person has the following three attributes: music_genres: progressive rock, nfl_teams: Philadelphia Eagles, us_cities: Birmingham?"
   },
   {
     "draw_id": "40-1",
@@ -26483,7 +26726,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who gets the Los Angeles Times delivered every morning, swears by Yamaha guitars and refuses to play anything else, and grows snapdragon as their favorite flower in their backyard?",
+    "auto_raw": "newspaper: Los Angeles Times, guitar_brands: Yamaha, flowers: snapdragon",
+    "auto_sentence": "Which person has the following three attributes: newspaper: Los Angeles Times, guitar_brands: Yamaha, flowers: snapdragon?"
   },
   {
     "draw_id": "41-0",
@@ -26806,7 +27052,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who grew up riding Belgian Horses at a farm, always adds extra sun-dried tomato when making pizza at home, and was born and raised in Boston?",
+    "auto_raw": "horse_breed: Belgian Horse, pizza_toppings: sun-dried tomato, us_cities: Boston",
+    "auto_sentence": "Which person has the following three attributes: horse_breed: Belgian Horse, pizza_toppings: sun-dried tomato, us_cities: Boston?"
   },
   {
     "draw_id": "41-1",
@@ -27129,7 +27378,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been playing the viola since middle school, counts the gorilla as their favorite animal, and wears a well-loved denim jacket?",
+    "auto_raw": "instruments: viola, favorite_animal: gorilla, fabrics: denim",
+    "auto_sentence": "Which person has the following three attributes: instruments: viola, favorite_animal: gorilla, fabrics: denim?"
   },
   {
     "draw_id": "42-0",
@@ -27452,7 +27704,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has read every biography about the wealthy entrepreneur Michael Bloomberg, counts Sauron as their favorite Lord of the Rings character, and has been a Jeep person their whole life?",
+    "auto_raw": "rich_people: Michael Bloomberg, tolkien_favorites: Sauron, car_brand: Jeep",
+    "auto_sentence": "Which person has the following three attributes: rich_people: Michael Bloomberg, tolkien_favorites: Sauron, car_brand: Jeep?"
   },
   {
     "draw_id": "42-1",
@@ -27775,7 +28030,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has Carcassonne as their favorite board game, receives The Denver Post delivered to their door every morning, and almost never leaves the house without their shorts?",
+    "auto_raw": "board_games: Carcassonne, newspaper: The Denver Post, clothing: shorts",
+    "auto_sentence": "Which person has the following three attributes: board_games: Carcassonne, newspaper: The Denver Post, clothing: shorts?"
   },
   {
     "draw_id": "43-0",
@@ -28098,7 +28356,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who loved watching Buffy the Vampire Slayer as a kid, insists on turquoise in their personal style, and always includes a quality dress shirt in their go-to outfit?",
+    "auto_raw": "tv_shows: Buffy the Vampire Slayer, favorite_color: turquoise, clothing: dress shirt",
+    "auto_sentence": "Which person has the following three attributes: tv_shows: Buffy the Vampire Slayer, favorite_color: turquoise, clothing: dress shirt?"
   },
   {
     "draw_id": "43-1",
@@ -28421,7 +28682,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who grows artichoke in their garden, puts steak sauce on pretty much everything, and keeps a worn copy of Black Beauty on their nightstand?",
+    "auto_raw": "vegetables: artichoke, condiments: steak sauce, favorite_books: Black Beauty",
+    "auto_sentence": "Which person has the following three attributes: vegetables: artichoke, condiments: steak sauce, favorite_books: Black Beauty?"
   },
   {
     "draw_id": "44-0",
@@ -28744,7 +29008,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been a Chrysler person his whole life, first tried a Bellini and never looked back, and spent a whole weekend reading biographies of Euclid?",
+    "auto_raw": "cocktails: Bellini, car_brand: Chrysler, admired_scientists: Euclid",
+    "auto_sentence": "Which person has the following three attributes: cocktails: Bellini, car_brand: Chrysler, admired_scientists: Euclid?"
   },
   {
     "draw_id": "44-1",
@@ -29067,7 +29334,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who is an avid Pittsburgh Steelers fan since childhood, has family roots in Czech Republic going back several generations, and always suggests The Game of Life when friends come over?",
+    "auto_raw": "board_games: The Game of Life, countries: Czech Republic, nfl_teams: Pittsburgh Steelers",
+    "auto_sentence": "Which person has the following three attributes: board_games: The Game of Life, countries: Czech Republic, nfl_teams: Pittsburgh Steelers?"
   },
   {
     "draw_id": "45-0",
@@ -29390,7 +29660,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has watched It's a Wonderful Life (1946) countless times since childhood, has pink as their favorite color, and treasures topaz as their favorite gemstone?",
+    "auto_raw": "popular_movies: It's a Wonderful Life (1946), gemstones: topaz, favorite_color: pink",
+    "auto_sentence": "Which person has the following three attributes: popular_movies: It's a Wonderful Life (1946), gemstones: topaz, favorite_color: pink?"
   },
   {
     "draw_id": "45-1",
@@ -29713,7 +29986,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was born and raised in Baton Rouge, relocated to the Dallas-Fort Worth-Arlington, TX area, and has a soft spot for crime dramas?",
+    "auto_raw": "movie_genres: crime dramas, us_metropolitan_areas: Dallas-Fort Worth-Arlington, TX, us_cities: Baton Rouge",
+    "auto_sentence": "Which person has the following three attributes: movie_genres: crime dramas, us_metropolitan_areas: Dallas-Fort Worth-Arlington, TX, us_cities: Baton Rouge?"
   },
   {
     "draw_id": "46-0",
@@ -30036,7 +30312,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who identified a Turkey Vulture as the first bird on his own, has family roots in Argentina going back generations, and refuses to sleep on anything but linen sheets?",
+    "auto_raw": "birds_north_america: Turkey Vulture, countries: Argentina, fabrics: linen",
+    "auto_sentence": "Which person has the following three attributes: birds_north_america: Turkey Vulture, countries: Argentina, fabrics: linen?"
   },
   {
     "draw_id": "46-1",
@@ -30359,7 +30638,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts the iguana as his spirit animal, has a framed print of a unicorn as his favorite mythical creature, and shows up at open mic nights with his B.C. Rich guitar?",
+    "auto_raw": "favorite_animal: iguana, mythic_creatures: unicorn, guitar_brands: B.C. Rich",
+    "auto_sentence": "Which person has the following three attributes: favorite_animal: iguana, mythic_creatures: unicorn, guitar_brands: B.C. Rich?"
   },
   {
     "draw_id": "47-0",
@@ -30682,7 +30964,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Whose favorite board game is Sorry!, favorite flower is the carnation that he grows in his backyard, and has a soft spot for sports movies?",
+    "auto_raw": "board_games: Sorry!, flowers: carnation, movie_genres: sports movies",
+    "auto_sentence": "Which person has the following three attributes: board_games: Sorry!, flowers: carnation, movie_genres: sports movies?"
   },
   {
     "draw_id": "47-1",
@@ -31005,7 +31290,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been a Mazda person his whole life, can recite dialogue from Curb Your Enthusiasm from memory, and owns at least three different editions of Pictionary?",
+    "auto_raw": "car_brand: Mazda, tv_shows: Curb Your Enthusiasm, board_games: Pictionary",
+    "auto_sentence": "Which person has the following three attributes: car_brand: Mazda, tv_shows: Curb Your Enthusiasm, board_games: Pictionary?"
   },
   {
     "draw_id": "48-0",
@@ -31328,7 +31616,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has memories of going to the drive-in theater as a kid, has been a Nissan person their whole life, and considers Austin home?",
+    "auto_raw": "venues: drive-in theater, car_brand: Nissan, us_cities: Austin",
+    "auto_sentence": "Which person has the following three attributes: venues: drive-in theater, car_brand: Nissan, us_cities: Austin?"
   },
   {
     "draw_id": "48-1",
@@ -31651,7 +31942,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who lived in Boise, the state capital, has spent their career working in Public Relations, and has been playing tennis since they were a teenager?",
+    "auto_raw": "us_state_capitals: Boise, work_industry: Public Relations, sports: tennis",
+    "auto_sentence": "Which person has the following three attributes: us_state_capitals: Boise, work_industry: Public Relations, sports: tennis?"
   },
   {
     "draw_id": "49-0",
@@ -31974,7 +32268,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who follows Lazio closely in Serie A, prides themselves on being creative, and enjoys drinking Bowmore Scotch?",
+    "auto_raw": "serie_a_teams: Lazio, personality_traits: creative, scotch_whisky: Bowmore",
+    "auto_sentence": "Which person has the following three attributes: serie_a_teams: Lazio, personality_traits: creative, scotch_whisky: Bowmore?"
   },
   {
     "draw_id": "49-1",
@@ -32297,7 +32594,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who keeps Bud Light on hand, listens to progressive rock as their go-to genre, and enjoys watching comedies?",
+    "auto_raw": "cheap_beers: Bud Light, music_genres: progressive rock, movie_genres: comedies",
+    "auto_sentence": "Which person has the following three attributes: cheap_beers: Bud Light, music_genres: progressive rock, movie_genres: comedies?"
   },
   {
     "draw_id": "50-0",
@@ -32620,7 +32920,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was born and raised in San Francisco, picked up the accordion in middle school and never put it down, and counts cantaloupe as his favorite fruit?",
+    "auto_raw": "us_cities: San Francisco, instruments: accordion, fruits: cantaloupe",
+    "auto_sentence": "Which person has the following three attributes: us_cities: San Francisco, instruments: accordion, fruits: cantaloupe?"
   },
   {
     "draw_id": "50-1",
@@ -32943,7 +33246,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who would be described as caring by his closest friends, has read The Tale of Peter Rabbit at least three times, and keeps Silicon as the centerpiece of his element collection?",
+    "auto_raw": "personality_traits: caring, favorite_books: The Tale of Peter Rabbit, chemical_elements: Silicon",
+    "auto_sentence": "Which person has the following three attributes: personality_traits: caring, favorite_books: The Tale of Peter Rabbit, chemical_elements: Silicon?"
   },
   {
     "draw_id": "51-0",
@@ -33266,7 +33572,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts the Houston Astros as his favorite baseball team, saved up for years to buy a Schecter guitar, and is a die-hard Arsenal fan in the Premier League?",
+    "auto_raw": "mlb_teams: Houston Astros, guitar_brands: Schecter, epl_teams: Arsenal",
+    "auto_sentence": "Which person has the following three attributes: mlb_teams: Houston Astros, guitar_brands: Schecter, epl_teams: Arsenal?"
   },
   {
     "draw_id": "51-1",
@@ -33589,7 +33898,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Whose favorite seafood is tilapia, whose favorite paint color is taupe, and who puts date in his smoothie every single morning?",
+    "auto_raw": "fish: tilapia, favorite_paint_color: taupe, fruits: date",
+    "auto_sentence": "Which person has the following three attributes: fish: tilapia, favorite_paint_color: taupe, fruits: date?"
   },
   {
     "draw_id": "52-0",
@@ -33912,7 +34224,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who collects a replica slingshot as a premodern weapon, considers The 7 Habits of Highly Effective People his favorite book, and always seeks out dry wine?",
+    "auto_raw": "premodern_weapons: slingshot, favorite_books: The 7 Habits of Highly Effective People, wine_tasting_descriptors: dry",
+    "auto_sentence": "Which person has the following three attributes: premodern_weapons: slingshot, favorite_books: The 7 Habits of Highly Effective People, wine_tasting_descriptors: dry?"
   },
   {
     "draw_id": "52-1",
@@ -34235,7 +34550,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts zucchini as their favorite vegetable, has always supported the New York Yankees as their favorite baseball team, and displays a framed portrait of Richard Nixon in their office?",
+    "auto_raw": "vegetables: zucchini, mlb_teams: New York Yankees, favorite_president: Richard Nixon",
+    "auto_sentence": "Which person has the following three attributes: vegetables: zucchini, mlb_teams: New York Yankees, favorite_president: Richard Nixon?"
   },
   {
     "draw_id": "53-0",
@@ -34558,7 +34876,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who got into R&B in college, identifies with San Diego as their home, and prefers sun-dried tomato as their favorite pizza topping?",
+    "auto_raw": "music_genres: R&B, us_cities: San Diego, pizza_toppings: sun-dried tomato",
+    "auto_sentence": "Which person has the following three attributes: music_genres: R&B, us_cities: San Diego, pizza_toppings: sun-dried tomato?"
   },
   {
     "draw_id": "53-1",
@@ -34881,7 +35202,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who donates to the YMCA of the USA, has been attending glam rock shows since their teenage years, and finds the historical occupation of lamplighter fascinating?",
+    "auto_raw": "supported_charity: YMCA of the USA, music_genres: glam rock, obsolete_occupations: lamplighter",
+    "auto_sentence": "Which person has the following three attributes: supported_charity: YMCA of the USA, music_genres: glam rock, obsolete_occupations: lamplighter?"
   },
   {
     "draw_id": "54-0",
@@ -35204,7 +35528,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts Harry Potter and the Deathly Hallows as their favorite book, was raised Unitarian and attends services regularly, and has family roots in Poland?",
+    "auto_raw": "favorite_books: Harry Potter and the Deathly Hallows, religions: Unitarian, countries: Poland",
+    "auto_sentence": "Which person has the following three attributes: favorite_books: Harry Potter and the Deathly Hallows, religions: Unitarian, countries: Poland?"
   },
   {
     "draw_id": "54-1",
@@ -35527,7 +35854,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has \"Better safe than sorry\" as their personal motto, considers Baton Rouge home, and always keeps Busch Light in their fridge?",
+    "auto_raw": "proverbs: Better safe than sorry., us_cities: Baton Rouge, cheap_beers: Busch Light",
+    "auto_sentence": "Which person has the following three attributes: proverbs: Better safe than sorry., us_cities: Baton Rouge, cheap_beers: Busch Light?"
   },
   {
     "draw_id": "55-0",
@@ -35850,7 +36180,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who is a lifelong Tennessee Titans fan, drives only Mercedes-Benz vehicles, and was raised Orthodox Jewish and still attends services?",
+    "auto_raw": "nfl_teams: Tennessee Titans, car_brand: Mercedes-Benz, religions: Orthodox Jewish",
+    "auto_sentence": "Which person has the following three attributes: nfl_teams: Tennessee Titans, car_brand: Mercedes-Benz, religions: Orthodox Jewish?"
   },
   {
     "draw_id": "55-1",
@@ -36173,7 +36506,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who uses AK-47 as their go-to cannabis strain, can identify a Muscovy duck from a distance, and has Silver as their favorite element on the periodic table?",
+    "auto_raw": "cannabis_strains: AK-47, waterfowl: Muscovy duck, chemical_elements: Silver",
+    "auto_sentence": "Which person has the following three attributes: cannabis_strains: AK-47, waterfowl: Muscovy duck, chemical_elements: Silver?"
   },
   {
     "draw_id": "56-0",
@@ -36496,7 +36832,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who fell into Transportation/Trucking/Railroad after college, got hooked on powerlifting, and reads The Miami Herald every morning?",
+    "auto_raw": "work_industry: Transportation/Trucking/Railroad, sports: powerlifting, newspaper: The Miami Herald",
+    "auto_sentence": "Which person has the following three attributes: work_industry: Transportation/Trucking/Railroad, sports: powerlifting, newspaper: The Miami Herald?"
   },
   {
     "draw_id": "56-1",
@@ -36819,7 +37158,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who considers the Financial District the most underrated neighborhood in San Francisco, has played weightlifting since their teenage years, and loves using the word velvety to describe wines?",
+    "auto_raw": "sf_neighborhoods: the Financial District, sports: weightlifting, wine_tasting_descriptors: velvety",
+    "auto_sentence": "Which person has the following three attributes: sf_neighborhoods: the Financial District, sports: weightlifting, wine_tasting_descriptors: velvety?"
   },
   {
     "draw_id": "57-0",
@@ -37142,7 +37484,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was obsessed with grizzly bears as a child, is a devoted Boston Celtics fan, and has been a Toyota person their whole life?",
+    "auto_raw": "favorite_animal: grizzly bear, nba_teams: Boston Celtics, car_brand: Toyota",
+    "auto_sentence": "Which person has the following three attributes: favorite_animal: grizzly bear, nba_teams: Boston Celtics, car_brand: Toyota?"
   },
   {
     "draw_id": "57-1",
@@ -37465,7 +37810,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been a Dallas Cowboys fan since childhood, has family roots in Bolivia, and grew up recording everything onto Reel-To-Reel?",
+    "auto_raw": "nfl_teams: Dallas Cowboys, countries: Bolivia, music_media_formats: Reel-To-Reel",
+    "auto_sentence": "Which person has the following three attributes: nfl_teams: Dallas Cowboys, countries: Bolivia, music_media_formats: Reel-To-Reel?"
   },
   {
     "draw_id": "58-0",
@@ -37788,7 +38136,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has a soft spot for horror movies, would most like to encounter a siren among mythical creatures, and has always wanted to visit Tokyo?",
+    "auto_raw": "mythic_creatures: siren, japanese_prefectures: Tokyo, movie_genres: horror movies",
+    "auto_sentence": "Which person has the following three attributes: mythic_creatures: siren, japanese_prefectures: Tokyo, movie_genres: horror movies?"
   },
   {
     "draw_id": "58-1",
@@ -38111,7 +38462,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has Reuben as their all-time favorite sandwich, played snowboarding through high school, and has a default mood of excited?",
+    "auto_raw": "sandwiches: Reuben, sports: snowboarding, moods: excited",
+    "auto_sentence": "Which person has the following three attributes: sandwiches: Reuben, sports: snowboarding, moods: excited?"
   },
   {
     "draw_id": "59-0",
@@ -38434,7 +38788,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who reads USA Today regularly, spends considerable time at a climbing gym, and whose dream car is a BMW?",
+    "auto_raw": "newspaper: USA Today, venues: climbing gym, car_brand: BMW",
+    "auto_sentence": "Which person has the following three attributes: newspaper: USA Today, venues: climbing gym, car_brand: BMW?"
   },
   {
     "draw_id": "59-1",
@@ -38757,7 +39114,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts Fight Club (1999) as their all-time favorite movie, dreams of owning a Lamborghini, and has experience with Lassa fever either through contraction or NGO work?",
+    "auto_raw": "car_brand: Lamborghini, popular_movies: Fight Club (1999), infectious_diseases: Lassa fever",
+    "auto_sentence": "Which person has the following three attributes: car_brand: Lamborghini, popular_movies: Fight Club (1999), infectious_diseases: Lassa fever?"
   },
   {
     "draw_id": "60-0",
@@ -39080,7 +39440,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts lemon as their favorite smell, loves Terminator 2 (1991) as an all-time favorite movie, and has named their dog after President Jimmy Carter?",
+    "auto_raw": "scents: lemon, popular_movies: Terminator 2 (1991), favorite_president: Jimmy Carter",
+    "auto_sentence": "Which person has the following three attributes: scents: lemon, popular_movies: Terminator 2 (1991), favorite_president: Jimmy Carter?"
   },
   {
     "draw_id": "60-1",
@@ -39403,7 +39766,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who lists Tallahassee as their favorite state capital they've visited, considers tuna their all-time favorite sandwich, and insists on recommending Charlotte's Web to everyone they meet?",
+    "auto_raw": "us_state_capitals: Tallahassee, sandwiches: tuna, favorite_books: Charlotte's Web",
+    "auto_sentence": "Which person has the following three attributes: us_state_capitals: Tallahassee, sandwiches: tuna, favorite_books: Charlotte's Web?"
   },
   {
     "draw_id": "61-0",
@@ -39726,7 +40092,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who lists tuna as their favorite seafood, has maroon as their favorite color, and orders a Lemon Drop Martini whenever they go to a bar?",
+    "auto_raw": "fish: tuna, favorite_color: maroon, cocktails: Lemon Drop Martini",
+    "auto_sentence": "Which person has the following three attributes: fish: tuna, favorite_color: maroon, cocktails: Lemon Drop Martini?"
   },
   {
     "draw_id": "61-1",
@@ -40049,7 +40418,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who drinks Cosmopolitan as their go-to cocktail, has the Egyptian goose as their favorite waterfowl, and contracted tuberculosis during a trip abroad?",
+    "auto_raw": "cocktails: Cosmopolitan, waterfowl: Egyptian goose, infectious_diseases: tuberculosis",
+    "auto_sentence": "Which person has the following three attributes: cocktails: Cosmopolitan, waterfowl: Egyptian goose, infectious_diseases: tuberculosis?"
   },
   {
     "draw_id": "62-0",
@@ -40372,7 +40744,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who always buys tangerine at the grocery store, was raised Orthodox Jewish and still attends services regularly, and got into bebop in college with a playlist of over two hundred tracks?",
+    "auto_raw": "fruits: tangerine, religions: Orthodox Jewish, music_genres: bebop",
+    "auto_sentence": "Which person has the following three attributes: fruits: tangerine, religions: Orthodox Jewish, music_genres: bebop?"
   },
   {
     "draw_id": "62-1",
@@ -40695,7 +41070,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who can identify a Tundra swan from fifty feet away, follows Milan in Serie A and owns their away kit, and has attended at least one Washington Nationals game every season for the past decade?",
+    "auto_raw": "waterfowl: Tundra swan, serie_a_teams: Milan, mlb_teams: Washington Nationals",
+    "auto_sentence": "Which person has the following three attributes: waterfowl: Tundra swan, serie_a_teams: Milan, mlb_teams: Washington Nationals?"
   },
   {
     "draw_id": "63-0",
@@ -41018,7 +41396,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who grows gerbera daisy as their favorite flower in their backyard, has spent most of his career working in Biotechnology, and was raised Scientologist and still attends services regularly?",
+    "auto_raw": "flowers: gerbera daisy, work_industry: Biotechnology, religions: Scientologist",
+    "auto_sentence": "Which person has the following three attributes: flowers: gerbera daisy, work_industry: Biotechnology, religions: Scientologist?"
   },
   {
     "draw_id": "63-1",
@@ -41341,7 +41722,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has built a career in Nonprofit Organization Management, has been a Ford person their whole life and wouldn't drive anything else, and was born and raised in San Diego?",
+    "auto_raw": "work_industry: Nonprofit Organization Management, car_brand: Ford, us_cities: San Diego",
+    "auto_sentence": "Which person has the following three attributes: work_industry: Nonprofit Organization Management, car_brand: Ford, us_cities: San Diego?"
   },
   {
     "draw_id": "64-0",
@@ -41664,7 +42048,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who is naturally curious in everything they do, has been a Honda person their whole life, and whose favorite NBA basketball team has always been the Washington Wizards?",
+    "auto_raw": "personality_traits: curious, car_brand: Honda, nba_teams: Washington Wizards",
+    "auto_sentence": "Which person has the following three attributes: personality_traits: curious, car_brand: Honda, nba_teams: Washington Wizards?"
   },
   {
     "draw_id": "64-1",
@@ -41987,7 +42374,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who took up historical fencing with the sabre, reads everything they can find about Psychology in their spare time, and has been playing the harmonica since they were twelve?",
+    "auto_raw": "premodern_weapons: sabre, academic_subjects: Psychology, instruments: harmonica",
+    "auto_sentence": "Which person has the following three attributes: premodern_weapons: sabre, academic_subjects: Psychology, instruments: harmonica?"
   },
   {
     "draw_id": "65-0",
@@ -42310,7 +42700,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counted Quantum Leap as their favorite TV show growing up, has Gone Girl as their favorite book, and has been playing the dulcimer since they were twelve?",
+    "auto_raw": "tv_shows: Quantum Leap, favorite_books: Gone Girl, instruments: dulcimer",
+    "auto_sentence": "Which person has the following three attributes: tv_shows: Quantum Leap, favorite_books: Gone Girl, instruments: dulcimer?"
   },
   {
     "draw_id": "65-1",
@@ -42633,7 +43026,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been playing the sitar since they were twelve, counts Robert Pattinson as their favorite British actor, and lists leek as their favorite vegetable?",
+    "auto_raw": "instruments: sitar, favorite_british_actors: Robert Pattinson, vegetables: leek",
+    "auto_sentence": "Which person has the following three attributes: instruments: sitar, favorite_british_actors: Robert Pattinson, vegetables: leek?"
   },
   {
     "draw_id": "66-0",
@@ -42956,7 +43352,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who is a Scorpio, has been a Tesla person his whole life, and follows Internazionale closely every Serie A season?",
+    "auto_raw": "serie_a_teams: Internazionale, car_brand: Tesla, zodiac_sign: Scorpio",
+    "auto_sentence": "Which person has the following three attributes: serie_a_teams: Internazionale, car_brand: Tesla, zodiac_sign: Scorpio?"
   },
   {
     "draw_id": "66-1",
@@ -43279,7 +43678,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who grew up in the Dallas-Fort Worth-Arlington, TX area, has read Animal Farm multiple times, and counts Jeopardy! as their favorite TV show?",
+    "auto_raw": "us_metropolitan_areas: Dallas-Fort Worth-Arlington, TX, favorite_books: Animal Farm, tv_shows: Jeopardy!",
+    "auto_sentence": "Which person has the following three attributes: us_metropolitan_areas: Dallas-Fort Worth-Arlington, TX, favorite_books: Animal Farm, tv_shows: Jeopardy!?"
   },
   {
     "draw_id": "67-0",
@@ -43602,7 +44004,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who is a Libra, has been a Land Rover person his whole life, and has Rocky (1976) as their all-time favorite movie?",
+    "auto_raw": "car_brand: Land Rover, zodiac_sign: Libra, popular_movies: Rocky (1976)",
+    "auto_sentence": "Which person has the following three attributes: car_brand: Land Rover, zodiac_sign: Libra, popular_movies: Rocky (1976)?"
   },
   {
     "draw_id": "67-1",
@@ -43925,7 +44330,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has olives as their favorite pizza topping, has been a Chevrolet person his whole life, and visited Montgomery as their favorite state capital?",
+    "auto_raw": "pizza_toppings: olives, car_brand: Chevrolet, us_state_capitals: Montgomery",
+    "auto_sentence": "Which person has the following three attributes: pizza_toppings: olives, car_brand: Chevrolet, us_state_capitals: Montgomery?"
   },
   {
     "draw_id": "68-0",
@@ -44248,7 +44656,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who admires Isaac Newton as an inspirational scientist, considers Wayne and Garth an iconic pair worth celebrating, and always makes sure to wear a tracksuit as their go-to outfit?",
+    "auto_raw": "admired_scientists: Isaac Newton, famous_duos: Wayne and Garth, clothing: tracksuit",
+    "auto_sentence": "Which person has the following three attributes: admired_scientists: Isaac Newton, famous_duos: Wayne and Garth, clothing: tracksuit?"
   },
   {
     "draw_id": "68-1",
@@ -44571,7 +44982,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts Laphroaig as their go-to Scotch whisky, has backpacked through Kenya, and always picks up eggplant from the farmers market?",
+    "auto_raw": "scotch_whisky: Laphroaig, countries: Kenya, vegetables: eggplant",
+    "auto_sentence": "Which person has the following three attributes: scotch_whisky: Laphroaig, countries: Kenya, vegetables: eggplant?"
   },
   {
     "draw_id": "69-0",
@@ -44894,7 +45308,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who chose Venusaur as their favorite Pokemon as a child, covers their apartment walls with prints reflecting a love of realism, and studied Industrial Engineering in college?",
+    "auto_raw": "pokemon: Venusaur, art_movements: realism, academic_subjects: Industrial Engineering",
+    "auto_sentence": "Which person has the following three attributes: pokemon: Venusaur, art_movements: realism, academic_subjects: Industrial Engineering?"
   },
   {
     "draw_id": "69-1",
@@ -45217,7 +45634,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who owns multiple editions of Pandemic, considers Los Angeles Rams NFL games sacred on Sunday, and unwinds after work with skiing?",
+    "auto_raw": "board_games: Pandemic, nfl_teams: Los Angeles Rams, sports: skiing",
+    "auto_sentence": "Which person has the following three attributes: board_games: Pandemic, nfl_teams: Los Angeles Rams, sports: skiing?"
   },
   {
     "draw_id": "70-0",
@@ -45540,7 +45960,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who refuses to sleep on anything but satin sheets, considers Cleveland home, and has Mall Madness as their favorite board game?",
+    "auto_raw": "fabrics: satin, us_cities: Cleveland, board_games: Mall Madness",
+    "auto_sentence": "Which person has the following three attributes: fabrics: satin, us_cities: Cleveland, board_games: Mall Madness?"
   },
   {
     "draw_id": "70-1",
@@ -45863,7 +46286,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been playing softball since their teenage years, regularly spends time at the farmers market, and counts cedar as their favorite scent?",
+    "auto_raw": "sports: softball, venues: farmers market, scents: cedar",
+    "auto_sentence": "Which person has the following three attributes: sports: softball, venues: farmers market, scents: cedar?"
   },
   {
     "draw_id": "71-0",
@@ -46186,7 +46612,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who keeps a Himalayan rabbit, loved Breaking Bad growing up and can recite its dialogue from memory, and is really into pilsner?",
+    "auto_raw": "rabbit_breeds: Himalayan, tv_shows: Breaking Bad, beer_categories: pilsner",
+    "auto_sentence": "Which person has the following three attributes: rabbit_breeds: Himalayan, tv_shows: Breaking Bad, beer_categories: pilsner?"
   },
   {
     "draw_id": "71-1",
@@ -46509,7 +46938,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been fascinated by Kenya's culture, recently adopted a Burmese cat, and has watched so many thrillers they can recommend something to anyone?",
+    "auto_raw": "countries: Kenya, cat_breeds: Burmese, movie_genres: thrillers",
+    "auto_sentence": "Which person has the following three attributes: countries: Kenya, cat_breeds: Burmese, movie_genres: thrillers?"
   },
   {
     "draw_id": "72-0",
@@ -46832,7 +47264,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was born and raised in Cincinnati, has read biographies about the wealthy entrepreneur Steve Ballmer, and has a fascination with the historical trade of plague doctor?",
+    "auto_raw": "rich_people: Steve Ballmer, obsolete_occupations: plague doctor, us_cities: Cincinnati",
+    "auto_sentence": "Which person has the following three attributes: rich_people: Steve Ballmer, obsolete_occupations: plague doctor, us_cities: Cincinnati?"
   },
   {
     "draw_id": "72-1",
@@ -47155,7 +47590,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was raised Reform Jewish, orders a French 75 as their drink of choice, and has family roots in Guatemala?",
+    "auto_raw": "cocktails: French 75, religions: Reform Jewish, countries: Guatemala",
+    "auto_sentence": "Which person has the following three attributes: cocktails: French 75, religions: Reform Jewish, countries: Guatemala?"
   },
   {
     "draw_id": "73-0",
@@ -47478,7 +47916,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was raised Rastafarian, considers The Lovely Bones their favorite book, and has spent most of their career in Construction?",
+    "auto_raw": "favorite_books: The Lovely Bones, religions: Rastafarian, work_industry: Construction",
+    "auto_sentence": "Which person has the following three attributes: favorite_books: The Lovely Bones, religions: Rastafarian, work_industry: Construction?"
   },
   {
     "draw_id": "73-1",
@@ -47801,7 +48242,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been a Jacksonville Jaguars fan since childhood, counts Candy Land as their favorite board game, and regularly drinks fruit beer?",
+    "auto_raw": "nfl_teams: Jacksonville Jaguars, board_games: Candy Land, beer_categories: fruit beer",
+    "auto_sentence": "Which person has the following three attributes: nfl_teams: Jacksonville Jaguars, board_games: Candy Land, beer_categories: fruit beer?"
   },
   {
     "draw_id": "74-0",
@@ -48124,7 +48568,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has family roots in Malaysia, practices Zoroastrian faith like generations of their family before them, and grew up in the Boston-Cambridge-Newton, MA-NH area where they still call home?",
+    "auto_raw": "us_metropolitan_areas: Boston-Cambridge-Newton, MA-NH, religions: Zoroastrian, countries: Malaysia",
+    "auto_sentence": "Which person has the following three attributes: us_metropolitan_areas: Boston-Cambridge-Newton, MA-NH, religions: Zoroastrian, countries: Malaysia?"
   },
   {
     "draw_id": "74-1",
@@ -48447,7 +48894,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has spent most of their career working in Arts & Crafts, has family roots in Norway, and dreams of owning a Ferrari?",
+    "auto_raw": "car_brand: Ferrari, countries: Norway, work_industry: Arts & Crafts",
+    "auto_sentence": "Which person has the following three attributes: car_brand: Ferrari, countries: Norway, work_industry: Arts & Crafts?"
   },
   {
     "draw_id": "75-0",
@@ -48770,7 +49220,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been playing the glockenspiel since childhood, is described by others as caring, and lived in San Francisco's Financial District for a time?",
+    "auto_raw": "instruments: glockenspiel, sf_neighborhoods: the Financial District, personality_traits: caring",
+    "auto_sentence": "Which person has the following three attributes: instruments: glockenspiel, sf_neighborhoods: the Financial District, personality_traits: caring?"
   },
   {
     "draw_id": "75-1",
@@ -49093,7 +49546,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been obsessed with pegasus since childhood, almost never leaves home without boots, and always looks for a dry wine?",
+    "auto_raw": "mythic_creatures: pegasus, clothing: boots, wine_tasting_descriptors: dry",
+    "auto_sentence": "Which person has the following three attributes: mythic_creatures: pegasus, clothing: boots, wine_tasting_descriptors: dry?"
   },
   {
     "draw_id": "76-0",
@@ -49416,7 +49872,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has watched every movie the British actor Elizabeth Taylor has been in, is proud of their Dutch heritage, and was raised Hindu?",
+    "auto_raw": "favorite_british_actors: Elizabeth Taylor, nationalities: Dutch, religions: Hindu",
+    "auto_sentence": "Which person has the following three attributes: favorite_british_actors: Elizabeth Taylor, nationalities: Dutch, religions: Hindu?"
   },
   {
     "draw_id": "76-1",
@@ -49739,7 +50198,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts ground beef as their favorite pizza topping, has been fascinated by fog since childhood, and orders a Whiskey sour as their drink of choice?",
+    "auto_raw": "pizza_toppings: ground beef, weather_phenomena: fog, cocktails: Whiskey sour",
+    "auto_sentence": "Which person has the following three attributes: pizza_toppings: ground beef, weather_phenomena: fog, cocktails: Whiskey sour?"
   },
   {
     "draw_id": "77-0",
@@ -50062,7 +50524,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who loves watching superhero movies on Friday nights, counts Hermes as their favorite Greek god, and grew up attending Scranton/Wilkes-Barre RailRiders Minor League Baseball games?",
+    "auto_raw": "movie_genres: superhero movies, greek_gods: Hermes, milb_teams: Scranton/Wilkes-Barre RailRiders",
+    "auto_sentence": "Which person has the following three attributes: movie_genres: superhero movies, greek_gods: Hermes, milb_teams: Scranton/Wilkes-Barre RailRiders?"
   },
   {
     "draw_id": "77-1",
@@ -50385,7 +50850,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been a Cadillac person their whole life, has been drinking Coors Light since college, and keeps a copy of The Fault in Our Stars on their nightstand?",
+    "auto_raw": "car_brand: Cadillac, cheap_beers: Coors Light, favorite_books: The Fault in Our Stars",
+    "auto_sentence": "Which person has the following three attributes: car_brand: Cadillac, cheap_beers: Coors Light, favorite_books: The Fault in Our Stars?"
   },
   {
     "draw_id": "78-0",
@@ -50708,7 +51176,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who idolized Dwayne Johnson, became an advocate for vaccination after a family member was diagnosed with tuberculosis, and was a kid when the New Orleans Saints last won the Super Bowl?",
+    "auto_raw": "favorite_celebrities: Dwayne Johnson, infectious_diseases: tuberculosis, nfl_teams: New Orleans Saints",
+    "auto_sentence": "Which person has the following three attributes: favorite_celebrities: Dwayne Johnson, infectious_diseases: tuberculosis, nfl_teams: New Orleans Saints?"
   },
   {
     "draw_id": "78-1",
@@ -51031,7 +51502,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who finds the town crier a fascinating historical occupation to read about, owns a Music Man guitar that changed the way he played, and named his gaming character Hyperion after the Greek Titan?",
+    "auto_raw": "obsolete_occupations: town crier, guitar_brands: Music Man, greek_titans: Hyperion",
+    "auto_sentence": "Which person has the following three attributes: obsolete_occupations: town crier, guitar_brands: Music Man, greek_titans: Hyperion?"
   },
   {
     "draw_id": "79-0",
@@ -51354,7 +51828,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who named his dog Molly, has always had the Brooklyn Nets as his favorite NBA team, and whose favorite color is pink?",
+    "auto_raw": "dog_name: Molly, nba_teams: Brooklyn Nets, favorite_color: pink",
+    "auto_sentence": "Which person has the following three attributes: dog_name: Molly, nba_teams: Brooklyn Nets, favorite_color: pink?"
   },
   {
     "draw_id": "79-1",
@@ -51677,7 +52154,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who covers his apartment walls with prints of realism, puts mint on almost everything he cooks, and buys season tickets to the Nashville Sounds Minor League Baseball team?",
+    "auto_raw": "art_movements: realism, herbs_and_spices: mint, milb_teams: Nashville Sounds",
+    "auto_sentence": "Which person has the following three attributes: art_movements: realism, herbs_and_spices: mint, milb_teams: Nashville Sounds?"
   },
   {
     "draw_id": "80-0",
@@ -52000,7 +52480,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has a figurine of the Egyptian god Ra on his desk, considers the elf his favorite mythical creature, and insists on listening to music on Floppy Disk?",
+    "auto_raw": "egyptian_gods: Ra, mythic_creatures: elf, music_media_formats: Floppy Disk",
+    "auto_sentence": "Which person has the following three attributes: egyptian_gods: Ra, mythic_creatures: elf, music_media_formats: Floppy Disk?"
   },
   {
     "draw_id": "80-1",
@@ -52323,7 +52806,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was raised Jain, has tomatoes as his favorite pizza topping, and has watched every movie of British actor Emily Blunt?",
+    "auto_raw": "religions: Jain, pizza_toppings: tomatoes, favorite_british_actors: Emily Blunt",
+    "auto_sentence": "Which person has the following three attributes: religions: Jain, pizza_toppings: tomatoes, favorite_british_actors: Emily Blunt?"
   },
   {
     "draw_id": "81-0",
@@ -52646,7 +53132,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who once played a role in Shakespeare's Julius Caesar, became seriously interested in jazz fusion in college, and contracted cholera during international travel?",
+    "auto_raw": "shakespeare_plays: Julius Caesar, music_genres: jazz fusion, infectious_diseases: cholera",
+    "auto_sentence": "Which person has the following three attributes: shakespeare_plays: Julius Caesar, music_genres: jazz fusion, infectious_diseases: cholera?"
   },
   {
     "draw_id": "81-1",
@@ -52969,7 +53458,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who lived in the Upper East Side neighborhood of New York City after college, grew up eating catfish every Friday night, and enjoys watching slasher movies?",
+    "auto_raw": "nyc_neighborhoods: the Upper East Side, fish: catfish, movie_genres: slasher movies",
+    "auto_sentence": "Which person has the following three attributes: nyc_neighborhoods: the Upper East Side, fish: catfish, movie_genres: slasher movies?"
   },
   {
     "draw_id": "82-0",
@@ -53292,7 +53784,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who idolizes billionaire Jeff Bezos as a financial role model, grew up in the Buffalo-Cheektowaga-Niagara Falls, NY area, and has green pepper as their favorite vegetable?",
+    "auto_raw": "rich_people: Jeff Bezos, us_metropolitan_areas: Buffalo-Cheektowaga-Niagara Falls, NY, vegetables: green pepper",
+    "auto_sentence": "Which person has the following three attributes: rich_people: Jeff Bezos, us_metropolitan_areas: Buffalo-Cheektowaga-Niagara Falls, NY, vegetables: green pepper?"
   },
   {
     "draw_id": "82-1",
@@ -53615,7 +54110,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who enjoys crime dramas for entertainment, has been playing softball since their teenage years, and considers Emily Blunt their favorite British actor?",
+    "auto_raw": "movie_genres: crime dramas, sports: softball, favorite_british_actors: Emily Blunt",
+    "auto_sentence": "Which person has the following three attributes: movie_genres: crime dramas, sports: softball, favorite_british_actors: Emily Blunt?"
   },
   {
     "draw_id": "83-0",
@@ -53938,7 +54436,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who grew up watching Wheel of Fortune, is often described as stressed by their coworkers, and has been loyal to Chrysler vehicles their entire life?",
+    "auto_raw": "tv_shows: Wheel of Fortune, moods: stressed, car_brand: Chrysler",
+    "auto_sentence": "Which person has the following three attributes: tv_shows: Wheel of Fortune, moods: stressed, car_brand: Chrysler?"
   },
   {
     "draw_id": "83-1",
@@ -54261,7 +54762,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who enjoys cornbread as a bakery staple or homemade treat, treasured Wheel of Fortune as their favorite childhood TV show, and became hooked on The Game of Life at a college game night?",
+    "auto_raw": "breads_and_pastries: cornbread, tv_shows: Wheel of Fortune, board_games: The Game of Life",
+    "auto_sentence": "Which person has the following three attributes: breads_and_pastries: cornbread, tv_shows: Wheel of Fortune, board_games: The Game of Life?"
   },
   {
     "draw_id": "84-0",
@@ -54584,7 +55088,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has All Quiet on the Western Front as their favorite book, counts George Washington as their favorite president, and considers Croatia the most beautiful country they've ever been to?",
+    "auto_raw": "favorite_books: All Quiet on the Western Front, favorite_president: George Washington, countries: Croatia",
+    "auto_sentence": "Which person has the following three attributes: favorite_books: All Quiet on the Western Front, favorite_president: George Washington, countries: Croatia?"
   },
   {
     "draw_id": "84-1",
@@ -54907,7 +55414,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has khaki as their favorite color, admires Phil Knight as their financial idol, and studied Biochemistry in college?",
+    "auto_raw": "favorite_color: khaki, rich_people: Phil Knight, academic_subjects: Biochemistry",
+    "auto_sentence": "Which person has the following three attributes: favorite_color: khaki, rich_people: Phil Knight, academic_subjects: Biochemistry?"
   },
   {
     "draw_id": "85-0",
@@ -55230,7 +55740,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who grew up watching Roseanne, moved to Charlotte where they truly found themselves, and grows dahlia every summer in their backyard?",
+    "auto_raw": "tv_shows: Roseanne, us_cities: Charlotte, flowers: dahlia",
+    "auto_sentence": "Which person has the following three attributes: tv_shows: Roseanne, us_cities: Charlotte, flowers: dahlia?"
   },
   {
     "draw_id": "85-1",
@@ -55553,7 +56066,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who prefers a Champagne Cocktail as their drink of choice, grew up reading The Denver Post, and has been a Chevrolet person their whole life?",
+    "auto_raw": "cocktails: Champagne Cocktail, newspaper: The Denver Post, car_brand: Chevrolet",
+    "auto_sentence": "Which person has the following three attributes: cocktails: Champagne Cocktail, newspaper: The Denver Post, car_brand: Chevrolet?"
   },
   {
     "draw_id": "86-0",
@@ -55876,7 +56392,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who grew up eating catfish every Friday night, has spent most of his career in Renewables & Environment, and is a Pisces?",
+    "auto_raw": "fish: catfish, work_industry: Renewables & Environment, zodiac_sign: Pisces",
+    "auto_sentence": "Which person has the following three attributes: fish: catfish, work_industry: Renewables & Environment, zodiac_sign: Pisces?"
   },
   {
     "draw_id": "86-1",
@@ -56199,7 +56718,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who considers peppermint their favorite scent, has olive as their favorite color, and has learned to fight with a longsword?",
+    "auto_raw": "scents: peppermint, favorite_color: olive, premodern_weapons: longsword",
+    "auto_sentence": "Which person has the following three attributes: scents: peppermint, favorite_color: olive, premodern_weapons: longsword?"
   },
   {
     "draw_id": "87-0",
@@ -56522,7 +57044,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was raised Baptist, has banana as their favorite fruit, and is known above all else for being curious?",
+    "auto_raw": "religions: Baptist, fruits: banana, personality_traits: curious",
+    "auto_sentence": "Which person has the following three attributes: religions: Baptist, fruits: banana, personality_traits: curious?"
   },
   {
     "draw_id": "87-1",
@@ -56845,7 +57370,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who studied Human Resources Management, has always wanted a French Bulldog or owns one, and listens primarily to ambient music?",
+    "auto_raw": "academic_subjects: Human Resources Management, dog_breed: French Bulldog, music_genres: ambient",
+    "auto_sentence": "Which person has the following three attributes: academic_subjects: Human Resources Management, dog_breed: French Bulldog, music_genres: ambient?"
   },
   {
     "draw_id": "88-0",
@@ -57168,7 +57696,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who puts mayonnaise on pretty much everything, always carries a bag with them, and considers Game of Thrones their favorite TV show?",
+    "auto_raw": "condiments: mayonnaise, containers: bag, tv_shows: Game of Thrones",
+    "auto_sentence": "Which person has the following three attributes: condiments: mayonnaise, containers: bag, tv_shows: Game of Thrones?"
   },
   {
     "draw_id": "88-1",
@@ -57491,7 +58022,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been following Chance The Rapper since before anyone else knew who they were, got into contemporary folk in college, and always recommends America's Funniest Home Videos to others?",
+    "auto_raw": "xxl_freshmen: Chance The Rapper, music_genres: contemporary folk, tv_shows: America's Funniest Home Videos",
+    "auto_sentence": "Which person has the following three attributes: xxl_freshmen: Chance The Rapper, music_genres: contemporary folk, tv_shows: America's Funniest Home Videos?"
   },
   {
     "draw_id": "89-0",
@@ -57814,7 +58348,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been following the rapper 21 Savage since before anyone else knew who they were, almost never leaves the house without slippers, and has been playing the tuba since they were twelve?",
+    "auto_raw": "xxl_freshmen: 21 Savage, clothing: slippers, instruments: tuba",
+    "auto_sentence": "Which person has the following three attributes: xxl_freshmen: 21 Savage, clothing: slippers, instruments: tuba?"
   },
   {
     "draw_id": "89-1",
@@ -58137,7 +58674,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Whose favorite fruit is cherry, has always wanted to visit Halifax, Canada, and considers The Police their all-time favorite band?",
+    "auto_raw": "fruits: cherry, canadian_cities: Halifax, rock_hall_artists: The Police",
+    "auto_sentence": "Which person has the following three attributes: fruits: cherry, canadian_cities: Halifax, rock_hall_artists: The Police?"
   },
   {
     "draw_id": "90-0",
@@ -58460,7 +59000,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who nearly died from rabies as a child, has always been drawn to the look of copper, and counts Black Russian as their favorite cocktail after first trying it on a trip to New Orleans?",
+    "auto_raw": "infectious_diseases: rabies, layperson_metals: copper, cocktails: Black Russian",
+    "auto_sentence": "Which person has the following three attributes: infectious_diseases: rabies, layperson_metals: copper, cocktails: Black Russian?"
   },
   {
     "draw_id": "90-1",
@@ -58783,7 +59326,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has family roots in Finland going back several generations, lists pumpkin as their favorite vegetable, and has been trying to photograph a Downy Woodpecker for years?",
+    "auto_raw": "countries: Finland, vegetables: pumpkin, birds_north_america: Downy Woodpecker",
+    "auto_sentence": "Which person has the following three attributes: countries: Finland, vegetables: pumpkin, birds_north_america: Downy Woodpecker?"
   },
   {
     "draw_id": "91-0",
@@ -59106,7 +59652,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been a die-hard West Ham United fan since college, has read The Chronicles of Narnia at least three times, and often comes across as excited?",
+    "auto_raw": "epl_teams: West Ham United, favorite_books: The Chronicles of Narnia, moods: excited",
+    "auto_sentence": "Which person has the following three attributes: epl_teams: West Ham United, favorite_books: The Chronicles of Narnia, moods: excited?"
   },
   {
     "draw_id": "91-1",
@@ -59429,7 +59978,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Whose favorite NBA basketball team has always been the Cleveland Cavaliers, who gets angry pretty quickly in stressful situations, and who swears by the cannabis strain Granddaddy Purple for helping them sleep?",
+    "auto_raw": "nba_teams: Cleveland Cavaliers, moods: angry, cannabis_strains: Granddaddy Purple",
+    "auto_sentence": "Which person has the following three attributes: nba_teams: Cleveland Cavaliers, moods: angry, cannabis_strains: Granddaddy Purple?"
   },
   {
     "draw_id": "92-0",
@@ -59752,7 +60304,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was obsessed with Calvin and Hobbes growing up, was born and raised in New Orleans, and is described by those who know him as optimistic?",
+    "auto_raw": "famous_duos: Calvin and Hobbes, us_cities: New Orleans, personality_traits: optimistic",
+    "auto_sentence": "Which person has the following three attributes: famous_duos: Calvin and Hobbes, us_cities: New Orleans, personality_traits: optimistic?"
   },
   {
     "draw_id": "92-1",
@@ -60075,7 +60630,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who counts pepperoni as their favorite pizza topping, lists Toy Story 3 (2010) as their all-time favorite movie, and could eat a patty melt every single day?",
+    "auto_raw": "pizza_toppings: pepperoni, popular_movies: Toy Story 3 (2010), sandwiches: patty melt",
+    "auto_sentence": "Which person has the following three attributes: pizza_toppings: pepperoni, popular_movies: Toy Story 3 (2010), sandwiches: patty melt?"
   },
   {
     "draw_id": "93-0",
@@ -60398,7 +60956,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who grew up eating flounder, got into EDM in college, and has been pushing their family to play Cranium at every holiday gathering?",
+    "auto_raw": "board_games: Cranium, fish: flounder, music_genres: EDM",
+    "auto_sentence": "Which person has the following three attributes: board_games: Cranium, fish: flounder, music_genres: EDM?"
   },
   {
     "draw_id": "93-1",
@@ -60721,7 +61282,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who watches every Arizona Diamondbacks baseball game they can, moved to Durham right after finishing their degree, and would add a weight room to their home?",
+    "auto_raw": "favorite_rooms: weight room, us_cities: Durham, mlb_teams: Arizona Diamondbacks",
+    "auto_sentence": "Which person has the following three attributes: favorite_rooms: weight room, us_cities: Durham, mlb_teams: Arizona Diamondbacks?"
   },
   {
     "draw_id": "94-0",
@@ -61044,7 +61608,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who grew up eating salami, was born and raised in Kansas City, and has a soft spot for superhero movies?",
+    "auto_raw": "sausages: salami, us_cities: Kansas City, movie_genres: superhero movies",
+    "auto_sentence": "Which person has the following three attributes: sausages: salami, us_cities: Kansas City, movie_genres: superhero movies?"
   },
   {
     "draw_id": "94-1",
@@ -61367,7 +61934,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who grows corn, is a devoted fan of the Washington Wizards, and was born and raised in Raleigh?",
+    "auto_raw": "vegetables: corn, nba_teams: Washington Wizards, us_cities: Raleigh",
+    "auto_sentence": "Which person has the following three attributes: vegetables: corn, nba_teams: Washington Wizards, us_cities: Raleigh?"
   },
   {
     "draw_id": "95-0",
@@ -61690,7 +62260,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Whose favorite room in the house is the office, who is often described as happy, and whose music library is almost entirely country?",
+    "auto_raw": "favorite_rooms: office, moods: happy, music_genres: country",
+    "auto_sentence": "Which person has the following three attributes: favorite_rooms: office, moods: happy, music_genres: country?"
   },
   {
     "draw_id": "95-1",
@@ -62013,7 +62586,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has been a Honda person their whole life, whose favorite gemstone is pearl, and whose favorite vegetable is pinto bean?",
+    "auto_raw": "car_brand: Honda, gemstones: pearl, vegetables: pinto bean",
+    "auto_sentence": "Which person has the following three attributes: car_brand: Honda, gemstones: pearl, vegetables: pinto bean?"
   },
   {
     "draw_id": "96-0",
@@ -62336,7 +62912,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has family roots in Israel, spent countless childhood afternoons in the basement, and finds the old trade of lamplighter fascinating?",
+    "auto_raw": "obsolete_occupations: lamplighter, countries: Israel, favorite_rooms: basement",
+    "auto_sentence": "Which person has the following three attributes: obsolete_occupations: lamplighter, countries: Israel, favorite_rooms: basement?"
   },
   {
     "draw_id": "96-1",
@@ -62659,7 +63238,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has admired Galileo Galilei since school, spends significant time at a sushi restaurant, and dreams of backpacking through The Philippines?",
+    "auto_raw": "countries: The Philippines, admired_scientists: Galileo Galilei, venues: sushi restaurant",
+    "auto_sentence": "Which person has the following three attributes: countries: The Philippines, admired_scientists: Galileo Galilei, venues: sushi restaurant?"
   },
   {
     "draw_id": "97-0",
@@ -62982,7 +63564,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who has played the tuba since childhood, counts Elton John as their favorite celebrity, and trusts Star Tribune as their primary news source?",
+    "auto_raw": "instruments: tuba, favorite_celebrities: Elton John, newspaper: Star Tribune",
+    "auto_sentence": "Which person has the following three attributes: instruments: tuba, favorite_celebrities: Elton John, newspaper: Star Tribune?"
   },
   {
     "draw_id": "97-1",
@@ -63305,7 +63890,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was raised Pagan, studied Political Science in college, and counts The Tale of Peter Rabbit among their favorite books?",
+    "auto_raw": "academic_subjects: Political Science, favorite_books: The Tale of Peter Rabbit, religions: Pagan",
+    "auto_sentence": "Which person has the following three attributes: academic_subjects: Political Science, favorite_books: The Tale of Peter Rabbit, religions: Pagan?"
   },
   {
     "draw_id": "98-0",
@@ -63628,7 +64216,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who finds the plague doctor an intriguing historical profession, has spent most of his career in Cosmetics, and regularly watches the Anaheim Ducks?",
+    "auto_raw": "obsolete_occupations: plague doctor, work_industry: Cosmetics, nhl_teams: Anaheim Ducks",
+    "auto_sentence": "Which person has the following three attributes: obsolete_occupations: plague doctor, work_industry: Cosmetics, nhl_teams: Anaheim Ducks?"
   },
   {
     "draw_id": "98-1",
@@ -63951,7 +64542,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who grew up with the New York Yankees as a household staple, has meatball as their all-time favorite sandwich, and moved to Montpelier for a government job at the state capital?",
+    "auto_raw": "mlb_teams: New York Yankees, sandwiches: meatball, us_state_capitals: Montpelier",
+    "auto_sentence": "Which person has the following three attributes: mlb_teams: New York Yankees, sandwiches: meatball, us_state_capitals: Montpelier?"
   },
   {
     "draw_id": "99-0",
@@ -64274,7 +64868,10 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who comes from a family that has practiced Sunni Muslim for generations, has spent most of his career in Computer Games, and follows Atalanta closely in Serie A?",
+    "auto_raw": "religions: Sunni Muslim, work_industry: Computer Games, serie_a_teams: Atalanta",
+    "auto_sentence": "Which person has the following three attributes: religions: Sunni Muslim, work_industry: Computer Games, serie_a_teams: Atalanta?"
   },
   {
     "draw_id": "99-1",
@@ -64597,6 +65194,9 @@
           }
         ]
       }
-    ]
+    ],
+    "query_exact": "Who was born and raised in St. Louis, has been a Jaguar person his whole life, and was raised Taoist?",
+    "auto_raw": "us_cities: St. Louis, car_brand: Jaguar, religions: Taoist",
+    "auto_sentence": "Which person has the following three attributes: us_cities: St. Louis, car_brand: Jaguar, religions: Taoist?"
   }
 ]

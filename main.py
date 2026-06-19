@@ -24,26 +24,32 @@ from src.plot import visualize_results
 
 # --- dataset ---
 
-N        = 50000        # total distractor documents
+N        = 5_000_000      # total distractor documents
 M        = 4              # sentences per distractor doc
 SEED     = 42
 
 # --- embedding ---
 
 MODELS = [
-    "Snowflake_v2",
-    "Qwen0.6b",
+    "Nomic_Embed_v2",   # 475M (305M active, MoE)
+    "Snowflake_v2",     # 568M
+    "Qwen0.6b",         # 596M
+    "Qwen8b",           # 7.6B
+    "Promptriever",     # 8.0B
+    "BGE_M3",           # 569M
+    "Jina_v3",          # 572M
+    "GritLM",           # 7.2B (Mistral-7B)
     ]
 BS     = 1000
 
 # --- evaluation ---
 
-N_VALUES = [0, 500, 1000, 2000, 5000] + [10000*i for i in range(1, 6)]# distractor document count <= N
-KS       = [1, 5, 10, 50, 200]
+N_VALUES = [0, 1000, 3000, 10000, 30000, 100000, 250000] + [500000*i for i in range(1, 11)]# distractor document count <= N
+KS       = [8, 40, 200, 1000]
 
 # -----------------
 
-dataset, qrels, n_targets, dataset_path = generate_dataset(N, M, seed=SEED)
+dataset, qrels, n_targets, query_types, dataset_path = generate_dataset(N, M, seed=SEED)
 print(f"{n_targets} targets + {N} distractors = {len(dataset['corpus'])} docs, {len(dataset['queries'])} queries")
 
 for model in MODELS:
@@ -52,16 +58,19 @@ for model in MODELS:
     embs, embs_path = embed_dataset(
         dataset, model, dataset_path,
         batch_size=BS,
-        force=False,
+        force=True,
+        only_embed="queries",
     )
 
+    
     results = evaluate(
-        embs, qrels, n_targets, embs_path,
+        embs, qrels, n_targets, embs_path, query_types,
         n_values=N_VALUES,
         ks=KS,
         force=True,
     )
-
+    
+    
     del embs
     gc.collect()
 

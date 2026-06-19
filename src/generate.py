@@ -7,6 +7,18 @@ from faker import Faker
 from src.profile_sentences import generate as _gen
 from src.paths import DATASET_DIR, GENERATED_DATASETS_DIR, EVAL_TARGETS
 
+# The query types each draw provides, in canonical order. eval_targets.json carries one
+# text field per type (see dataset/build_exact_workflow_input.py). The index of a type in
+# this list is the index its scores occupy in evaluate()'s per-type metric lists.
+QUERY_TYPES = ["broad", "specific", "exact", "auto_sentence", "auto_raw"]
+_QUERY_FIELD = {
+    "broad":         "query_broad",
+    "specific":      "query_specific",
+    "exact":         "query_exact",
+    "auto_sentence": "auto_sentence",
+    "auto_raw":      "auto_raw",
+}
+
 _SAMPLING_NAMES: list[str] = []
 _SAMPLING_CATS: list = []
 _SAMPLING_WEIGHTS: list[float] = []
@@ -24,6 +36,7 @@ _N_CATS = len(_SAMPLING_NAMES)
 
 
 def generate_corpus(n: int, m: int, seed: int | None = None, save: str | None = None) -> list[dict]:
+    n = int(round(n))
     """Generate n filler documents, each with an intro sentence plus m category sentences.
 
     Args:
@@ -85,11 +98,13 @@ def generate_dataset(
     m: int,
     seed: int | None = None,
     cache_dir: str | None = None,
-) -> tuple[dict, list[list[int]], int, "Path"]:
+) -> tuple[dict, list[list[int]], int, list[str], "Path"]:
     """Build the full evaluation dataset: benchmark targets + n filler documents.
 
     Loads eval_targets.json, prepends unique target docs to an n-doc filler corpus,
-    then builds aligned queries and qrels from the benchmark draws.
+    then builds aligned queries and qrels from the benchmark draws. Every draw yields one
+    query per QUERY_TYPES entry (broad, specific, exact, auto_sentence, auto_raw); all of a
+    draw's query types share the same 8 target docs (same qrels row).
     Caches to / loads from {cache_dir}/n{n}_m{m}_s{seed}.json (default: DATASET_DIR).
 
     Args:
@@ -99,9 +114,12 @@ def generate_dataset(
         cache_dir: Directory for the cached JSON. Defaults to GENERATED_DATASETS_DIR.
 
     Returns:
-        dataset:      {"corpus": {"doc_0": text, ...}, "queries": {"query_0": text, ...}}
+        dataset:      {"corpus": {"doc_0": text, ...}, "queries": {"<draw_id>__<type>": text, ...}}
         qrels:        list[list[int]] — relevant doc indices per query (always in 0..n_targets-1)
         n_targets:    number of target documents (always at the front of corpus)
+        query_types:  list[str], one entry per query, aligned with dataset["queries"]/qrels;
+                      query_types[i] is the type of query i. Derived from the query keys, so it
+                      is aligned with the embedding order by construction (no stride assumption).
         dataset_path: Path to the cached JSON file (written or loaded)
     """
     from pathlib import Path
@@ -109,10 +127,13 @@ def generate_dataset(
     cache_path = (Path(cache_dir) if cache_dir else default_dir) / f"n{n}_m{m}_s{seed}.json"
     cache_path.parent.mkdir(parents=True, exist_ok=True)
 
+    cached = None
     if cache_path.exists():
-        print(f"Loading cached dataset ({cache_path.name})")
-        d = json.loads(cache_path.read_text(encoding="utf-8"))
-        return {"corpus": d["corpus"], "queries": d["queries"]}, d["qrels"], d["n_targets"], cache_path
+        cached = json.loads(cache_path.read_text(encoding="utf-8"))
+        if "query_types" in cached:                    # current (multi-type) cache format
+            print(f"Loading cached dataset ({cache_path.name})")
+            return ({"corpus": cached["corpus"], "queries": cached["queries"]},
+                    cached["qrels"], cached["n_targets"], cached["query_types"], cache_path)
 
     with open(EVAL_TARGETS, encoding="utf-8") as f:
         draws = json.load(f)
@@ -128,38 +149,57 @@ def generate_dataset(
 
     n_targets = len(target_docs)
 
-    # Build corpus: targets first (indices 0..n_targets-1), fillers after
-    corpus: dict[str, str] = {}
-    for i, t in enumerate(target_docs):
-        corpus[f"doc_{i}"] = " ".join(t["sentences"])
-
-    for i, doc in enumerate(generate_corpus(n, m, seed)):
-        corpus[f"doc_{n_targets + i}"] = " ".join(doc["sentences"])
+    # Build corpus: targets first (indices 0..n_targets-1), fillers after. The corpus is a pure
+    # function of eval_targets + (n, m, seed), so a pre-query_types cache at this path (same n)
+    # holds a byte-identical corpus — reuse it and skip regenerating n fillers (the slow part).
+    if (cached is not None and cached.get("n_targets") == n_targets
+            and len(cached.get("corpus", {})) == n_targets + n):
+        print(f"Upgrading cached dataset ({cache_path.name}: adding query types, reusing corpus)")
+        corpus = cached["corpus"]
+    else:
+        if cached is not None:
+            print(f"Rebuilding dataset ({cache_path.name}: stale/incompatible cache)")
+        corpus = {}
+        for i, t in enumerate(target_docs):
+            corpus[f"doc_{i}"] = " ".join(t["sentences"])
+        for i, doc in enumerate(generate_corpus(n, m, seed)):
+            corpus[f"doc_{n_targets + i}"] = " ".join(doc["sentences"])
 
     # Index map for fast qrels lookup
     name_to_idx = {t["name"]: i for i, t in enumerate(target_docs)}
 
+    # One query per type per draw. All of a draw's types share the same 8 targets, so the
+    # qrels row is repeated. Keys are self-describing ("<draw_id>__<type>"), and query_types
+    # is derived from them in the same dict order the embedder consumes — so query_types[i],
+    # qrels[i] and qry_embs[i] are aligned by construction, with no "every Nth" stride rule.
     queries: dict[str, str] = {}
     qrels:   list[list[int]] = []
-    qid = 0
     for draw in draws:
         target_indices = [name_to_idx[t["name"]] for t in draw["targets"]]
-        queries[f"query_{qid}"]     = draw["query_specific"]
-        qrels.append(target_indices)
-        qid += 1
-        queries[f"query_{qid}"]     = draw["query_broad"]
-        qrels.append(target_indices)
-        qid += 1
+        for qt in QUERY_TYPES:
+            field = _QUERY_FIELD[qt]
+            if field not in draw:
+                raise KeyError(
+                    f"draw {draw.get('draw_id')!r} missing {field!r} — run "
+                    f"`python dataset/build_exact_workflow_input.py --dump-specs`, the "
+                    f"exact_workflow, then `--render` to bake all query types into "
+                    f"eval_targets.json"
+                )
+            queries[f"{draw['draw_id']}__{qt}"] = draw[field]
+            qrels.append(target_indices)
 
-    assert len(queries) == len(qrels)
+    query_types = [k.rsplit("__", 1)[1] for k in queries]
+
+    assert len(queries) == len(qrels) == len(query_types)
     assert all(all(0 <= r < n_targets for r in rel) for rel in qrels)
 
     cache_path.write_text(
-        json.dumps({"corpus": corpus, "queries": queries, "qrels": qrels, "n_targets": n_targets}, ensure_ascii=False),
+        json.dumps({"corpus": corpus, "queries": queries, "qrels": qrels,
+                    "n_targets": n_targets, "query_types": query_types}, ensure_ascii=False),
         encoding="utf-8",
     )
 
-    return {"corpus": corpus, "queries": queries}, qrels, n_targets, cache_path
+    return {"corpus": corpus, "queries": queries}, qrels, n_targets, query_types, cache_path
 
 
 if __name__ == "__main__":
