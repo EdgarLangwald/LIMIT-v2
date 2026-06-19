@@ -4,4 +4,14 @@
 *.out
 /embeddings
 /models
+/Reports
 src/__pycache__
+
+/results/*
+!/results/plot_studio
+/results/plot_studio/*
+!/results/plot_studio/*.py
+
+/__pycache__
+/.vscode
+/dataset
