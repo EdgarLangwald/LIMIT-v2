@@ -17,14 +17,8 @@ def main():
         export_pdf(default_config(), out)
         print("wrote", out)
         return
-    try:
-        from gui import launch_gui
-        launch_gui()
-    except Exception as e:                              # no display / Tk unavailable -> headless
-        print(f"GUI unavailable ({e}); writing default PDF instead.")
-        export_pdf(default_config())
-        print("wrote", PDF_PATH)
-
+    from gui import launch_gui
+    launch_gui()
 
 if __name__ == "__main__":
     main()
