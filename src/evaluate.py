@@ -141,6 +141,83 @@ def evaluate(
     return results
 
 
+def evaluate_retrieval(
+    embs:        dict,
+    qrels:       dict[str, dict[str, int]],
+    doc_ids:     list[str],
+    query_ids:   list[str],
+    ks:          tuple[int, ...] = (10,),
+    top_k:       int = 100,
+    results_dir: Path | None = None,
+    name:        str | None = None,
+) -> dict[int, dict[str, float]]:
+    """NDCG@k / recall@k / MAP@k on a *generic* retrieval dataset (e.g. RTEB).
+
+    Unlike ``evaluate()``, this makes NO assumptions about a targets-plus-distractors layout or a
+    constant number of relevant docs per query. It works on arbitrary (corpus, queries, qrels)
+    where each query may have a different number of (graded or binary) relevant docs scattered
+    anywhere in the corpus. Metrics are computed with ``pytrec_eval`` — the same engine
+    BEIR/MTEB/RTEB use — so the numbers match published leaderboard definitions exactly.
+
+    Args:
+        embs:      {"doc_embs": (n_docs, dim), "qry_embs": (n_queries, dim)}, L2-normalized.
+        qrels:     {query_id: {doc_id: relevance_int}} (gold judgments; relevance must be int).
+        doc_ids:   doc_ids[i] is the id of doc row i in doc_embs (corpus dict insertion order).
+        query_ids: query_ids[j] is the id of query row j in qry_embs.
+        ks:        cutoffs to report (default (10,) — RTEB's headline is NDCG@10).
+        top_k:     docs kept per query before scoring (RTEB retrieves top-100; cutoff metrics
+                   only read the first k, so this just bounds the run size).
+
+    Returns: {k: {"ndcg@k": float, "recall@k": float, "map@k": float}}, averaged over queries.
+    """
+    import pytrec_eval
+
+    doc_embs = np.asarray(embs["doc_embs"])
+    qry_embs = np.asarray(embs["qry_embs"])
+    if len(doc_ids) != doc_embs.shape[0] or len(query_ids) != qry_embs.shape[0]:
+        raise ValueError(
+            f"id/embedding length mismatch: doc_ids={len(doc_ids)} doc_embs={doc_embs.shape[0]}, "
+            f"query_ids={len(query_ids)} qry_embs={qry_embs.shape[0]}"
+        )
+
+    # Cosine via dot product (embeddings are L2-normalized). Corpus is small for RTEB open
+    # datasets, so the full (n_queries, n_docs) score matrix fits comfortably.
+    sims = qry_embs @ doc_embs.T                                   # (n_queries, n_docs)
+    keep = min(top_k, sims.shape[1])
+
+    # Build the pytrec_eval run: {query_id: {doc_id: score}} keeping the top-`keep` docs/query.
+    run: dict[str, dict[str, float]] = {}
+    for j, qid in enumerate(query_ids):
+        row = sims[j]
+        top = np.argpartition(-row, keep - 1)[:keep] if keep < row.shape[0] else np.arange(row.shape[0])
+        run[qid] = {doc_ids[i]: float(row[i]) for i in top}
+
+    # pytrec_eval needs int relevance and only scores queries present in BOTH qrels and run.
+    gold = {q: {d: int(s) for d, s in rels.items()} for q, rels in qrels.items()}
+    measures = {m for k in ks for m in (f"ndcg_cut.{k}", f"recall.{k}", f"map_cut.{k}")}
+    evaluator = pytrec_eval.RelevanceEvaluator(gold, measures)
+    per_query = evaluator.evaluate(run)                            # {qid: {"ndcg_cut_10": ..., ...}}
+
+    n = len(per_query)
+    out: dict[int, dict[str, float]] = {}
+    for k in ks:
+        out[k] = {
+            f"ndcg@{k}":   float(np.mean([v[f"ndcg_cut_{k}"] for v in per_query.values()])) if n else 0.0,
+            f"recall@{k}": float(np.mean([v[f"recall_{k}"]   for v in per_query.values()])) if n else 0.0,
+            f"map@{k}":    float(np.mean([v[f"map_cut_{k}"]   for v in per_query.values()])) if n else 0.0,
+        }
+
+    if results_dir is not None and name is not None:
+        results_dir = Path(results_dir)
+        results_dir.mkdir(parents=True, exist_ok=True)
+        payload = {"name": name, "n_queries": n,
+                   "results": {str(k): v for k, v in out.items()}}
+        with open(results_dir / f"{name}.json", "w") as f:
+            json.dump(payload, f, indent=2)
+
+    return out
+
+
 def evaluate_manually(
     query:       str,
     target_name: str,

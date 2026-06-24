@@ -89,21 +89,31 @@ MODELS: dict[str, dict] = {
         "doc_prefix":   "search_document: ",
         "trust_remote_code": True,
     },
-    # ~2.3 GB; multilingual XLM-RoBERTa w/ task-specific LoRA adapters, 1024-dim Matryoshka, 8192 ctx.
-    # Selects adapter + instruction via task/prompt_name encode args (NOT text prefixes); needs
-    # trust_remote_code + `pip install einops`. License: CC-BY-NC-4.0 (non-commercial) (2024)
-    "Jina_v3": {
-        "hf_id": "jinaai/jina-embeddings-v3",
+    # ~1.4 GB; Qwen3-0.6B-Base backbone, 677M params, 1024-dim, 32K ctx, 119 languages.
+    # Sub-1B retrieval SOTA (2026). Like v3, selects the retrieval task via prompt_name encode
+    # args (queries -> "query", documents -> "document"); needs trust_remote_code.
+    "Jina_v5": {
+        "hf_id": "jinaai/jina-embeddings-v5-text-small",
         "query_prefix": "",
         "doc_prefix":   "",
         "trust_remote_code": True,
-        "query_encode_kwargs": {"task": "retrieval.query",   "prompt_name": "retrieval.query"},
-        "doc_encode_kwargs":   {"task": "retrieval.passage", "prompt_name": "retrieval.passage"},
+        "query_encode_kwargs": {"prompt_name": "query"},
+        "doc_encode_kwargs":   {"prompt_name": "document"},
     },
     # ~2 GB; updated Arctic-L, stronger MTEB than v1 (2024)
     "Snowflake_v2": {
         "hf_id": "Snowflake/snowflake-arctic-embed-l-v2.0",
         "query_prefix": "query: ",
+    },
+    # ~0.7 GB; Voyage 4 family MoE, 340M params (180M non-embed), 2048-dim Matryoshka
+    # (2048/1024/512/256), 32K ctx. First OPEN-WEIGHTS Voyage model (Apache-2.0, 2026).
+    # Asymmetric: queries and documents use different prompts (replicated here as prefixes;
+    # equivalent to the model's encode_query/encode_document helpers). Needs trust_remote_code.
+    "Voyage_4_nano": {
+        "hf_id": "voyageai/voyage-4-nano",
+        "query_prefix": "Represent the query for retrieving supporting documents: ",
+        "doc_prefix":   "Represent the document for retrieval: ",
+        "trust_remote_code": True,
     },
 }
 

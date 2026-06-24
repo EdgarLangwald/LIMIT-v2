@@ -37,7 +37,7 @@ MODELS = [
     "Qwen8b",           # 7.6B
     "Promptriever",     # 8.0B
     "BGE_M3",           # 569M
-    "Jina_v3",          # 572M
+    "Jina_v5",          # 677M (Qwen3-0.6B-Base)
     "GritLM",           # 7.2B (Mistral-7B)
     ]
 BS     = 1000

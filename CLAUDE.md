@@ -20,12 +20,13 @@ This way, the building logic of the synthetic dataset is clearly separated from 
 ```
 LIMIT-v2/
 ├── main.py                       — full-pipeline entrypoint
+├── reproduce.py                  — RTEB reproduction harness: embeds the open RTEB AILAStatutes dataset with our models and diffs NDCG@10 vs published scores (validates load_model/embed config)
 ├── src/                          — importable package (the three pipeline stages)
 │   ├── paths.py                  — repo-root-anchored data dirs (DATASET_DIR, EMBEDDINGS_DIR, …)
 │   ├── profile_sentences.py      — STAGE 1: sentence category dataclasses (auto-generated)
 │   ├── generate.py               — STAGE 1: generate_dataset(n, m, seed); QUERY_TYPES
 │   ├── embed.py                  — STAGE 2: embed_dataset, load_model, embed_query
-│   ├── evaluate.py               — STAGE 3: evaluate() saves results/{name}.json (per query type); evaluate_manually()
+│   ├── evaluate.py               — STAGE 3: evaluate() saves results/{name}.json (per query type); evaluate_manually(); evaluate_retrieval() (generic NDCG@10/recall/MAP via pytrec_eval, for external datasets)
 │   ├── plot.py                   — STAGE 3: visualize_results() builds PDF from results/*.json (one section per query type)
 │   └── pools/                    — male_names.csv, female_names.csv, family_names.csv, eval_targets.json
 ├── tests/                        — test scaffolds (some reference not-yet-built metrics)
@@ -45,6 +46,8 @@ LIMIT-v2/
 │   └── generated_datasets/       — cached generate_dataset() outputs (n{n}_m{m}_s{seed}.json)
 ├── embeddings/ models/           — cached embeddings and model weights. !!These are symlinks to work partition!!
 ├── results/                      — evaluate() JSON outputs + report.pdf from visualize_results()
+│   └── plot_studio/              — interactive/standalone result plotters (core.py data layer; main.py GUI)
+│       └── icc_shrinkage.py      — ICC + empirical-Bayes shrinkage heatmap: how well sub-5M recall predicts recall@5M
 └── explore_faker.ipynb
 ```
 
@@ -113,7 +116,7 @@ untouched (`only_embed` is "docs" | "queries" | None and is independent of `forc
 
 **IMPORTANT:** Use the correct venv based on the machine name. To get it, run `hostname` in bash:
 - `EDGAR-PC`: `C:\Users\edgar\Projekte\Python\Machine_Learning_venv\Scripts\python.exe`
-- `EDGAR_LAPTOP`: `C:\Users\EdgarLangwald\OneDrive - neuland AI AG\Coding\.venv\Scripts\python.exe`
+- `EDGAR_LAPTOP`: `C:\Users\EdgarLangwald\Documents\Coding\.venv\Scripts\python.exe` (shared across LIMIT-v2 and LIMIT)
 - `*.rwth-aachen.de` (RWTH cluster): `/rwthfs/rz/cluster/home/nld68820/.venv/bin/python`
 
 Run all scripts and pip installs using the correct python for the current device.

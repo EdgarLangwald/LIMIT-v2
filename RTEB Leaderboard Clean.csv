@@ -1,0 +1,45 @@
+﻿Model,Type,Embd Dim,Params,Open,Closed,Overall,CSV Average
+voyage-code-3,Text,2048,—,77.96,90.2,81.02,23.15
+voyage-multimodal-3.5,Multimodal,1024,—,80.76,,80.76,0.0
+voyage-4-large,Text,2048,—,75.72,84.29,79.7,79.7
+Octen-Embedding-8B,Text,4096,7.6B,77.88,81.11,79.38,79.38
+embed-v4.0 (multimodal),Multimodal,1536,—,78.45,,78.45,0.0
+voyage-3-large,Text,2048,—,73.96,83.22,78.26,78.26
+voyage-4,Text,1024,—,73.72,82.8,77.94,77.94
+Octen-Embedding-4B,Text,2560,4B,74.37,78.71,76.38,76.38
+gemini-embedding-001,Text,3072,—,71.22,81.2,75.85,75.85
+voyage-4-lite,Text,1024,—,70.82,79.97,75.07,75.07
+"voyage-3.5 (int8, 512d)",Text,512,—,69.88,80.18,74.66,74.66
+llama-embed-nemotron-8b,Text,4096,7.5B,67.28,80.4,73.37,73.37
+embed-v4.0,Text,1536,—,65.78,81.31,72.99,72.99
+"embed-v4.0 (int8, 512d)",Text,512,—,65.79,81.31,72.99,72.99
+Qwen3-Embedding-8B,Text,4096,7.57B,69.1,76.27,72.43,72.43
+gemini-embedding-2-preview,Text+Multimodal,3072,—,70.76,70.6,70.71,68.4
+text-embedding-3-large (3072d),Text,3072,—,60.09,71.63,65.45,65.45
+KaLM-Embedding-Gemma3-12B-2511,Text,3840,11.76B,61.7,67.5,64.39,64.39
+voyage-law-2,Text,1024,—,54.52,77.25,64.26,16.07
+text-embedding-3-large (512d),Text,512,—,57.72,68.85,62.88,62.88
+e5-mistral-7b-instruct,Text,4096,7.11B,55.75,70.7,62.69,62.69
+GritLM-7B,Text,384,7.24B,54.88,69.46,61.65,61.65
+text-embedding-004,Text,768,—,57.26,63.95,60.36,60.36
+embed-multilingual-v3.0,Text,1024,—,52.73,68.39,60.0,60.0
+text-embedding-3-small (1536d),Text,1536,—,53.06,66.36,59.23,59.24
+NV-Embed-v2,Text,4096,7.85B,54.41,61.67,57.78,57.78
+text-embedding-3-small (512d),Text,512,—,50.97,64.62,57.31,57.31
+bge-m3,Text,1024,569M,48.39,65.62,56.39,56.39
+"voyage-3.5 (binary, 256d)",Text,256,—,51.17,61.42,55.93,55.93
+bge-m3-unsupervised,Text,1024,—,45.29,63.93,53.95,53.95
+kanon-2-embedder,Text,1792,—,49.64,46.69,48.38,12.09
+bge-large-en-v1.5,Text,1024,335M,45.24,51.96,48.36,48.36
+"embed-v4.0 (binary, 256d)",Text,256,—,40.8,56.04,47.87,47.87
+bge-base-en-v1.5,Text,768,109M,43.45,47.63,45.39,45.39
+jina-embeddings-v2-base-en,Text,768,137M,42.72,48.11,45.22,45.22
+all-mpnet-base-v2,Text,768,109M,43.51,44.81,44.11,44.11
+bge-small-en-v1.5,Text,384,33M,39.64,47.04,43.07,43.07
+all-MiniLM-L12-v2,Text,384,33M,39.73,43.83,41.64,41.64
+multi-qa-MiniLM-L6-cos-v1,Text,384,23M,38.25,43.04,40.47,40.47
+jina-embeddings-v2-small-en,Text,512,33M,38.31,42.18,40.1,40.1
+all-MiniLM-L6-v2,Text,384,23M,38.55,41.37,39.86,39.86
+amazon.titan-embed-image-v1,Multimodal,1024,—,33.39,,33.39,0.0
+bge-m3-retromae,Text,1024,—,22.85,39.94,30.79,30.79
+LaBSE,Text,768,471M,23.77,38.84,30.76,30.76

@@ -38,3 +38,11 @@ output.err reads faker didn't load. But pip show faker shows correct in terminal
 remember that you're on SLURM cluster, and jobs take a while to submit. check with exp. decay whether the job is being done, but check no less then every 5min.
 
 You're free to create temporary test files to debug as you go. You're free to add logs into the code, as long as you delete them all after the fix.
+
+You're going to help me answer a very important question: Can retrival scores for increasing document corpus size be modeled by a single parametric family of functions? In order to find this out, you'll make a python file inside plot_studio. First, we'll filter all of the results by whether the model has a score of >= 0.99 for 0 distractors. If not, we won't consider that function. What I want to empirically test is to what degree knowing the scores for less then 5m docs can predict the score at 5m.
+
+I want the final result to be a table with 95% confidence intervals, (i.e. each table entry is a confidence interval) where one axis (say, the row) uses increasingly more documents to make the approximation (i.e. 1000, 3000, 10000, etc) and the other is a small band of a partition of [0, 1] (i.e. [0, 0.05), [0.05, 0.1), etc) telling us where the model recall lies at the document count in that column.
+
+The actual confidence interval should not be two numbers though, as that's visually cluttering. Instead, I want the field to be a color from green to red. Green means the interval is very small i.e. we are confident and red means it's maximally large. However, I want to control for the sample size, because we obviously are less confident if we have no data. What approximator do you suggest to implement this?
+
+Each unique combination of recall@k value, model and query type (except auto, they count as the same, so drop auto_sentence) counts as an independent experiment.
