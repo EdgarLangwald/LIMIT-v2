@@ -3,6 +3,7 @@
 *.err
 *.out
 .env
+/home_cache
 /embeddings
 /models
 
