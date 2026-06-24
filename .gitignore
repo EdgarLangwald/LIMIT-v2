@@ -2,15 +2,13 @@
 *.png
 *.err
 *.out
+.env
+/home_cache
 /embeddings
 /models
 
 src/__pycache__
-
-/results/*
-!/results/plot_studio
-/results/plot_studio/*
-!/results/plot_studio/*.py
+/results/plot_studio/__pycache__
 
 /__pycache__
 /.vscode

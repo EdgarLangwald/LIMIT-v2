@@ -24,7 +24,7 @@ from src.plot import visualize_results
 
 # --- dataset ---
 
-N        = 5_000_000      # total distractor documents
+N        = 5000        # total distractor documents
 M        = 4              # sentences per distractor doc
 SEED     = 42
 
@@ -40,12 +40,12 @@ MODELS = [
     "Jina_v5",          # 677M (Qwen3-0.6B-Base)
     "GritLM",           # 7.2B (Mistral-7B)
     ]
-BS     = 1000
+BS     = 100
 
 # --- evaluation ---
 
-N_VALUES = [0, 1000, 3000, 10000, 30000, 100000, 250000] + [500000*i for i in range(1, 11)]# distractor document count <= N
-KS       = [8, 40, 200, 1000]
+N_VALUES = [0, 500, 1000, 2000, 5000] #+ [10000*i for i in range(1, 6)] # distractor document count <= N
+KS       = [1, 5, 10, 50, 200]
 
 # -----------------
 
@@ -59,7 +59,6 @@ for model in MODELS:
         dataset, model, dataset_path,
         batch_size=BS,
         force=True,
-        only_embed="queries",
     )
 
     

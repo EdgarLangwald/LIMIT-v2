@@ -1,0 +1,31 @@
+Draw: 0-0   Slots: scents=cinnamon, instruments=bagpipe, us_cities=Orlando
+
+=== QUERIES ===
+
+[broad]         Who treasures a warm spice scent, plays a reed woodwind instrument, and has family roots in a major central Florida city?
+
+[specific]      Who cherishes a warm woody spice scent as a weekend comfort ritual, has played a loud reed woodwind instrument since childhood with nostalgic affection, and comes from a central Florida city where his family has lived for generations?
+
+[exact]         Who was born and raised in Orlando, has been playing the bagpipe since childhood, and counts cinnamon as their favorite scent?
+
+[auto_sentence] Which person has the following three attributes: scents: cinnamon, instruments: bagpipe, us_cities: Orlando?
+
+[auto_raw]      scents: cinnamon, instruments: bagpipe, us_cities: Orlando
+
+=== PROFILES ===
+
+--- Nelida Roiger (female) ---
+
+  Nelida Roiger was born on 27 July 1950, lives in Alaska, and works as a Haematologist.
+  She's been meaning to reread Shakespeare's Romeo and Juliet ever since she saw it performed in the park.
+  [scents]  Her favorite candle scent is cinnamon, and she always keeps one burning on the weekends.
+  [instruments]  She's been playing the bagpipe since she was twelve.
+  [us_cities]  She was born and raised in Orlando.
+
+--- Milton Chinigo (male) ---
+
+  Milton Chinigo was born on 29 September 1968, lives in Iowa, and works as a Corporate treasurer.
+  [scents]  He says cinnamon is the first thing he thinks of when someone asks what his favorite smell is.
+  [instruments]  He's been playing the bagpipe since he was twelve.
+  He fixed the railing on his porch himself using iron fixtures.
+  [us_cities]  He was born and raised in Orlando.

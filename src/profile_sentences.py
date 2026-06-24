@@ -6424,7 +6424,7 @@ class _Cat_ZodiacSign:
         return {"sentence": template.format(item=item, **pronouns),
                 "facts": {"category": self.category_name, "item": item}}
 
-
+# 114 different sentence categories
 @dataclass
 class _Generate:
     academic_subjects: _Cat_AcademicSubjects = field(default_factory=_Cat_AcademicSubjects)

@@ -1,0 +1,9 @@
+Promptriever	n5000000_m4_s42	docs	5.9833s/batch	(5002 batches)
+GritLM	        n5000000_m4_s42	docs	4.3712s/batch	(5002 batches)
+Qwen8b	        n5000000_m4_s42	docs	4.3282s/batch	(5002 batches)
+Snowflake_v2	n5000000_m4_s42	docs	1.9111s/batch	(5002 batches)
+BGE_M3	        n5000000_m4_s42	docs	1.8977s/batch	(5002 batches)
+Nomic_Embed_v2	n5000000_m4_s42	docs	1.3476s/batch	(5002 batches)
+Qwen0.6b	    n5000000_m4_s42	docs	0.9308s/batch	(5002 batches)
+Jina_v3	        n5000000_m4_s42	docs	0.8445s/batch	(5002 batches)
+

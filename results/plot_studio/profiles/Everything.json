@@ -1,0 +1,227 @@
+{
+  "normalize": true,
+  "model_order": [
+    "Jina_v3",
+    "Qwen0.6b",
+    "Qwen8b",
+    "BGE_M3",
+    "Nomic_Embed_v2",
+    "Snowflake_v2",
+    "Promptriever",
+    "GritLM"
+  ],
+  "slider_pos": {
+    "metrics": {
+      "recall@8": 0.125,
+      "recall@40": 0.125,
+      "recall@200": 0.125,
+      "recall@1000": 0.125,
+      "mrr": 0.5
+    },
+    "queries": {
+      "broad": 0.25,
+      "specific": 0.25,
+      "exact": 0.25,
+      "auto_sentence": 0.125,
+      "auto_raw": 0.125
+    },
+    "docs": {
+      "0": 0.2,
+      "10000": 0.2,
+      "100000": 0.2,
+      "1000000": 0.2,
+      "5000000": 0.2
+    }
+  },
+  "plots": {
+    "grid_a": {
+      "show": true,
+      "rows": [
+        "mrr",
+        "recall@1000",
+        "recall@200",
+        "recall@40",
+        "recall@8"
+      ],
+      "cols": [
+        "auto_raw",
+        "auto_sentence",
+        "broad",
+        "exact",
+        "specific"
+      ],
+      "lines": [
+        "BGE_M3",
+        "GritLM",
+        "Jina_v3",
+        "Nomic_Embed_v2",
+        "Promptriever",
+        "Qwen0.6b",
+        "Qwen8b",
+        "Snowflake_v2"
+      ],
+      "xvals": [
+        "0",
+        "1000",
+        "10000",
+        "100000",
+        "1000000",
+        "1500000",
+        "2000000",
+        "250000",
+        "2500000",
+        "3000",
+        "30000",
+        "3000000",
+        "3500000",
+        "4000000",
+        "4500000",
+        "500000",
+        "5000000"
+      ],
+      "grid": true,
+      "mright": true,
+      "mbottom": true,
+      "corner": true
+    },
+    "grid_b": {
+      "show": true,
+      "rows": [
+        "BGE_M3",
+        "GritLM",
+        "Jina_v3",
+        "Nomic_Embed_v2",
+        "Promptriever",
+        "Qwen0.6b",
+        "Qwen8b",
+        "Snowflake_v2"
+      ],
+      "cols": [
+        "auto_raw",
+        "auto_sentence",
+        "broad",
+        "exact",
+        "specific"
+      ],
+      "lines": [
+        "mrr",
+        "recall@1000",
+        "recall@200",
+        "recall@40",
+        "recall@8"
+      ],
+      "xvals": [
+        "0",
+        "1000",
+        "10000",
+        "100000",
+        "1000000",
+        "1500000",
+        "2000000",
+        "250000",
+        "2500000",
+        "3000",
+        "30000",
+        "3000000",
+        "3500000",
+        "4000000",
+        "4500000",
+        "500000",
+        "5000000"
+      ],
+      "grid": true,
+      "mright": true,
+      "mbottom": true,
+      "corner": true
+    },
+    "plot_c": {
+      "show": true,
+      "bands": [
+        "auto_raw",
+        "broad",
+        "exact",
+        "specific"
+      ],
+      "xvals": [
+        "0",
+        "1000",
+        "10000",
+        "100000",
+        "1000000",
+        "1500000",
+        "2000000",
+        "250000",
+        "2500000",
+        "3000",
+        "30000",
+        "3000000",
+        "3500000",
+        "4000000",
+        "4500000",
+        "500000",
+        "5000000"
+      ],
+      "band_factor": 0.10227272727272728
+    },
+    "grid_d": {
+      "show": true,
+      "rows": [
+        "mrr",
+        "recall@1000",
+        "recall@200",
+        "recall@40",
+        "recall@8"
+      ],
+      "cols": [
+        "0",
+        "10000",
+        "100000",
+        "1000000",
+        "5000000"
+      ],
+      "hm_rows": [
+        "BGE_M3",
+        "GritLM",
+        "Jina_v3",
+        "Nomic_Embed_v2",
+        "Promptriever",
+        "Qwen0.6b",
+        "Qwen8b",
+        "Snowflake_v2"
+      ],
+      "hm_cols": [
+        "auto_raw",
+        "auto_sentence",
+        "broad",
+        "exact",
+        "specific"
+      ],
+      "grid": true,
+      "mright": true,
+      "mbottom": true,
+      "corner": true
+    },
+    "pareto": {
+      "show": true,
+      "cols": [
+        "0",
+        "10000",
+        "100000",
+        "1000000",
+        "5000000"
+      ],
+      "models": [
+        "BGE_M3",
+        "GritLM",
+        "Jina_v3",
+        "Nomic_Embed_v2",
+        "Promptriever",
+        "Qwen0.6b",
+        "Qwen8b",
+        "Snowflake_v2"
+      ],
+      "grid": true,
+      "mright": true
+    }
+  }
+}

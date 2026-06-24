@@ -82,7 +82,7 @@ def generate_corpus(n: int, m: int, seed: int | None = None, save: str | None = 
         if save == "txt":
             path = str(DATASET_DIR / f"{stem}.txt")
             with open(path, "w", encoding="utf-8") as f:
-                f.write("\n\n".join(" ".join(doc["sentences"]) for doc in documents))
+                f.write("\n\n".join("\n".join(doc["sentences"]) for doc in documents))
         elif save == "json":
             path = str(DATASET_DIR / f"{stem}.json")
             with open(path, "w", encoding="utf-8") as f:
