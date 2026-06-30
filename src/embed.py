@@ -52,6 +52,24 @@ MODELS: dict[str, dict] = {
         "hf_id": "Qwen/Qwen3-Embedding-8B",
         "query_prefix": "Instruct: Retrieve the person whose profile best answers the query.\nQuery:",
     },
+    # Octen series: LoRA fine-tunes of Qwen3-Embedding, so they share Qwen3's last-token
+    # pooling and Instruct-query prompt format (README's bare encode() omits it, but the
+    # instruction is worth ~1-5% on retrieval). No trust_remote_code — stock SentenceTransformer.
+    # ~1.2 GB; Qwen3-Embedding-0.6B backbone, 1024-dim, 32K ctx (2026)
+    "Octen0.6b": {
+        "hf_id": "Octen/Octen-Embedding-0.6B",
+        "query_prefix": "Instruct: Retrieve the person whose profile best answers the query.\nQuery:",
+    },
+    # ~8 GB; Qwen3-Embedding-4B backbone, 2560-dim (2026)
+    "Octen4b": {
+        "hf_id": "Octen/Octen-Embedding-4B",
+        "query_prefix": "Instruct: Retrieve the person whose profile best answers the query.\nQuery:",
+    },
+    # ~16 GB; Qwen3-Embedding-8B backbone, 4096-dim; RTEB #1 at release (2026)
+    "Octen8b": {
+        "hf_id": "Octen/Octen-Embedding-8B",
+        "query_prefix": "Instruct: Retrieve the person whose profile best answers the query.\nQuery:",
+    },
     # ~14 GB; was SOTA on MTEB at release (2023)
     "E5_Mistral": {
         "hf_id": "intfloat/e5-mistral-7b-instruct",
@@ -97,6 +115,9 @@ MODELS: dict[str, dict] = {
         "query_prefix": "",
         "doc_prefix":   "",
         "trust_remote_code": True,
+        # Jina v5's custom code refuses to encode until a task is set; the retrieval task pairs with
+        # the query/document prompt_names below. Without it: "Task must be specified before encoding".
+        "model_kwargs": {"default_task": "retrieval"},
         "query_encode_kwargs": {"prompt_name": "query"},
         "doc_encode_kwargs":   {"prompt_name": "document"},
     },
@@ -181,10 +202,15 @@ def load_model(model_name: str, device: str | None = None):
         st_kwargs = {"trust_remote_code": True} if MODELS[model_name].get("trust_remote_code") else {}
         if st_kwargs:
             _patch_remote_code_tied_weights()
+        # Per-model SentenceTransformer model_kwargs (e.g. Jina v5 needs default_task='retrieval',
+        # which its custom code requires before any encode() call).
+        model_kwargs = dict(MODELS[model_name].get("model_kwargs", {}))
         # Force fp32 on CPU: models with a bf16/fp16 config (e.g. Jina v3) produce
         # NaN embeddings under CPU attention without flash_attn. bf16 stays on GPU.
         if use_device == "cpu":
-            st_kwargs["model_kwargs"] = {"dtype": torch.float32}
+            model_kwargs["dtype"] = torch.float32
+        if model_kwargs:
+            st_kwargs["model_kwargs"] = model_kwargs
         st = SentenceTransformer(model_local_path, device=use_device, **st_kwargs)
         if st_kwargs.get("trust_remote_code"):
             _reinit_remote_code_buffers(st)
@@ -353,6 +379,11 @@ def embed_dataset(
         dim = np.array(model.encode(["test"], instruction=doc_prefix, batch_size=1), dtype=np.float32).shape[-1]
     else:
         dim = model.get_embedding_dimension()
+        if not dim:
+            # Some trust_remote_code models (e.g. Jina v5) don't expose their output dim via the
+            # SentenceTransformer module chain, so get_embedding_dimension() returns None. Probe it
+            # with a throwaway encode — the dim is independent of the (default) prompt applied.
+            dim = int(np.asarray(model.encode(["test"]), dtype=np.float32).shape[-1])
 
     progress   = None if force else _load_progress(base)
     docs_done  = (not force) and (progress is None or progress.get("docs_done", False)) and os.path.isfile(base + "_d.npy")
