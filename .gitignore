@@ -10,6 +10,6 @@
 src/__pycache__
 /results/plot_studio/__pycache__
 
-/__pycache__
+**/__pycache__
 /.vscode
 /dataset

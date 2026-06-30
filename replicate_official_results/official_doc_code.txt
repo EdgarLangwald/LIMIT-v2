@@ -1,0 +1,226 @@
+This is the official code provided by the model authors. The models are:
+
+Qwen/Qwen3-Embedding-0.6B
+Qwen/Qwen3-Embedding-8B
+Octen/Octen-Embedding-0.6B
+Octen/Octen-Embedding-4B
+Snowflake/snowflake-arctic-embed-l-v2.0
+codefuse-ai/F2LLM-v2-1.7B
+codefuse-ai/F2LLM-v2-4B
+jinaai/jina-embeddings-v5-text-small
+voyageai/voyage-4-nano
+intfloat/e5-mistral-7b-instruct
+
+Qwen3
+
+# Requires transformers>=4.51.0
+# Requires sentence-transformers>=2.7.0
+
+from sentence_transformers import SentenceTransformer
+
+# Load the model
+model = SentenceTransformer("Qwen/Qwen3-Embedding-0.6B")
+
+# We recommend enabling flash_attention_2 for better acceleration and memory saving,
+# together with setting `padding_side` to "left":
+# model = SentenceTransformer(
+#     "Qwen/Qwen3-Embedding-0.6B",
+#     model_kwargs={"attn_implementation": "flash_attention_2", "device_map": "auto"},
+#     tokenizer_kwargs={"padding_side": "left"},
+# )
+
+# The queries and documents to embed
+queries = [
+    "What is the capital of China?",
+    "Explain gravity",
+]
+documents = [
+    "The capital of China is Beijing.",
+    "Gravity is a force that attracts two bodies towards each other. It gives weight to physical objects and is responsible for the movement of planets around the sun.",
+]
+
+with torch.no_grad():
+    # Encode the queries and documents. Note that queries benefit from using a prompt
+    # Here we use the prompt called "query" stored under `model.prompts`, but you can
+    # also pass your own prompt via the `prompt` argument
+    query_embeddings = model.encode(queries, prompt_name="query")
+    document_embeddings = model.encode(documents)
+
+    # Compute the (cosine) similarity between the query and document embeddings
+    similarity = model.similarity(query_embeddings, document_embeddings)
+
+print(similarity)
+# tensor([[0.7646, 0.1414], [0.1355, 0.6000]])
+
+Snowflake
+
+from sentence_transformers import SentenceTransformer
+
+# Load the model
+model_name = 'Snowflake/snowflake-arctic-embed-l-v2.0'
+model = SentenceTransformer(model_name)
+
+# Define the queries and documents
+queries = ['what is snowflake?', 'Where can I get the best tacos?']
+documents = ['The Data Cloud!', 'Mexico City of Course!']
+
+# Compute embeddings: use `prompt_name="query"` to encode queries!
+query_embeddings = model.encode(queries, prompt_name="query") 
+document_embeddings = model.encode(documents)
+
+# Compute cosine similarity scores
+scores = model.similarity(query_embeddings, document_embeddings)
+
+# Output the results
+for query, query_scores in zip(queries, scores):
+    doc_score_pairs = list(zip(documents, query_scores))
+    doc_score_pairs = sorted(doc_score_pairs, key=lambda x: x[1], reverse=True)
+    print("Query:", query)
+    for document, score in doc_score_pairs:
+        print(score, document)
+
+Octen
+
+from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer("Octen/Octen-Embedding-8B")
+
+# Encode sentences
+sentences = [
+    "This is an example sentence",
+    "Each sentence is converted to a vector"
+]
+
+embeddings = model.encode(sentences)
+print(embeddings.shape)
+# Output: (2, 4096)
+
+# Compute similarity
+from sentence_transformers.util import cos_sim
+similarity = cos_sim(embeddings[0], embeddings[1])
+print(f"Similarity: {similarity.item():.4f}")
+
+F2LLM 1.7b
+
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer("codefuse-ai/F2LLM-v2-1.7B", device="cuda:0", model_kwargs={"torch_dtype": "bfloat16"})
+# Some sample query and documents
+query = "What is F2LLM used for?"
+documents = [
+    'We present F2LLM, a family of fully open embedding LLMs that achieve a strong balance between model size, training data, and embedding performance.',
+    'F2LLM is a model for computing text embeddings that can be used for various NLP tasks such as information retrieval, semantic search, and text classification.',
+    'F2LLM 是 CodeFuse 开源的系列嵌入模型。',
+    'F2LLM — это модель вычисления встраивания текста, которую можно использовать для различных задач НЛП, таких как поиск информации, семантический поиск и классификация текста.'
+]
+# Encode the query and documents separately. The encode_query method uses the query prompt
+query_embedding = model.encode_query(query)
+document_embeddings = model.encode_document(documents)
+print(query_embedding.shape, document_embeddings.shape)
+# (2048,) (4, 2048)
+# Compute cosine similarity between the query and documents
+similarity = model.similarity(query_embedding, document_embeddings)
+print(similarity)
+# tensor([[0.6735, 0.8418, 0.7513, 0.8602]])
+
+equivalently for F2LLM 4b
+dims and scores are
+# (2560,) (4, 2560)
+# tensor([[0.6348, 0.8547, 0.7168, 0.8356]])
+
+Jina-v5
+
+from sentence_transformers import SentenceTransformer
+import torch
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+model = SentenceTransformer(
+    "jinaai/jina-embeddings-v5-text-small",
+    trust_remote_code=True,
+    device=device,
+    model_kwargs={"dtype": torch.bfloat16},  # Recommended for GPUs
+    config_kwargs={"_attn_implementation": "flash_attention_2"},  # Recommended but optional
+)
+
+# Optional: set truncate_dim in encode() to control embedding size
+
+# ========================
+# 1. Retrieval Task
+# ========================
+# Encode query
+query_embeddings = model.encode(
+    sentences=["Overview of climate change impacts on coastal cities"],
+    task="retrieval",
+    prompt_name="query",
+)
+# Encode document
+document_embeddings = model.encode(
+    sentences=[
+        "Climate change has led to rising sea levels, increased frequency of extreme weather events..."
+    ],
+    task="retrieval",
+    prompt_name="document",
+)
+
+Voyage
+
+from sentence_transformers import SentenceTransformer
+import torch
+
+# Standard loading, assuming no GPU access
+model = SentenceTransformer(
+    "voyageai/voyage-4-nano", 
+    trust_remote_code=True, 
+    truncate_dim=2048
+)
+
+# OPTIONAL: Loading for high-performance inference with GPUs
+# Use 'flash_attention_2' and 'bfloat16' if your GPU supports it (e.g., A100, H100, RTX 30/40 series)
+# model = SentenceTransformer(
+#     "voyageai/voyage-4-nano", 
+#     trust_remote_code=True, 
+#     truncate_dim=2048, 
+#     model_kwargs={
+#         "attn_implementation": "flash_attention_2",
+#         "dtype": torch.bfloat16
+#     }
+# )
+
+query = "Which planet is known as the Red Planet?"
+documents = [
+    "Venus is often called Earth's twin because of its similar size and proximity.",
+    "Mars, known for its reddish appearance, is often referred to as the Red Planet.",
+    "Jupiter, the largest planet in our solar system, has a prominent red spot.",
+    "Saturn, famous for its rings, is sometimes mistaken for the Red Planet."
+]
+
+# Encode via encode_query and encode_document to automatically use the right prompts
+query_embedding = model.encode_query(query)
+document_embeddings = model.encode_document(documents)
+
+# Inspect the output shapes
+print(f"Query Shape: {query_embedding.shape}")      # Expected: (2048,)
+print(f"Document Shape: {document_embeddings.shape}") # Expected: (4, 2048)
+
+Mistral
+
+from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer("intfloat/e5-mistral-7b-instruct")
+# In case you want to reduce the maximum sequence length:
+model.max_seq_length = 4096
+
+queries = [
+    "how much protein should a female eat",
+    "summit define",
+]
+documents = [
+    "As a general guideline, the CDC's average requirement of protein for women ages 19 to 70 is 46 grams per day. But, as you can see from this chart, you'll need to increase that if you're expecting or training for a marathon. Check out the chart below to see how much protein you should be eating each day.",
+    "Definition of summit for English Language Learners. : 1  the highest point of a mountain : the top of a mountain. : 2  the highest level. : 3  a meeting or series of meetings between the leaders of two or more governments."
+]
+
+query_embeddings = model.encode(queries, prompt_name="web_search_query")
+document_embeddings = model.encode(documents)
+
+scores = (query_embeddings @ document_embeddings.T) * 100
+print(scores.tolist())

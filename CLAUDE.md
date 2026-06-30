@@ -20,39 +20,19 @@ This way, the building logic of the synthetic dataset is clearly separated from 
 ```
 LIMIT-v2/
 ├── main.py                       — full-pipeline entrypoint
-├── reproduce.py                  — RTEB reproduction harness: embeds the open RTEB AILAStatutes dataset with our models and diffs NDCG@10 vs published scores (validates load_model/embed config)
+|
 ├── src/                          — importable package (the three pipeline stages)
-│   ├── paths.py                  — repo-root-anchored data dirs (DATASET_DIR, EMBEDDINGS_DIR, …)
-│   ├── profile_sentences.py      — STAGE 1: sentence category dataclasses (auto-generated)
-│   ├── generate.py               — STAGE 1: generate_dataset(n, m, seed); QUERY_TYPES
-│   ├── embed.py                  — STAGE 2: embed_dataset, load_model, embed_query
-│   ├── evaluate.py               — STAGE 3: evaluate() saves results/{name}.json (per query type); evaluate_manually(); evaluate_retrieval() (generic NDCG@10/recall/MAP via pytrec_eval, for external datasets)
-│   ├── plot.py                   — STAGE 3: visualize_results() builds PDF from results/*.json (one section per query type)
-│   └── pools/                    — male_names.csv, female_names.csv, family_names.csv, eval_targets.json
-├── tests/                        — test scaffolds (some reference not-yet-built metrics)
 ├── dataset/
-│   ├── corpus_workflow.js        — Workflow script: rebuilds src/profile_sentences.py
-│   ├── corpus_workflow.txt       — subagent prompt for corpus_workflow.js
-│   ├── corpus_handpicked_frequencies.txt — manually-set frequency weights for all 114 categories
-│   ├── build_query_workflow_input.py — rebuilds the broad+specific queries of src/pools/eval_targets.json
-│   ├── query_workflow.js         — Workflow script: LLM step for broad+specific query generation
-│   ├── query_workflow.txt        — subagent prompt for query_workflow.js
-│   ├── build_exact_workflow_input.py — adds query_exact (LLM) + auto_raw/auto_sentence (algorithmic) to eval_targets.json
-│   ├── exact_workflow.js         — Workflow script: LLM step for exact query generation (~50 Haiku agents)
-│   ├── exact_workflow.txt        — subagent prompt for exact_workflow.js
-│   ├── corpus_evaluations/       — per-file Haiku eval cache for corpus_workflow.js
-│   ├── query_workflow_input/  query_workflow_output/ — intermediate broad+specific query-build cache
-│   ├── exact_workflow_input/  exact_workflow_output/ — intermediate exact query-build cache
-│   └── generated_datasets/       — cached generate_dataset() outputs (n{n}_m{m}_s{seed}.json)
+|
 ├── embeddings/ models/           — cached embeddings and model weights. !!These are symlinks to work partition!!
 ├── results/                      — evaluate() JSON outputs + report.pdf from visualize_results()
 │   └── plot_studio/              — interactive/standalone result plotters (core.py data layer; main.py GUI)
-│       └── icc_shrinkage.py      — ICC + empirical-Bayes shrinkage heatmap: how well sub-5M recall predicts recall@5M
-└── explore_faker.ipynb
+|
+├── replicate_official_results/   — per-model embedding implementations using each provider's official API
+
 ```
 
-The tree HAS to be kept updated with PERMANENT files. If you create a file, make a judgement on wether the users intent is to keep the file in the long run, or whether the file's purpose is temporary (bugfix, exploration, etc.) 
-IF UNSURE, ASK!
+The tree HAS to be kept updated with PERMANENT folders. If you create a new one, make a judgement on wether the users intent is to keep the it in the long run, or whether its purpose is temporary (bugfix, exploration, etc.) 
 
 ### Using `profile_sentences.generate`
 
